@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ASCII"?>
+<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmi:id="_zmOyMDYrEeKvpYoU2mBS0w" elementId="org.baumato.worktracker.ui.application">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_MZMgEDYtEeKvpYoU2mBS0w" elementId="org.baumato.worktracker.ui.trimmedwindow.0" label="WorkTracker" width="800" height="600">
+    <children xsi:type="basic:PartSashContainer" xmi:id="_xw1AsDY0EeKiNZbXiGFecg" elementId="partsashcontainer" selectedElement="_ycZtQDY0EeKiNZbXiGFecg" horizontal="true">
+      <children xsi:type="basic:PartStack" xmi:id="_ycZtQDY0EeKiNZbXiGFecg" elementId="partstack.left">
+        <children xsi:type="basic:Part" xmi:id="_ts_NQDYzEeKiNZbXiGFecg" elementId="datesview" contributionURI="bundleclass://org.baumato.worktracker.ui/org.baumato.wt.ui.views.DatesView" label="Dates"/>
+      </children>
+      <children xsi:type="basic:PartSashContainer" xmi:id="_1JeiEDY1EeKiNZbXiGFecg" elementId="org.baumato.worktracker.ui.partsashcontainer.0">
+        <children xsi:type="basic:PartStack" xmi:id="_2Fal4DY1EeKiNZbXiGFecg" elementId="org.baumato.worktracker.ui.partstack.0">
+          <children xsi:type="basic:Part" xmi:id="_26J1gDY1EeKiNZbXiGFecg" elementId="org.baumato.worktracker.ui.part.0" contributionURI="bundleclass://org.baumato.worktracker.ui/org.baumato.wt.ui.views.CurrentActivityView" label="Change Current Activity"/>
+        </children>
+        <children xsi:type="basic:PartSashContainer" xmi:id="_FSfNADY2EeKiNZbXiGFecg" elementId="org.baumato.worktracker.ui.partsashcontainer.0" horizontal="true">
+          <children xsi:type="basic:PartSashContainer" xmi:id="_GS3r8DY2EeKiNZbXiGFecg" elementId="org.baumato.worktracker.ui.partsashcontainer.0">
+            <children xsi:type="basic:PartStack" xmi:id="_eg4vIDY2EeKiNZbXiGFecg" elementId="org.baumato.worktracker.ui.partstack.0">
+              <children xsi:type="basic:Part" xmi:id="_HAVO4DY2EeKiNZbXiGFecg" elementId="org.baumato.worktracker.ui.part.0" contributionURI="bundleclass://org.baumato.worktracker.ui/org.baumato.wt.ui.views.ActivitiesView" label="Activities"/>
+            </children>
+            <children xsi:type="basic:PartStack" xmi:id="_fGFG4DY2EeKiNZbXiGFecg" elementId="org.baumato.worktracker.ui.partstack.0">
+              <children xsi:type="basic:Part" xmi:id="_N1vAcDY2EeKiNZbXiGFecg" elementId="org.baumato.worktracker.ui.part.0" contributionURI="bundleclass://org.baumato.worktracker.ui/org.baumato.wt.ui.views.DescriptionsView" label="Description"/>
+            </children>
+          </children>
+          <children xsi:type="basic:PartStack" xmi:id="_hmhqYDY2EeKiNZbXiGFecg" elementId="org.baumato.worktracker.ui.partstack.0">
+            <children xsi:type="basic:Part" xmi:id="_U-Wo8DY2EeKiNZbXiGFecg" elementId="org.baumato.worktracker.ui.part.0" contributionURI="bundleclass://org.baumato.worktracker.ui/org.baumato.wt.ui.views.ActivitySummary" label="Activity Summary"/>
+          </children>
+        </children>
+      </children>
+    </children>
+    <mainMenu xmi:id="_QawRADYtEeKvpYoU2mBS0w" elementId="org.baumato.worktracker.ui.menu.0"/>
+  </children>
+  <addons xmi:id="_zmOyMTYrEeKvpYoU2mBS0w" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
+  <addons xmi:id="_zmOyMjYrEeKvpYoU2mBS0w" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
+  <addons xmi:id="_zmOyMzYrEeKvpYoU2mBS0w" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
+  <addons xmi:id="_zmOyNDYrEeKvpYoU2mBS0w" elementId="org.eclipse.e4.ui.workbench.commands.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.CommandProcessingAddon"/>
+  <addons xmi:id="_zmOyNTYrEeKvpYoU2mBS0w" elementId="org.eclipse.e4.ui.workbench.contexts.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.ContextProcessingAddon"/>
+  <addons xmi:id="_zmOyNjYrEeKvpYoU2mBS0w" elementId="org.eclipse.e4.ui.workbench.bindings.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.swt/org.eclipse.e4.ui.workbench.swt.util.BindingProcessingAddon"/>
+</application:Application>

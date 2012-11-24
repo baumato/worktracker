@@ -1,0 +1,17 @@
+package org.baumato.wt.core
+
+
+class Activity {
+	refers ActivityName activityName
+	refers Activity next
+	refers ActivityDate start
+	String description
+}
+
+class ActivityName {
+	String name
+}
+
+class ActivityDate  {
+	String date
+}
