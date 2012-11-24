@@ -10,11 +10,11 @@
  ******************************************************************************/
 package org.baumato.wt.core;
 
-import java.util.List;
+import org.eclipse.core.databinding.observable.list.IObservableList;
 
-public interface PersistenceService {
+public interface ActivityRepository {
 
-	List<String> getActivityDates();
+	IObservableList getActivityDates();
 	Activity getActivities();
 	
 }

@@ -10,14 +10,22 @@
  ******************************************************************************/
 package org.baumato.wt.ui.handlers;
 
+import javax.inject.Inject;
+
+import org.baumato.wt.core.ActivityRepository;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 
 public class OpenPreferencesHandler {
 
+	@Inject
+	ActivityRepository repo;
+	
 	@Execute
 	public void openPreferences(Shell shell) {
 		MessageDialog.openInformation(shell, "Preferences", "Open Preferences");
+		
+		repo.getActivityDates().add("2013-02-12");
 	}
 }

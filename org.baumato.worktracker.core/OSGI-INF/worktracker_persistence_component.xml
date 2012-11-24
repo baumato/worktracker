@@ -10,8 +10,8 @@
       tobbaumann - initial API and implementation
 -->
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.baumato.worktracker.core">
-   <implementation class="org.baumato.wt.core.impl.PersistenceServiceDummy"/>
+   <implementation class="org.baumato.wt.core.impl.DummyActivityRepository"/>
    <service>
-      <provide interface="org.baumato.wt.core.PersistenceService"/>
+      <provide interface="org.baumato.wt.core.ActivityRepository"/>
    </service>
 </scr:component>

@@ -18,11 +18,17 @@ import java.util.List;
 import org.baumato.wt.core.Activity;
 import org.baumato.wt.core.ActivityDate;
 import org.baumato.wt.core.ActivityName;
+import org.baumato.wt.core.ActivityRepository;
 import org.baumato.wt.core.CoreFactory;
-import org.baumato.wt.core.PersistenceService;
+import org.eclipse.core.databinding.observable.list.IObservableList;
+import org.eclipse.core.databinding.observable.list.WritableList;
 
-public class PersistenceServiceDummy implements PersistenceService {
+public class DummyActivityRepository implements ActivityRepository {
 
+	public DummyActivityRepository() {
+	}
+	
+	
 	@Override
 	public Activity getActivities() {
 		Activity a = CoreFactory.eINSTANCE.createActivity();
@@ -36,12 +42,12 @@ public class PersistenceServiceDummy implements PersistenceService {
 	}
 
 	@Override
-	public List<String> getActivityDates() {
-		List<String> res = newArrayList();
+	public IObservableList getActivityDates() {
+		List<String> dates = newArrayList();
 		for (int i = 1; i <= 30; i++) {
-			res.add("2011-11-" + padStart(""+i, 2, '0'));
+			dates.add("2012-11-" + padStart("" + i, 2, '0'));
 		}
-		return res;
+		return new WritableList(dates, null);
 	}
 
 }
