@@ -1,0 +1,73 @@
+package org.tobbaumann.wt.domain
+
+import java.util.Date
+import java.lang.String
+import java.text.SimpleDateFormat
+
+interface Comparable wraps java.lang.Comparable<WorkItem>{}
+
+class WorkItem extends Comparable {
+	id String ID
+	Date start
+	Date end
+	refers Activity activity
+	contains Description description
+	
+	contains derived TimeSpan duration get {
+//		val TimeSpan ts = ModelFactory::eINSTANCE.createTimeSpan
+//		val Date s = if (start == null) new Date() else start
+//		ts.seconds = ((end.time - s.time) / 1000)
+//		return ts
+	}
+	
+	op int compareTo(WorkItem wi) {
+		return start.compareTo(wi.start)
+	}
+}
+
+class Activity {
+	String name
+}
+
+class TimeSpan {
+	long seconds
+	op long inSeconds() {
+		return seconds
+	}
+	op long inMinutes() {
+		return seconds / 60
+	}
+	op long inHours() {
+		return inMinutes / 60
+	}
+	op long inDays() {
+		return inHours / 24
+	}
+	op long inWeeks() {
+		return inDays / 7
+	}
+}
+
+class Description {
+	String description
+}
+
+type Date wraps java.util.Date
+create {
+	try {
+		return new SimpleDateFormat("yyyy-MM-dd").parse(it)
+	} catch (RuntimeException e) {
+		throw e;
+	} catch (Exception e) {
+		throw new RuntimeException(e);
+	}
+}
+convert {
+	try {
+		return new SimpleDateFormat("yyyy-MM-dd").format(it)
+	} catch (RuntimeException e) {
+		throw e;
+	} catch (Exception e) {
+		throw new RuntimeException(e);
+	}
+}

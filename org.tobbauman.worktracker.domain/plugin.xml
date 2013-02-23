@@ -7,10 +7,9 @@
 <plugin>
 
    <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated model -->
       <package
-            uri="org.tobbaumann.wt.model"
-            class="org.tobbaumann.wt.model.ModelPackage"
+            uri="org.tobbaumann.wt.domain"
+            class="org.tobbaumann.wt.domain.DomainPackage"
             genModel="WorkTracker.xcore"/>
    </extension>
 

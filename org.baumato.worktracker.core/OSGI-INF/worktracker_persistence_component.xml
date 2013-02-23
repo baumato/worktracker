@@ -9,9 +9,9 @@
   Contributors:
       tobbaumann - initial API and implementation
 -->
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.baumato.worktracker.core">
-   <implementation class="org.baumato.wt.core.impl.DummyActivityRepository"/>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.tobbaumann.worktracker.core">
    <service>
-      <provide interface="org.baumato.wt.core.ActivityRepository"/>
+      <provide interface="org.tobbaumann.wt.core.WorkTrackingService"/>
    </service>
+   <implementation class="org.tobbaumann.wt.core.impl.WorkTrackingServiceImpl" />
 </scr:component>

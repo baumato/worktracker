@@ -1,18 +1,19 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
-Bundle-SymbolicName: org.baumato.worktracker.core;singleton:=true
+Bundle-SymbolicName: org.tobbaumann.worktracker.core;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: org.baumato.wt.core,
- org.baumato.wt.core.impl,
- org.baumato.wt.core.util
+Export-Package: org.tobbaumann.wt.core
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
  org.eclipse.xtext.xbase.lib;visibility:=reexport,
  org.eclipse.core.databinding;bundle-version="1.4.1"
 Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/worktracker_persistence_component.xml
+Import-Package: org.slf4j;version="[1.6.4,2.0.0)",
+ org.tobbaumann.wt.domain,
+ org.tobbaumann.wt.domain.util

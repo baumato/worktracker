@@ -13,7 +13,7 @@
          </property>
          <property
                name="applicationXMI"
-               value="org.baumato.worktracker.ui/Application.e4xmi">
+               value="org.tobbaumann.worktracker.ui/Application.e4xmi">
          </property>
       </product>
    </extension>
