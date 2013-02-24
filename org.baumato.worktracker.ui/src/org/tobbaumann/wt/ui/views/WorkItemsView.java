@@ -11,6 +11,7 @@
 package org.tobbaumann.wt.ui.views;
 
 import java.text.DateFormat;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -21,7 +22,6 @@ import javax.inject.Named;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
-import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -33,10 +33,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.WorkItem;
-import org.tobbaumann.wt.domain.provider.DomainItemProviderAdapterFactory;
-import org.tobbaumann.wt.domain.provider.WorkItemItemProvider;
 
-public class ActivitiesView {
+public class WorkItemsView {
 
 	private TableViewer tableViewer;
 	private WorkTrackingService service;
@@ -44,7 +42,7 @@ public class ActivitiesView {
 	private ESelectionService selectionService;
 
 	@Inject
-	public ActivitiesView(WorkTrackingService service) {
+	public WorkItemsView(WorkTrackingService service) {
 		this.service = service;
 	}
 
@@ -61,15 +59,15 @@ public class ActivitiesView {
 
 		Table table = tableViewer.getTable();
 		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
+		table.setLinesVisible(false);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final WorkItemItemProvider wip = new WorkItemItemProvider(new DomainItemProviderAdapterFactory());
-		for (IItemPropertyDescriptor p : wip.getPropertyDescriptors(null)) {
+		List<String> columnNames = Arrays.asList("Activity", "Start", "End");
+		for (String colName : columnNames) {
 			TableColumn tcol = new TableColumn(table, SWT.LEFT);
-			tcol.setText(p.getDisplayName(null));
+			tcol.setText(colName);
 		}
-		TableColumn emptyCol = new TableColumn(table, SWT.LEFT);
+		new TableColumn(table, SWT.LEFT); // empty column
 		packColumns();
 	}
 
@@ -94,34 +92,24 @@ public class ActivitiesView {
 	public void dispose() {
 	}
 
-	private static final class ActivitiesViewLabelProvider extends StyledCellLabelProvider {
+	private final class ActivitiesViewLabelProvider extends StyledCellLabelProvider {
 		@Override
 		public void update(ViewerCell cell) {
 			WorkItem wi = (WorkItem) cell.getElement();
-
-
-
-
-			switch(cell.getColumnIndex()) {
+			switch (cell.getColumnIndex()) {
 			case 0:
-				cell.setText(wi.getID().substring(0, 8));
-				break;
-			case 1:
 				cell.setText(wi.getActivity().getName());
 				break;
-			case 2:
-				String start = DateFormat.getTimeInstance().format(wi.getStart());
-				cell.setText(start);
+			case 1:
+				cell.setText(DateFormat.getTimeInstance().format(wi.getStart()));
 				break;
-			case 3:
+			case 2:
 				cell.setText(DateFormat.getTimeInstance().format(wi.getEnd()));
 				break;
 			default:
 				break;
 			}
-
-			// clients must override and configure the cell and call super
-			super.update(cell); // calls 'repaint' to trigger the paint listener
+			super.update(cell);
 		}
 	}
 }

@@ -22,7 +22,6 @@ class WorkItem extends Comparable {
 	refers Activity activity
 	Date start
 	Date end
-	contains Description description
 	
 	contains derived TimeSpan duration get {
 		val TimeSpan ts = DomainFactory::eINSTANCE.createTimeSpan
@@ -32,6 +31,8 @@ class WorkItem extends Comparable {
 		ts.millis = h.inSeconds * 1000
 		return ts
 	}
+	
+	contains Description description
 	
 	op int compareTo(WorkItem wi) {
 		return start.compareTo(wi.start)
