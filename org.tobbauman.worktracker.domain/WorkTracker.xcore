@@ -1,23 +1,36 @@
+@Ecore(nsURI="org.tobbaumann.wt.domain/1.0")
+@GenModel(
+	editPluginID="org.tobbaumann.worktracker.domain.edit",
+	editDirectory="/org.tobbaumann.worktracker.domain.edit/src",
+	editorPluginID="org.tobbaumann.worktracker.domain.editor",
+	editorDirectory="/org.tobbaumann.worktracker.domain.editor/src"
+)
 package org.tobbaumann.wt.domain
 
 import java.util.Date
 import java.lang.String
 import java.text.SimpleDateFormat
+import org.tobbaumann.wt.domain.impl.TimeSpanHelper
+
+annotation "http://www.eclipse.org/emf/2002/Ecore" as Ecore
+annotation "http://www.eclipse.org/emf/2002/GenModel" as GenModel
 
 interface Comparable wraps java.lang.Comparable<WorkItem>{}
 
 class WorkItem extends Comparable {
 	id String ID
+	refers Activity activity
 	Date start
 	Date end
-	refers Activity activity
 	contains Description description
 	
 	contains derived TimeSpan duration get {
-//		val TimeSpan ts = ModelFactory::eINSTANCE.createTimeSpan
-//		val Date s = if (start == null) new Date() else start
-//		ts.seconds = ((end.time - s.time) / 1000)
-//		return ts
+		val TimeSpan ts = DomainFactory::eINSTANCE.createTimeSpan
+		val Date s = if (start == null) new Date() else start
+		val Date e = if (end == null) s else end
+		val TimeSpanHelper h = TimeSpanHelper::getInstance(s, e)
+		ts.millis = h.inSeconds * 1000
+		return ts
 	}
 	
 	op int compareTo(WorkItem wi) {
@@ -30,21 +43,59 @@ class Activity {
 }
 
 class TimeSpan {
-	long seconds
-	op long inSeconds() {
-		return seconds
+	long millis
+	
+	derived int seconds get {
+		return ((millis / 1000) % 60).intValue		
 	}
+	
+	derived int minutes get {
+		return ((millis / 1000 / 60) % 60).intValue
+	}
+	
+	derived int hours get {
+		return ((millis / 1000 / 60 / 60) % 24).intValue
+	}
+	
+	derived int days get {
+		return ((millis / 1000 / 60 / 60 / 24) % 7).intValue
+	}
+	
+	derived int weeks get {
+		return (millis / 1000 / 60 / 60 / 24 / 7).intValue
+	}
+	
+	op long inSeconds() {
+		return millis / 1000
+	}
+	
 	op long inMinutes() {
 		return seconds / 60
 	}
+	
 	op long inHours() {
 		return inMinutes / 60
 	}
+	
 	op long inDays() {
 		return inHours / 24
 	}
+	
 	op long inWeeks() {
 		return inDays / 7
+	}
+	
+	op String asString() {
+		val StringBuilder s = new StringBuilder();
+        if(weeks > 0) s.append(weeks + " w  ");
+        if(days > 0) s.append(days + " d  ");
+        if(hours > 0) s.append(hours + " h  ");
+        if(minutes > 0) s.append(minutes + " m  ");
+        if(seconds> 0) s.append(seconds+ " s  ");
+        if (s.toString.empty) {
+        	s.append("0 s")
+        }
+        return s.toString.trim;
 	}
 }
 

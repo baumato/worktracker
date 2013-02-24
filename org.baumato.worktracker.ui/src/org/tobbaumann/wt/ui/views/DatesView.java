@@ -16,7 +16,11 @@ import javax.inject.Inject;
 
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -25,13 +29,14 @@ import org.tobbaumann.wt.core.WorkTrackingService;
 
 public class DatesView {
 
-	@Inject
 	private WorkTrackingService wtService;
 
 	@Inject
 	private ESelectionService selectionService;
 
-	public DatesView() {
+	@Inject
+	public DatesView(WorkTrackingService service) {
+		this.wtService = service;
 	}
 
 	/**
@@ -44,6 +49,15 @@ public class DatesView {
 		viewer.setLabelProvider(new LabelProvider());
 		viewer.setInput(wtService.readDates());
 		viewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				ISelection s = event.getSelection();
+				IStructuredSelection ss = (IStructuredSelection) s;
+				String date = ss.getFirstElement().toString();
+				selectionService.setSelection(date);
+			}
+		});
 	}
 
 	@PreDestroy

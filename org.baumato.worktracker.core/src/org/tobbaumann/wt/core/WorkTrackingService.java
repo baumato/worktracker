@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.tobbaumann.wt.core;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -26,7 +25,7 @@ public interface WorkTrackingService {
 
 	WorkItem readWorkItem(String id);
 
-	List<WorkItem> readWorkItems(Date date);
+	List<WorkItem> readWorkItems(String date);
 
 	List<WorkItem> readWorkItems();
 

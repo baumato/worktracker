@@ -7,6 +7,7 @@ Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Capability: osgi.ee; filter="(|(&(osgi.ee=JavaSE)(version=1.5))(&(osgi.ee=JavaSE)(version=1.6))(&(osgi.ee=JavaSE)(version=1.7)))"
 Export-Package: org.tobbaumann.wt.core
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
 <application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_zmOyMDYrEeKvpYoU2mBS0w" elementId="worktracker.ui.application">
-  <children xsi:type="basic:TrimmedWindow" xmi:id="_MZMgEDYtEeKvpYoU2mBS0w" elementId="worktracker.ui.trimmedwindow.0" label="WorkTracker" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/clock.png" x="0" y="0" width="800" height="600">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_MZMgEDYtEeKvpYoU2mBS0w" elementId="worktracker.ui.trimmedwindow.0" label="WorkTracker" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/clock.png" x="0" y="0" width="1024" height="768">
     <children xsi:type="basic:PartSashContainer" xmi:id="_xw1AsDY0EeKiNZbXiGFecg" elementId="partsashcontainer" containerData="" selectedElement="_ycZtQDY0EeKiNZbXiGFecg" horizontal="true">
       <children xsi:type="basic:PartStack" xmi:id="_ycZtQDY0EeKiNZbXiGFecg" elementId="partstack.left" containerData="20">
         <children xsi:type="basic:Part" xmi:id="_ts_NQDYzEeKiNZbXiGFecg" elementId="datesview" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.DatesView" label="Dates">
