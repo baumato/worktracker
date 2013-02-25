@@ -17,7 +17,6 @@ import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import org.tobbaumann.wt.domain.Activity;
-import org.tobbaumann.wt.domain.Description;
 import org.tobbaumann.wt.domain.DomainFactory;
 import org.tobbaumann.wt.domain.DomainPackage;
 import org.tobbaumann.wt.domain.TimeSpan;
@@ -66,13 +65,6 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
    * @generated
    */
   private EClass timeSpanEClass = null;
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EClass descriptionEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -232,9 +224,9 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getWorkItem_Description()
+  public EAttribute getWorkItem_Description()
   {
-    return (EReference)workItemEClass.getEStructuralFeatures().get(6);
+    return (EAttribute)workItemEClass.getEStructuralFeatures().get(6);
   }
 
   /**
@@ -285,6 +277,16 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
   public EReference getWorkItemSummary_SumOfDurations()
   {
     return (EReference)workItemSummaryEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getWorkItemSummary_SumOfDescriptions()
+  {
+    return (EAttribute)workItemSummaryEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -442,26 +444,6 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getDescription()
-  {
-    return descriptionEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getDescription_Description()
-  {
-    return (EAttribute)descriptionEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EDataType getDate()
   {
     return dateEDataType;
@@ -506,13 +488,14 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
     createEAttribute(workItemEClass, WORK_ITEM__START);
     createEAttribute(workItemEClass, WORK_ITEM__END);
     createEReference(workItemEClass, WORK_ITEM__DURATION);
-    createEReference(workItemEClass, WORK_ITEM__DESCRIPTION);
+    createEAttribute(workItemEClass, WORK_ITEM__DESCRIPTION);
     createEOperation(workItemEClass, WORK_ITEM___COMPARE_TO__WORKITEM);
 
     workItemSummaryEClass = createEClass(WORK_ITEM_SUMMARY);
     createEReference(workItemSummaryEClass, WORK_ITEM_SUMMARY__WORK_ITEMS);
     createEAttribute(workItemSummaryEClass, WORK_ITEM_SUMMARY__ACTIVITY_NAME);
     createEReference(workItemSummaryEClass, WORK_ITEM_SUMMARY__SUM_OF_DURATIONS);
+    createEAttribute(workItemSummaryEClass, WORK_ITEM_SUMMARY__SUM_OF_DESCRIPTIONS);
 
     activityEClass = createEClass(ACTIVITY);
     createEAttribute(activityEClass, ACTIVITY__NAME);
@@ -530,9 +513,6 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
     createEOperation(timeSpanEClass, TIME_SPAN___IN_DAYS);
     createEOperation(timeSpanEClass, TIME_SPAN___IN_WEEKS);
     createEOperation(timeSpanEClass, TIME_SPAN___AS_STRING);
-
-    descriptionEClass = createEClass(DESCRIPTION);
-    createEAttribute(descriptionEClass, DESCRIPTION__DESCRIPTION);
 
     // Create data types
     dateEDataType = createEDataType(DATE);
@@ -582,7 +562,7 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
     initEAttribute(getWorkItem_Start(), this.getDate(), "start", null, 0, 1, WorkItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getWorkItem_End(), this.getDate(), "end", null, 0, 1, WorkItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getWorkItem_Duration(), this.getTimeSpan(), null, "duration", null, 0, 1, WorkItem.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-    initEReference(getWorkItem_Description(), this.getDescription(), null, "description", null, 0, 1, WorkItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getWorkItem_Description(), theEcorePackage.getEString(), "description", null, 0, 1, WorkItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     EOperation op = initEOperation(getWorkItem__CompareTo__WorkItem(), theEcorePackage.getEInt(), "compareTo", 0, 1, !IS_UNIQUE, IS_ORDERED);
     addEParameter(op, this.getWorkItem(), "wi", 0, 1, !IS_UNIQUE, IS_ORDERED);
@@ -591,6 +571,7 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
     initEReference(getWorkItemSummary_WorkItems(), this.getWorkItem(), null, "workItems", null, 0, -1, WorkItemSummary.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getWorkItemSummary_ActivityName(), theEcorePackage.getEString(), "activityName", null, 0, 1, WorkItemSummary.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, IS_DERIVED, IS_ORDERED);
     initEReference(getWorkItemSummary_SumOfDurations(), this.getTimeSpan(), null, "sumOfDurations", null, 0, 1, WorkItemSummary.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+    initEAttribute(getWorkItemSummary_SumOfDescriptions(), theEcorePackage.getEString(), "sumOfDescriptions", null, 0, -1, WorkItemSummary.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
     initEClass(activityEClass, Activity.class, "Activity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getActivity_Name(), theEcorePackage.getEString(), "name", null, 0, 1, Activity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -614,9 +595,6 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
     initEOperation(getTimeSpan__InWeeks(), theEcorePackage.getELong(), "inWeeks", 0, 1, !IS_UNIQUE, IS_ORDERED);
 
     initEOperation(getTimeSpan__AsString(), theEcorePackage.getEString(), "asString", 0, 1, !IS_UNIQUE, IS_ORDERED);
-
-    initEClass(descriptionEClass, Description.class, "Description", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getDescription_Description(), theEcorePackage.getEString(), "description", null, 0, 1, Description.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     // Initialize data types
     initEDataType(dateEDataType, Date.class, "Date", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
@@ -645,7 +623,7 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
        {
        "Ecore", "http://www.eclipse.org/emf/2002/Ecore",
        "GenModel", "http://www.eclipse.org/emf/2002/GenModel"
-       });																	
+       });																		
   }
 
 } //DomainPackageImpl

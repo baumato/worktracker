@@ -18,7 +18,6 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.xtext.xbase.lib.Exceptions;
 
 import org.tobbaumann.wt.domain.Activity;
-import org.tobbaumann.wt.domain.Description;
 import org.tobbaumann.wt.domain.DomainFactory;
 import org.tobbaumann.wt.domain.DomainPackage;
 import org.tobbaumann.wt.domain.TimeSpan;
@@ -81,7 +80,6 @@ public class DomainFactoryImpl extends EFactoryImpl implements DomainFactory
       case DomainPackage.WORK_ITEM_SUMMARY: return createWorkItemSummary();
       case DomainPackage.ACTIVITY: return createActivity();
       case DomainPackage.TIME_SPAN: return createTimeSpan();
-      case DomainPackage.DESCRIPTION: return createDescription();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
@@ -163,17 +161,6 @@ public class DomainFactoryImpl extends EFactoryImpl implements DomainFactory
   {
     TimeSpanImpl timeSpan = new TimeSpanImpl();
     return timeSpan;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public Description createDescription()
-  {
-    DescriptionImpl description = new DescriptionImpl();
-    return description;
   }
 
   /**

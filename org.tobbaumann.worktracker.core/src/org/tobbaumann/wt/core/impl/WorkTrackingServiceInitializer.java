@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.tobbaumann.wt.core.impl;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,7 +23,11 @@ import org.tobbaumann.wt.domain.Activity;
 import org.tobbaumann.wt.domain.DomainFactory;
 import org.tobbaumann.wt.domain.WorkItem;
 
+import com.google.common.base.Charsets;
+import com.google.common.base.Throwables;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.io.Resources;
 
 public class WorkTrackingServiceInitializer {
 
@@ -43,16 +49,26 @@ public class WorkTrackingServiceInitializer {
 	private ImmutableSet<WorkItem> createItems() {
 		ImmutableSet.Builder<WorkItem> items = ImmutableSet.builder();
 		List<String> activities = Arrays.asList(
-				"Doing some work", "Doing other work",
+				"Doing some work", "Support 3rd party",
 				"Even more work", "A meeting", "Task 0815",
 				"Coffee break", "Talking to colleagues",
 				"Task I don't like", "A bit stretching");
+
+		List<String> descriptions = ImmutableList.of();
+		try {
+			URL resource = Resources.getResource(WorkTrackingServiceInitializer.class, "Descriptions.txt");
+			descriptions = Resources.readLines(resource, Charsets.UTF_8);
+		} catch (IOException e) {
+			Throwables.propagate(e);
+		}
+
 		for (int dayOfMonth = 1; dayOfMonth <= 28; dayOfMonth++) {
 			Date startDate = createRandomDateTime(9, dayOfMonth);
 			for (int hourOfDay = 10; hourOfDay <= 19; hourOfDay++) {
 				Date endDate = createRandomDateTime(hourOfDay, dayOfMonth);
 				String activityName = activities.get(random.nextInt(activities.size()));
-				items.add(createWorkItem(activityName, startDate, endDate));
+				String description = descriptions.get(random.nextInt(descriptions.size()));
+				items.add(createWorkItem(activityName, startDate, endDate, description));
 				startDate = endDate;
 			}
 		}
@@ -70,13 +86,14 @@ public class WorkTrackingServiceInitializer {
 		return c.getTime();
 	}
 
-	private WorkItem createWorkItem(String activityName, Date start, Date end) {
+	private WorkItem createWorkItem(String activityName, Date start, Date end, String description) {
 		WorkItem wi = DomainFactory.eINSTANCE.createWorkItem();
 		Activity a = DomainFactory.eINSTANCE.createActivity();
 		a.setName(activityName);
 		wi.setActivity(a);
 		wi.setStart(start);
 		wi.setEnd(end);
+		wi.setDescription(description);
 		return wi;
 	}
 }

@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.UUID;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tobbaumann.wt.core.WorkTrackingService;
@@ -62,7 +62,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		List<WorkItem> itemsToAdd = newArrayList();
 		for (WorkItem wi : workItems) {
 			checkArgument(wi.getID() == null);
-			wi.setID(UUID.randomUUID().toString());
+			wi.setID(EcoreUtil.generateUUID());
 			itemsToAdd.add(wi);
 		}
 		items.addAll(itemsToAdd);

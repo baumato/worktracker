@@ -20,7 +20,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.tobbaumann.wt.domain.Activity;
-import org.tobbaumann.wt.domain.Description;
 import org.tobbaumann.wt.domain.DomainFactory;
 import org.tobbaumann.wt.domain.DomainPackage;
 import org.tobbaumann.wt.domain.TimeSpan;
@@ -128,14 +127,24 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
   protected Date end = END_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getDescription() <em>Description</em>}' containment reference.
+   * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getDescription()
    * @generated
    * @ordered
    */
-  protected Description description;
+  protected static final String DESCRIPTION_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getDescription()
+   * @generated
+   * @ordered
+   */
+  protected String description = DESCRIPTION_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
@@ -355,7 +364,7 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
    * <!-- end-user-doc -->
    * @generated
    */
-  public Description getDescription()
+  public String getDescription()
   {
     return description;
   }
@@ -365,37 +374,12 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetDescription(Description newDescription, NotificationChain msgs)
+  public void setDescription(String newDescription)
   {
-    Description oldDescription = description;
+    String oldDescription = description;
     description = newDescription;
     if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, DomainPackage.WORK_ITEM__DESCRIPTION, oldDescription, newDescription);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setDescription(Description newDescription)
-  {
-    if (newDescription != description)
-    {
-      NotificationChain msgs = null;
-      if (description != null)
-        msgs = ((InternalEObject)description).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - DomainPackage.WORK_ITEM__DESCRIPTION, null, msgs);
-      if (newDescription != null)
-        msgs = ((InternalEObject)newDescription).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - DomainPackage.WORK_ITEM__DESCRIPTION, null, msgs);
-      msgs = basicSetDescription(newDescription, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, DomainPackage.WORK_ITEM__DESCRIPTION, newDescription, newDescription));
+      eNotify(new ENotificationImpl(this, Notification.SET, DomainPackage.WORK_ITEM__DESCRIPTION, oldDescription, description));
   }
 
   /**
@@ -423,8 +407,6 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
     {
       case DomainPackage.WORK_ITEM__DURATION:
         return basicSetDuration(null, msgs);
-      case DomainPackage.WORK_ITEM__DESCRIPTION:
-        return basicSetDescription(null, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
   }
@@ -481,7 +463,7 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
         setEnd((Date)newValue);
         return;
       case DomainPackage.WORK_ITEM__DESCRIPTION:
-        setDescription((Description)newValue);
+        setDescription((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -510,7 +492,7 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
         setEnd(END_EDEFAULT);
         return;
       case DomainPackage.WORK_ITEM__DESCRIPTION:
-        setDescription((Description)null);
+        setDescription(DESCRIPTION_EDEFAULT);
         return;
     }
     super.eUnset(featureID);
@@ -539,7 +521,7 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
       case DomainPackage.WORK_ITEM__DURATION:
         return getDuration() != null;
       case DomainPackage.WORK_ITEM__DESCRIPTION:
-        return description != null;
+        return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
     }
     return super.eIsSet(featureID);
   }
@@ -577,6 +559,8 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
     result.append(start);
     result.append(", end: ");
     result.append(end);
+    result.append(", description: ");
+    result.append(description);
     result.append(')');
     return result.toString();
   }

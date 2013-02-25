@@ -2,11 +2,13 @@
  */
 package org.tobbaumann.wt.domain.impl;
 
+import com.google.common.base.Strings;
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 
+import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
@@ -38,6 +40,7 @@ import org.tobbaumann.wt.domain.WorkItemSummary;
  *   <li>{@link org.tobbaumann.wt.domain.impl.WorkItemSummaryImpl#getWorkItems <em>Work Items</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.impl.WorkItemSummaryImpl#getActivityName <em>Activity Name</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.impl.WorkItemSummaryImpl#getSumOfDurations <em>Sum Of Durations</em>}</li>
+ *   <li>{@link org.tobbaumann.wt.domain.impl.WorkItemSummaryImpl#getSumOfDescriptions <em>Sum Of Descriptions</em>}</li>
  * </ul>
  * </p>
  *
@@ -170,6 +173,28 @@ public class WorkItemSummaryImpl extends MinimalEObjectImpl.Container implements
    * <!-- end-user-doc -->
    * @generated
    */
+  public EList<String> getSumOfDescriptions()
+  {
+    EList<WorkItem> _workItems = this.getWorkItems();
+    final Function1<WorkItem,String> _function = new Function1<WorkItem,String>()
+    {
+        public String apply(final WorkItem it)
+        {
+          String _description = it.getDescription();
+          String _nullToEmpty = Strings.nullToEmpty(_description);
+          return _nullToEmpty;
+        }
+      };
+    List<String> _map = ListExtensions.<WorkItem, String>map(_workItems, _function);
+    BasicEList<String> _basicEList = new BasicEList<String>(_map);
+    return _basicEList;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
@@ -197,6 +222,8 @@ public class WorkItemSummaryImpl extends MinimalEObjectImpl.Container implements
         return getActivityName();
       case DomainPackage.WORK_ITEM_SUMMARY__SUM_OF_DURATIONS:
         return getSumOfDurations();
+      case DomainPackage.WORK_ITEM_SUMMARY__SUM_OF_DESCRIPTIONS:
+        return getSumOfDescriptions();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -253,6 +280,8 @@ public class WorkItemSummaryImpl extends MinimalEObjectImpl.Container implements
         return ACTIVITY_NAME_EDEFAULT == null ? getActivityName() != null : !ACTIVITY_NAME_EDEFAULT.equals(getActivityName());
       case DomainPackage.WORK_ITEM_SUMMARY__SUM_OF_DURATIONS:
         return getSumOfDurations() != null;
+      case DomainPackage.WORK_ITEM_SUMMARY__SUM_OF_DESCRIPTIONS:
+        return !getSumOfDescriptions().isEmpty();
     }
     return super.eIsSet(featureID);
   }

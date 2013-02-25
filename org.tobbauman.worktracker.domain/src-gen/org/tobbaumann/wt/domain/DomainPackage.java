@@ -154,7 +154,7 @@ public interface DomainPackage extends EPackage
   int WORK_ITEM__DURATION = COMPARABLE_FEATURE_COUNT + 5;
 
   /**
-   * The feature id for the '<em><b>Description</b></em>' containment reference.
+   * The feature id for the '<em><b>Description</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -227,13 +227,22 @@ public interface DomainPackage extends EPackage
   int WORK_ITEM_SUMMARY__SUM_OF_DURATIONS = 2;
 
   /**
+   * The feature id for the '<em><b>Sum Of Descriptions</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WORK_ITEM_SUMMARY__SUM_OF_DESCRIPTIONS = 3;
+
+  /**
    * The number of structural features of the '<em>Work Item Summary</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int WORK_ITEM_SUMMARY_FEATURE_COUNT = 3;
+  int WORK_ITEM_SUMMARY_FEATURE_COUNT = 4;
 
   /**
    * The number of operations of the '<em>Work Item Summary</em>' class.
@@ -418,43 +427,6 @@ public interface DomainPackage extends EPackage
   int TIME_SPAN_OPERATION_COUNT = 6;
 
   /**
-   * The meta object id for the '{@link org.tobbaumann.wt.domain.impl.DescriptionImpl <em>Description</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.tobbaumann.wt.domain.impl.DescriptionImpl
-   * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getDescription()
-   * @generated
-   */
-  int DESCRIPTION = 5;
-
-  /**
-   * The feature id for the '<em><b>Description</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DESCRIPTION__DESCRIPTION = 0;
-
-  /**
-   * The number of structural features of the '<em>Description</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DESCRIPTION_FEATURE_COUNT = 1;
-
-  /**
-   * The number of operations of the '<em>Description</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int DESCRIPTION_OPERATION_COUNT = 0;
-
-  /**
    * The meta object id for the '<em>Date</em>' data type.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -462,7 +434,7 @@ public interface DomainPackage extends EPackage
    * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getDate()
    * @generated
    */
-  int DATE = 6;
+  int DATE = 5;
 
 
   /**
@@ -553,15 +525,15 @@ public interface DomainPackage extends EPackage
   EReference getWorkItem_Duration();
 
   /**
-   * Returns the meta object for the containment reference '{@link org.tobbaumann.wt.domain.WorkItem#getDescription <em>Description</em>}'.
+   * Returns the meta object for the attribute '{@link org.tobbaumann.wt.domain.WorkItem#getDescription <em>Description</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Description</em>'.
+   * @return the meta object for the attribute '<em>Description</em>'.
    * @see org.tobbaumann.wt.domain.WorkItem#getDescription()
    * @see #getWorkItem()
    * @generated
    */
-  EReference getWorkItem_Description();
+  EAttribute getWorkItem_Description();
 
   /**
    * Returns the meta object for the '{@link org.tobbaumann.wt.domain.WorkItem#compareTo(org.tobbaumann.wt.domain.WorkItem) <em>Compare To</em>}' operation.
@@ -615,6 +587,17 @@ public interface DomainPackage extends EPackage
    * @generated
    */
   EReference getWorkItemSummary_SumOfDurations();
+
+  /**
+   * Returns the meta object for the attribute list '{@link org.tobbaumann.wt.domain.WorkItemSummary#getSumOfDescriptions <em>Sum Of Descriptions</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Sum Of Descriptions</em>'.
+   * @see org.tobbaumann.wt.domain.WorkItemSummary#getSumOfDescriptions()
+   * @see #getWorkItemSummary()
+   * @generated
+   */
+  EAttribute getWorkItemSummary_SumOfDescriptions();
 
   /**
    * Returns the meta object for class '{@link org.tobbaumann.wt.domain.Activity <em>Activity</em>}'.
@@ -774,27 +757,6 @@ public interface DomainPackage extends EPackage
   EOperation getTimeSpan__AsString();
 
   /**
-   * Returns the meta object for class '{@link org.tobbaumann.wt.domain.Description <em>Description</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Description</em>'.
-   * @see org.tobbaumann.wt.domain.Description
-   * @generated
-   */
-  EClass getDescription();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.tobbaumann.wt.domain.Description#getDescription <em>Description</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Description</em>'.
-   * @see org.tobbaumann.wt.domain.Description#getDescription()
-   * @see #getDescription()
-   * @generated
-   */
-  EAttribute getDescription_Description();
-
-  /**
    * Returns the meta object for data type '{@link java.util.Date <em>Date</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -899,12 +861,12 @@ public interface DomainPackage extends EPackage
     EReference WORK_ITEM__DURATION = eINSTANCE.getWorkItem_Duration();
 
     /**
-     * The meta object literal for the '<em><b>Description</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Description</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EReference WORK_ITEM__DESCRIPTION = eINSTANCE.getWorkItem_Description();
+    EAttribute WORK_ITEM__DESCRIPTION = eINSTANCE.getWorkItem_Description();
 
     /**
      * The meta object literal for the '<em><b>Compare To</b></em>' operation.
@@ -947,6 +909,14 @@ public interface DomainPackage extends EPackage
      * @generated
      */
     EReference WORK_ITEM_SUMMARY__SUM_OF_DURATIONS = eINSTANCE.getWorkItemSummary_SumOfDurations();
+
+    /**
+     * The meta object literal for the '<em><b>Sum Of Descriptions</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute WORK_ITEM_SUMMARY__SUM_OF_DESCRIPTIONS = eINSTANCE.getWorkItemSummary_SumOfDescriptions();
 
     /**
      * The meta object literal for the '{@link org.tobbaumann.wt.domain.impl.ActivityImpl <em>Activity</em>}' class.
@@ -1071,24 +1041,6 @@ public interface DomainPackage extends EPackage
      * @generated
      */
     EOperation TIME_SPAN___AS_STRING = eINSTANCE.getTimeSpan__AsString();
-
-    /**
-     * The meta object literal for the '{@link org.tobbaumann.wt.domain.impl.DescriptionImpl <em>Description</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.tobbaumann.wt.domain.impl.DescriptionImpl
-     * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getDescription()
-     * @generated
-     */
-    EClass DESCRIPTION = eINSTANCE.getDescription();
-
-    /**
-     * The meta object literal for the '<em><b>Description</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute DESCRIPTION__DESCRIPTION = eINSTANCE.getDescription_Description();
 
     /**
      * The meta object literal for the '<em>Date</em>' data type.

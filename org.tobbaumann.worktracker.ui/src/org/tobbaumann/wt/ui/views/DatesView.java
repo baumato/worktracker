@@ -16,7 +16,6 @@ import javax.inject.Inject;
 
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -52,9 +51,7 @@ public class DatesView {
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				ISelection s = event.getSelection();
-				IStructuredSelection ss = (IStructuredSelection) s;
-				String date = ss.getFirstElement().toString();
+				String date = ((IStructuredSelection) event.getSelection()).getFirstElement().toString();
 				selectionService.setSelection(date);
 			}
 		});

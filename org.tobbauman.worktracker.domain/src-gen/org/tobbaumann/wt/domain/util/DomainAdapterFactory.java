@@ -10,7 +10,6 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
 import org.tobbaumann.wt.domain.Activity;
-import org.tobbaumann.wt.domain.Description;
 import org.tobbaumann.wt.domain.DomainPackage;
 import org.tobbaumann.wt.domain.TimeSpan;
 import org.tobbaumann.wt.domain.WorkItem;
@@ -105,11 +104,6 @@ public class DomainAdapterFactory extends AdapterFactoryImpl
         return createTimeSpanAdapter();
       }
       @Override
-      public Adapter caseDescription(Description object)
-      {
-        return createDescriptionAdapter();
-      }
-      @Override
       public Adapter defaultCase(EObject object)
       {
         return createEObjectAdapter();
@@ -202,21 +196,6 @@ public class DomainAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createTimeSpanAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.tobbaumann.wt.domain.Description <em>Description</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.tobbaumann.wt.domain.Description
-   * @generated
-   */
-  public Adapter createDescriptionAdapter()
   {
     return null;
   }

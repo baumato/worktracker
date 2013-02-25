@@ -169,30 +169,30 @@ public interface WorkItem extends EObject, Comparable<WorkItem>
   TimeSpan getDuration();
 
   /**
-   * Returns the value of the '<em><b>Description</b></em>' containment reference.
+   * Returns the value of the '<em><b>Description</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Description</em>' containment reference isn't clear,
+   * If the meaning of the '<em>Description</em>' attribute isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Description</em>' containment reference.
-   * @see #setDescription(Description)
+   * @return the value of the '<em>Description</em>' attribute.
+   * @see #setDescription(String)
    * @see org.tobbaumann.wt.domain.DomainPackage#getWorkItem_Description()
-   * @model containment="true"
+   * @model unique="false"
    * @generated
    */
-  Description getDescription();
+  String getDescription();
 
   /**
-   * Sets the value of the '{@link org.tobbaumann.wt.domain.WorkItem#getDescription <em>Description</em>}' containment reference.
+   * Sets the value of the '{@link org.tobbaumann.wt.domain.WorkItem#getDescription <em>Description</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Description</em>' containment reference.
+   * @param value the new value of the '<em>Description</em>' attribute.
    * @see #getDescription()
    * @generated
    */
-  void setDescription(Description value);
+  void setDescription(String value);
 
   /**
    * <!-- begin-user-doc -->

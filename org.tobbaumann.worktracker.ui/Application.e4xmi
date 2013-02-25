@@ -8,21 +8,19 @@
         </children>
       </children>
       <children xsi:type="basic:PartSashContainer" xmi:id="_1JeiEDY1EeKiNZbXiGFecg" elementId="worktracker.ui.partsashcontainer.0" containerData="80">
-        <children xsi:type="basic:PartStack" xmi:id="_2Fal4DY1EeKiNZbXiGFecg" elementId="worktracker.ui.partstack.0">
+        <children xsi:type="basic:PartStack" xmi:id="_2Fal4DY1EeKiNZbXiGFecg" elementId="worktracker.ui.partstack.0" containerData="40">
           <children xsi:type="basic:Part" xmi:id="_26J1gDY1EeKiNZbXiGFecg" elementId="worktracker.ui.part.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.CurrentActivityView" label="Change Current Activity"/>
         </children>
-        <children xsi:type="basic:PartSashContainer" xmi:id="_FSfNADY2EeKiNZbXiGFecg" elementId="worktracker.ui.partsashcontainer.0" horizontal="true">
-          <children xsi:type="basic:PartSashContainer" xmi:id="_GS3r8DY2EeKiNZbXiGFecg" elementId="worktracker.ui.partsashcontainer.0">
-            <children xsi:type="basic:PartStack" xmi:id="_eg4vIDY2EeKiNZbXiGFecg" elementId="worktracker.ui.partstack.0">
-              <children xsi:type="basic:Part" xmi:id="_HAVO4DY2EeKiNZbXiGFecg" elementId="worktracker.ui.part.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.WorkItemsView" label="Work Items"/>
-            </children>
-            <children xsi:type="basic:PartStack" xmi:id="_fGFG4DY2EeKiNZbXiGFecg" elementId="worktracker.ui.partstack.0">
-              <children xsi:type="basic:Part" xmi:id="_N1vAcDY2EeKiNZbXiGFecg" elementId="worktracker.ui.part.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.DescriptionsView" label="Description"/>
-            </children>
+        <children xsi:type="basic:PartSashContainer" xmi:id="_FSfNADY2EeKiNZbXiGFecg" elementId="worktracker.ui.partsashcontainer.0" containerData="50" horizontal="true">
+          <children xsi:type="basic:PartStack" xmi:id="_eg4vIDY2EeKiNZbXiGFecg" elementId="worktracker.ui.partstack.0">
+            <children xsi:type="basic:Part" xmi:id="_HAVO4DY2EeKiNZbXiGFecg" elementId="worktracker.ui.part.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.WorkItemsView" label="Work Items"/>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_hmhqYDY2EeKiNZbXiGFecg" elementId="worktracker.ui.partstack.0">
             <children xsi:type="basic:Part" xmi:id="_U-Wo8DY2EeKiNZbXiGFecg" elementId="worktracker.ui.part.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.WorkItemSummaryView" label="Work Items Summary"/>
           </children>
+        </children>
+        <children xsi:type="basic:PartStack" xmi:id="_fGFG4DY2EeKiNZbXiGFecg" elementId="worktracker.ui.partstack.0" containerData="10">
+          <children xsi:type="basic:Part" xmi:id="_N1vAcDY2EeKiNZbXiGFecg" elementId="worktracker.ui.part.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.DescriptionsView" label="Description"/>
         </children>
       </children>
     </children>

@@ -59,15 +59,6 @@ public interface DomainFactory extends EFactory
   TimeSpan createTimeSpan();
 
   /**
-   * Returns a new object of class '<em>Description</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Description</em>'.
-   * @generated
-   */
-  Description createDescription();
-
-  /**
    * Returns the package supported by this factory.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
