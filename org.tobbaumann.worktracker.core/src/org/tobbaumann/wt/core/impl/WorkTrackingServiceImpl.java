@@ -14,6 +14,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newLinkedHashSet;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -26,8 +27,11 @@ import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.DomainFactory;
 import org.tobbaumann.wt.domain.DomainPackage;
 import org.tobbaumann.wt.domain.WorkItem;
+import org.tobbaumann.wt.domain.WorkItemSummary;
 
+import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Multimap;
 
 public class WorkTrackingServiceImpl implements WorkTrackingService {
 
@@ -102,6 +106,23 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	}
 
 	@Override
+	public List<WorkItemSummary> readWorkItemSummaries(String date) {
+		List<WorkItem> items = readWorkItems(date);
+		Multimap<String, WorkItem> map = ArrayListMultimap.create();
+		for (WorkItem wi : items) {
+			map.put(wi.getActivityName(), wi);
+		}
+		List<WorkItemSummary> res = newArrayList();
+		for (String a : map.keySet()) {
+			Collection<WorkItem> itemsWithActivity = map.get(a);
+			WorkItemSummary wis = DomainFactory.eINSTANCE.createWorkItemSummary();
+			wis.getWorkItems().addAll(itemsWithActivity);
+			res.add(wis);
+		}
+		return res;
+	}
+
+	@Override
 	public List<WorkItem> readWorkItems() {
 		return ImmutableList.copyOf(items);
 	}
@@ -115,5 +136,4 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		}
 		return dates;
 	}
-
 }

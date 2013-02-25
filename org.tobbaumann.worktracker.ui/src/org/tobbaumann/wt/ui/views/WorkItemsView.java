@@ -51,18 +51,16 @@ public class WorkItemsView {
 	 */
 	@PostConstruct
 	public void createControls(Composite parent) {
-
-
 		tableViewer = new TableViewer(parent, SWT.FULL_SELECTION);
 		tableViewer.setContentProvider(new ArrayContentProvider());
-		tableViewer.setLabelProvider(new ActivitiesViewLabelProvider());
+		tableViewer.setLabelProvider(new LabelProvider());
 
 		Table table = tableViewer.getTable();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(false);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		List<String> columnNames = Arrays.asList("Activity", "Start", "End");
+		List<String> columnNames = Arrays.asList("Activity", "Start", "End", "Duration");
 		for (String colName : columnNames) {
 			TableColumn tcol = new TableColumn(table, SWT.LEFT);
 			tcol.setText(colName);
@@ -92,19 +90,22 @@ public class WorkItemsView {
 	public void dispose() {
 	}
 
-	private final class ActivitiesViewLabelProvider extends StyledCellLabelProvider {
+	private static final class LabelProvider extends StyledCellLabelProvider {
 		@Override
 		public void update(ViewerCell cell) {
 			WorkItem wi = (WorkItem) cell.getElement();
 			switch (cell.getColumnIndex()) {
 			case 0:
-				cell.setText(wi.getActivity().getName());
+				cell.setText(wi.getActivityName());
 				break;
 			case 1:
 				cell.setText(DateFormat.getTimeInstance().format(wi.getStart()));
 				break;
 			case 2:
 				cell.setText(DateFormat.getTimeInstance().format(wi.getEnd()));
+				break;
+			case 3:
+				cell.setText(wi.getDuration().asString());
 				break;
 			default:
 				break;

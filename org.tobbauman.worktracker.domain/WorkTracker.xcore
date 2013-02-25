@@ -20,6 +20,9 @@ interface Comparable wraps java.lang.Comparable<WorkItem>{}
 class WorkItem extends Comparable {
 	id String ID
 	refers Activity activity
+	derived String activityName get {
+		return if (activity != null) activity.name else null
+	}
 	Date start
 	Date end
 	
@@ -36,6 +39,21 @@ class WorkItem extends Comparable {
 	
 	op int compareTo(WorkItem wi) {
 		return start.compareTo(wi.start)
+	}
+}
+
+class WorkItemSummary {
+	refers WorkItem[] workItems
+	derived String activityName get {
+		if (workItems.empty) {
+			return null
+		}
+		return workItems.get(0).activityName
+	}
+	contains derived TimeSpan sumOfDurations get {
+		val TimeSpan ts = DomainFactory::eINSTANCE.createTimeSpan
+		ts.millis = workItems.map([it | it.duration.millis]).reduce([a, b | a + b])
+		return ts
 	}
 }
 

@@ -21,7 +21,7 @@
             </children>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_hmhqYDY2EeKiNZbXiGFecg" elementId="worktracker.ui.partstack.0">
-            <children xsi:type="basic:Part" xmi:id="_U-Wo8DY2EeKiNZbXiGFecg" elementId="worktracker.ui.part.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.ActivitySummary" label="Activity Summary"/>
+            <children xsi:type="basic:Part" xmi:id="_U-Wo8DY2EeKiNZbXiGFecg" elementId="worktracker.ui.part.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.WorkItemSummaryView" label="Work Items Summary"/>
           </children>
         </children>
       </children>

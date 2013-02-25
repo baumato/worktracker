@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.tobbaumann.wt.domain.WorkItem;
+import org.tobbaumann.wt.domain.WorkItemSummary;
 
 public interface WorkTrackingService {
 
@@ -26,6 +27,8 @@ public interface WorkTrackingService {
 	WorkItem readWorkItem(String id);
 
 	List<WorkItem> readWorkItems(String date);
+
+	List<WorkItemSummary> readWorkItemSummaries(String date);
 
 	List<WorkItem> readWorkItems();
 
