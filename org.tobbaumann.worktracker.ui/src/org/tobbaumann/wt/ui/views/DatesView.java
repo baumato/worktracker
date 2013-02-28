@@ -21,10 +21,13 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.tobbaumann.wt.core.WorkTrackingService;
+
+import com.google.common.collect.Ordering;
 
 public class DatesView {
 
@@ -46,6 +49,7 @@ public class DatesView {
 		TableViewer viewer = new TableViewer(parent, SWT.FULL_SELECTION);
 		viewer.setContentProvider(new ArrayContentProvider());
 		viewer.setLabelProvider(new LabelProvider());
+		viewer.setComparator(new ViewerComparator(Ordering.natural().reverse()));
 		viewer.setInput(wtService.readDates());
 		viewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
