@@ -5,3 +5,6 @@ bin
 *.jar
 *.war
 *.ear
+# EMF Edit Projects
+/org.tobbaumann.worktracker.domain.edit
+/org.tobbaumann.worktracker.domain.editor
