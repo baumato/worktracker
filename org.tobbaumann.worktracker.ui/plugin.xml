@@ -15,6 +15,10 @@
                name="applicationXMI"
                value="org.tobbaumann.worktracker.ui/Application.e4xmi">
          </property>
+         <property
+               name="applicationCSS"
+               value="org.tobbaumann.worktracker.ui/css/default.css">
+         </property>
       </product>
    </extension>
 
