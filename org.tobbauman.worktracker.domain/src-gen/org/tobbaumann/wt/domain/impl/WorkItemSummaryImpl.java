@@ -3,6 +3,7 @@
 package org.tobbaumann.wt.domain.impl;
 
 import com.google.common.base.Strings;
+
 import java.util.Collection;
 import java.util.List;
 

@@ -32,7 +32,7 @@ import org.tobbaumann.wt.domain.WorkItem;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.tobbaumann.wt.domain.impl.WorkItemImpl#getID <em>ID</em>}</li>
+ *   <li>{@link org.tobbaumann.wt.domain.impl.WorkItemImpl#getId <em>Id</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.impl.WorkItemImpl#getActivity <em>Activity</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.impl.WorkItemImpl#getActivityName <em>Activity Name</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.impl.WorkItemImpl#getStart <em>Start</em>}</li>
@@ -47,20 +47,20 @@ import org.tobbaumann.wt.domain.WorkItem;
 public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkItem
 {
   /**
-   * The default value of the '{@link #getID() <em>ID</em>}' attribute.
+   * The default value of the '{@link #getId() <em>Id</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getID()
+   * @see #getId()
    * @generated
    * @ordered
    */
   protected static final String ID_EDEFAULT = null;
 
   /**
-   * The cached value of the '{@link #getID() <em>ID</em>}' attribute.
+   * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getID()
+   * @see #getId()
    * @generated
    * @ordered
    */
@@ -172,7 +172,7 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getID()
+  public String getId()
   {
     return id;
   }
@@ -182,12 +182,12 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setID(String newID)
+  public void setId(String newId)
   {
-    String oldID = id;
-    id = newID;
+    String oldId = id;
+    id = newId;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, DomainPackage.WORK_ITEM__ID, oldID, id));
+      eNotify(new ENotificationImpl(this, Notification.SET, DomainPackage.WORK_ITEM__ID, oldId, id));
   }
 
   /**
@@ -422,7 +422,7 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
     switch (featureID)
     {
       case DomainPackage.WORK_ITEM__ID:
-        return getID();
+        return getId();
       case DomainPackage.WORK_ITEM__ACTIVITY:
         if (resolve) return getActivity();
         return basicGetActivity();
@@ -451,7 +451,7 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
     switch (featureID)
     {
       case DomainPackage.WORK_ITEM__ID:
-        setID((String)newValue);
+        setId((String)newValue);
         return;
       case DomainPackage.WORK_ITEM__ACTIVITY:
         setActivity((Activity)newValue);
@@ -480,7 +480,7 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
     switch (featureID)
     {
       case DomainPackage.WORK_ITEM__ID:
-        setID(ID_EDEFAULT);
+        setId(ID_EDEFAULT);
         return;
       case DomainPackage.WORK_ITEM__ACTIVITY:
         setActivity((Activity)null);
@@ -553,7 +553,7 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (ID: ");
+    result.append(" (id: ");
     result.append(id);
     result.append(", start: ");
     result.append(start);

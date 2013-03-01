@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.tobbaumann.wt.core.impl;
 
+import static com.google.common.collect.Lists.newArrayList;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
@@ -19,6 +21,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.tobbaumann.wt.core.WorkTrackingService;
+import org.tobbaumann.wt.domain.Activities;
 import org.tobbaumann.wt.domain.Activity;
 import org.tobbaumann.wt.domain.DomainFactory;
 import org.tobbaumann.wt.domain.WorkItem;
@@ -43,17 +46,35 @@ public class WorkTrackingServiceInitializer {
 	}
 
 	private void initialize() {
+		addActivities();
 		service.createWorkItems(createItems());
 	}
 
-	private ImmutableSet<WorkItem> createItems() {
-		ImmutableSet.Builder<WorkItem> items = ImmutableSet.builder();
+	private void addActivities() {
+		for (Activity a : createActivities()) {
+			service.createActivity(a);
+		}
+	}
+
+	private Iterable<Activity> createActivities() {
+		List<Activity> res = newArrayList();
 		List<String> activities = Arrays.asList(
 				"Doing some work", "Support 3rd party",
 				"Even more work", "A meeting", "Task 0815",
 				"Coffee break", "Talking to colleagues",
 				"Task I don't like", "A bit stretching");
+		for (String name : activities) {
+			Activity activity = DomainFactory.eINSTANCE.createActivity();
+			activity.setName(name);
+			activity.setOccurrenceFrequency(0);
+			res.add(activity);
+		}
+		return res;
+	}
 
+
+	private ImmutableSet<WorkItem> createItems() {
+		ImmutableSet.Builder<WorkItem> items = ImmutableSet.builder();
 		List<String> descriptions = ImmutableList.of();
 		try {
 			URL resource = Resources.getResource(WorkTrackingServiceInitializer.class, "Descriptions.txt");
@@ -62,13 +83,15 @@ public class WorkTrackingServiceInitializer {
 			Throwables.propagate(e);
 		}
 
+		Activities activities = service.readActivities();
+
 		for (int dayOfMonth = 1; dayOfMonth <= 28; dayOfMonth++) {
 			Date startDate = createRandomDateTime(9, dayOfMonth);
 			for (int hourOfDay = 10; hourOfDay <= 19; hourOfDay++) {
 				Date endDate = createRandomDateTime(hourOfDay, dayOfMonth);
-				String activityName = activities.get(random.nextInt(activities.size()));
+				Activity activity = activities.getActivities().get(random.nextInt(activities.getActivities().size()));
 				String description = descriptions.get(random.nextInt(descriptions.size()));
-				items.add(createWorkItem(activityName, startDate, endDate, description));
+				items.add(createWorkItem(activity, startDate, endDate, description));
 				startDate = endDate;
 			}
 		}
@@ -86,11 +109,9 @@ public class WorkTrackingServiceInitializer {
 		return c.getTime();
 	}
 
-	private WorkItem createWorkItem(String activityName, Date start, Date end, String description) {
+	private WorkItem createWorkItem(Activity activity, Date start, Date end, String description) {
 		WorkItem wi = DomainFactory.eINSTANCE.createWorkItem();
-		Activity a = DomainFactory.eINSTANCE.createActivity();
-		a.setName(activityName);
-		wi.setActivity(a);
+		wi.setActivity(activity);
 		wi.setStart(start);
 		wi.setEnd(end);
 		wi.setDescription(description);

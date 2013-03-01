@@ -16,7 +16,7 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link org.tobbaumann.wt.domain.WorkItem#getID <em>ID</em>}</li>
+ *   <li>{@link org.tobbaumann.wt.domain.WorkItem#getId <em>Id</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.WorkItem#getActivity <em>Activity</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.WorkItem#getActivityName <em>Activity Name</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.WorkItem#getStart <em>Start</em>}</li>
@@ -33,30 +33,30 @@ import org.eclipse.emf.ecore.EObject;
 public interface WorkItem extends EObject, Comparable<WorkItem>
 {
   /**
-   * Returns the value of the '<em><b>ID</b></em>' attribute.
+   * Returns the value of the '<em><b>Id</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>ID</em>' attribute isn't clear,
+   * If the meaning of the '<em>Id</em>' attribute isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>ID</em>' attribute.
-   * @see #setID(String)
-   * @see org.tobbaumann.wt.domain.DomainPackage#getWorkItem_ID()
+   * @return the value of the '<em>Id</em>' attribute.
+   * @see #setId(String)
+   * @see org.tobbaumann.wt.domain.DomainPackage#getWorkItem_Id()
    * @model unique="false" id="true"
    * @generated
    */
-  String getID();
+  String getId();
 
   /**
-   * Sets the value of the '{@link org.tobbaumann.wt.domain.WorkItem#getID <em>ID</em>}' attribute.
+   * Sets the value of the '{@link org.tobbaumann.wt.domain.WorkItem#getId <em>Id</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>ID</em>' attribute.
-   * @see #getID()
+   * @param value the new value of the '<em>Id</em>' attribute.
+   * @see #getId()
    * @generated
    */
-  void setID(String value);
+  void setId(String value);
 
   /**
    * Returns the value of the '<em><b>Activity</b></em>' reference.

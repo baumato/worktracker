@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import org.eclipse.xtext.xbase.lib.Exceptions;
 
+import org.tobbaumann.wt.domain.Activities;
 import org.tobbaumann.wt.domain.Activity;
 import org.tobbaumann.wt.domain.DomainFactory;
 import org.tobbaumann.wt.domain.DomainPackage;
@@ -76,9 +77,10 @@ public class DomainFactoryImpl extends EFactoryImpl implements DomainFactory
   {
     switch (eClass.getClassifierID())
     {
+      case DomainPackage.ACTIVITIES: return createActivities();
+      case DomainPackage.ACTIVITY: return createActivity();
       case DomainPackage.WORK_ITEM: return createWorkItem();
       case DomainPackage.WORK_ITEM_SUMMARY: return createWorkItemSummary();
-      case DomainPackage.ACTIVITY: return createActivity();
       case DomainPackage.TIME_SPAN: return createTimeSpan();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -124,6 +126,28 @@ public class DomainFactoryImpl extends EFactoryImpl implements DomainFactory
    * <!-- end-user-doc -->
    * @generated
    */
+  public Activities createActivities()
+  {
+    ActivitiesImpl activities = new ActivitiesImpl();
+    return activities;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Activity createActivity()
+  {
+    ActivityImpl activity = new ActivityImpl();
+    return activity;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public WorkItem createWorkItem()
   {
     WorkItemImpl workItem = new WorkItemImpl();
@@ -139,17 +163,6 @@ public class DomainFactoryImpl extends EFactoryImpl implements DomainFactory
   {
     WorkItemSummaryImpl workItemSummary = new WorkItemSummaryImpl();
     return workItemSummary;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public Activity createActivity()
-  {
-    ActivityImpl activity = new ActivityImpl();
-    return activity;
   }
 
   /**

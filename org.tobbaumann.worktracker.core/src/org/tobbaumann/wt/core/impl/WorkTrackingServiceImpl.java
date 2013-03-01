@@ -24,6 +24,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tobbaumann.wt.core.WorkTrackingService;
+import org.tobbaumann.wt.domain.Activities;
+import org.tobbaumann.wt.domain.Activity;
 import org.tobbaumann.wt.domain.DomainFactory;
 import org.tobbaumann.wt.domain.DomainPackage;
 import org.tobbaumann.wt.domain.WorkItem;
@@ -39,6 +41,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 			.getName());
 
 	private final Set<WorkItem> items = new TreeSet<WorkItem>();
+	private final Activities activities = DomainFactory.eINSTANCE.createActivities();
 
 	public WorkTrackingServiceImpl() {
 		init();
@@ -58,11 +61,23 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	}
 
 	@Override
+	public Activities readActivities() {
+		return activities;
+	}
+
+	@Override
+	public void createActivity(Activity activity) {
+		checkArgument(activity.getId() == null);
+		activity.setId(EcoreUtil.generateUUID());
+		activities.getActivities().add(activity);
+	}
+
+	@Override
 	public void createWorkItems(Iterable<WorkItem> workItems) {
 		List<WorkItem> itemsToAdd = newArrayList();
 		for (WorkItem wi : workItems) {
-			checkArgument(wi.getID() == null);
-			wi.setID(EcoreUtil.generateUUID());
+			checkArgument(wi.getId() == null);
+			wi.setId(EcoreUtil.generateUUID());
 			itemsToAdd.add(wi);
 		}
 		items.addAll(itemsToAdd);
@@ -72,7 +87,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	public void updateWorkItems(Iterable<WorkItem> workItems) {
 		List<WorkItem> itemsToUpdate = newArrayList();
 		for (WorkItem wi : workItems) {
-			checkArgument(wi.getID() != null);
+			checkArgument(wi.getId() != null);
 			itemsToUpdate.add(wi);
 		}
 		items.addAll(itemsToUpdate);
@@ -84,9 +99,14 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	}
 
 	@Override
+	public List<WorkItem> readWorkItems() {
+		return ImmutableList.copyOf(items);
+	}
+
+	@Override
 	public WorkItem readWorkItem(String id) {
 		for (WorkItem wi : items) {
-			if (wi.getID().equals(id)) {
+			if (wi.getId().equals(id)) {
 				return wi;
 			}
 		}
@@ -122,10 +142,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		return res;
 	}
 
-	@Override
-	public List<WorkItem> readWorkItems() {
-		return ImmutableList.copyOf(items);
-	}
+
 
 	@Override
 	public Set<String> readDates() {

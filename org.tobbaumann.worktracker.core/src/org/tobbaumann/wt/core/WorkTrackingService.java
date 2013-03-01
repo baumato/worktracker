@@ -13,10 +13,16 @@ package org.tobbaumann.wt.core;
 import java.util.List;
 import java.util.Set;
 
+import org.tobbaumann.wt.domain.Activities;
+import org.tobbaumann.wt.domain.Activity;
 import org.tobbaumann.wt.domain.WorkItem;
 import org.tobbaumann.wt.domain.WorkItemSummary;
 
 public interface WorkTrackingService {
+
+	Activities readActivities();
+
+	void createActivity(Activity activity);
 
 	void createWorkItems(Iterable<WorkItem> workItems);
 
@@ -33,4 +39,5 @@ public interface WorkTrackingService {
 	List<WorkItem> readWorkItems();
 
 	Set<String> readDates();
+
 }

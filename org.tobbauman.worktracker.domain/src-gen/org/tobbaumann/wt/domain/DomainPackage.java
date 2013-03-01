@@ -90,6 +90,107 @@ public interface DomainPackage extends EPackage
   int COMPARABLE_OPERATION_COUNT = 0;
 
   /**
+   * The meta object id for the '{@link org.tobbaumann.wt.domain.impl.ActivitiesImpl <em>Activities</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.tobbaumann.wt.domain.impl.ActivitiesImpl
+   * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getActivities()
+   * @generated
+   */
+  int ACTIVITIES = 1;
+
+  /**
+   * The feature id for the '<em><b>Activities</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACTIVITIES__ACTIVITIES = 0;
+
+  /**
+   * The number of structural features of the '<em>Activities</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACTIVITIES_FEATURE_COUNT = 1;
+
+  /**
+   * The operation id for the '<em>Get Most Used Activities</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACTIVITIES___GET_MOST_USED_ACTIVITIES__INT = 0;
+
+  /**
+   * The number of operations of the '<em>Activities</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACTIVITIES_OPERATION_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link org.tobbaumann.wt.domain.impl.ActivityImpl <em>Activity</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.tobbaumann.wt.domain.impl.ActivityImpl
+   * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getActivity()
+   * @generated
+   */
+  int ACTIVITY = 2;
+
+  /**
+   * The feature id for the '<em><b>Id</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACTIVITY__ID = 0;
+
+  /**
+   * The feature id for the '<em><b>Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACTIVITY__NAME = 1;
+
+  /**
+   * The feature id for the '<em><b>Occurrence Frequency</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACTIVITY__OCCURRENCE_FREQUENCY = 2;
+
+  /**
+   * The number of structural features of the '<em>Activity</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACTIVITY_FEATURE_COUNT = 3;
+
+  /**
+   * The number of operations of the '<em>Activity</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACTIVITY_OPERATION_COUNT = 0;
+
+  /**
    * The meta object id for the '{@link org.tobbaumann.wt.domain.impl.WorkItemImpl <em>Work Item</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -97,10 +198,10 @@ public interface DomainPackage extends EPackage
    * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getWorkItem()
    * @generated
    */
-  int WORK_ITEM = 1;
+  int WORK_ITEM = 3;
 
   /**
-   * The feature id for the '<em><b>ID</b></em>' attribute.
+   * The feature id for the '<em><b>Id</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -197,7 +298,7 @@ public interface DomainPackage extends EPackage
    * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getWorkItemSummary()
    * @generated
    */
-  int WORK_ITEM_SUMMARY = 2;
+  int WORK_ITEM_SUMMARY = 4;
 
   /**
    * The feature id for the '<em><b>Work Items</b></em>' reference list.
@@ -254,43 +355,6 @@ public interface DomainPackage extends EPackage
   int WORK_ITEM_SUMMARY_OPERATION_COUNT = 0;
 
   /**
-   * The meta object id for the '{@link org.tobbaumann.wt.domain.impl.ActivityImpl <em>Activity</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.tobbaumann.wt.domain.impl.ActivityImpl
-   * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getActivity()
-   * @generated
-   */
-  int ACTIVITY = 3;
-
-  /**
-   * The feature id for the '<em><b>Name</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ACTIVITY__NAME = 0;
-
-  /**
-   * The number of structural features of the '<em>Activity</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ACTIVITY_FEATURE_COUNT = 1;
-
-  /**
-   * The number of operations of the '<em>Activity</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ACTIVITY_OPERATION_COUNT = 0;
-
-  /**
    * The meta object id for the '{@link org.tobbaumann.wt.domain.impl.TimeSpanImpl <em>Time Span</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -298,7 +362,7 @@ public interface DomainPackage extends EPackage
    * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getTimeSpan()
    * @generated
    */
-  int TIME_SPAN = 4;
+  int TIME_SPAN = 5;
 
   /**
    * The feature id for the '<em><b>Millis</b></em>' attribute.
@@ -434,7 +498,7 @@ public interface DomainPackage extends EPackage
    * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getDate()
    * @generated
    */
-  int DATE = 5;
+  int DATE = 6;
 
 
   /**
@@ -449,6 +513,80 @@ public interface DomainPackage extends EPackage
   EClass getComparable();
 
   /**
+   * Returns the meta object for class '{@link org.tobbaumann.wt.domain.Activities <em>Activities</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Activities</em>'.
+   * @see org.tobbaumann.wt.domain.Activities
+   * @generated
+   */
+  EClass getActivities();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.tobbaumann.wt.domain.Activities#getActivities <em>Activities</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Activities</em>'.
+   * @see org.tobbaumann.wt.domain.Activities#getActivities()
+   * @see #getActivities()
+   * @generated
+   */
+  EReference getActivities_Activities();
+
+  /**
+   * Returns the meta object for the '{@link org.tobbaumann.wt.domain.Activities#getMostUsedActivities(int) <em>Get Most Used Activities</em>}' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the '<em>Get Most Used Activities</em>' operation.
+   * @see org.tobbaumann.wt.domain.Activities#getMostUsedActivities(int)
+   * @generated
+   */
+  EOperation getActivities__GetMostUsedActivities__int();
+
+  /**
+   * Returns the meta object for class '{@link org.tobbaumann.wt.domain.Activity <em>Activity</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Activity</em>'.
+   * @see org.tobbaumann.wt.domain.Activity
+   * @generated
+   */
+  EClass getActivity();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.tobbaumann.wt.domain.Activity#getId <em>Id</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Id</em>'.
+   * @see org.tobbaumann.wt.domain.Activity#getId()
+   * @see #getActivity()
+   * @generated
+   */
+  EAttribute getActivity_Id();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.tobbaumann.wt.domain.Activity#getName <em>Name</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name</em>'.
+   * @see org.tobbaumann.wt.domain.Activity#getName()
+   * @see #getActivity()
+   * @generated
+   */
+  EAttribute getActivity_Name();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.tobbaumann.wt.domain.Activity#getOccurrenceFrequency <em>Occurrence Frequency</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Occurrence Frequency</em>'.
+   * @see org.tobbaumann.wt.domain.Activity#getOccurrenceFrequency()
+   * @see #getActivity()
+   * @generated
+   */
+  EAttribute getActivity_OccurrenceFrequency();
+
+  /**
    * Returns the meta object for class '{@link org.tobbaumann.wt.domain.WorkItem <em>Work Item</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -459,15 +597,15 @@ public interface DomainPackage extends EPackage
   EClass getWorkItem();
 
   /**
-   * Returns the meta object for the attribute '{@link org.tobbaumann.wt.domain.WorkItem#getID <em>ID</em>}'.
+   * Returns the meta object for the attribute '{@link org.tobbaumann.wt.domain.WorkItem#getId <em>Id</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>ID</em>'.
-   * @see org.tobbaumann.wt.domain.WorkItem#getID()
+   * @return the meta object for the attribute '<em>Id</em>'.
+   * @see org.tobbaumann.wt.domain.WorkItem#getId()
    * @see #getWorkItem()
    * @generated
    */
-  EAttribute getWorkItem_ID();
+  EAttribute getWorkItem_Id();
 
   /**
    * Returns the meta object for the reference '{@link org.tobbaumann.wt.domain.WorkItem#getActivity <em>Activity</em>}'.
@@ -598,27 +736,6 @@ public interface DomainPackage extends EPackage
    * @generated
    */
   EAttribute getWorkItemSummary_SumOfDescriptions();
-
-  /**
-   * Returns the meta object for class '{@link org.tobbaumann.wt.domain.Activity <em>Activity</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Activity</em>'.
-   * @see org.tobbaumann.wt.domain.Activity
-   * @generated
-   */
-  EClass getActivity();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.tobbaumann.wt.domain.Activity#getName <em>Name</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Name</em>'.
-   * @see org.tobbaumann.wt.domain.Activity#getName()
-   * @see #getActivity()
-   * @generated
-   */
-  EAttribute getActivity_Name();
 
   /**
    * Returns the meta object for class '{@link org.tobbaumann.wt.domain.TimeSpan <em>Time Span</em>}'.
@@ -803,6 +920,66 @@ public interface DomainPackage extends EPackage
     EClass COMPARABLE = eINSTANCE.getComparable();
 
     /**
+     * The meta object literal for the '{@link org.tobbaumann.wt.domain.impl.ActivitiesImpl <em>Activities</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.tobbaumann.wt.domain.impl.ActivitiesImpl
+     * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getActivities()
+     * @generated
+     */
+    EClass ACTIVITIES = eINSTANCE.getActivities();
+
+    /**
+     * The meta object literal for the '<em><b>Activities</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference ACTIVITIES__ACTIVITIES = eINSTANCE.getActivities_Activities();
+
+    /**
+     * The meta object literal for the '<em><b>Get Most Used Activities</b></em>' operation.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EOperation ACTIVITIES___GET_MOST_USED_ACTIVITIES__INT = eINSTANCE.getActivities__GetMostUsedActivities__int();
+
+    /**
+     * The meta object literal for the '{@link org.tobbaumann.wt.domain.impl.ActivityImpl <em>Activity</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.tobbaumann.wt.domain.impl.ActivityImpl
+     * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getActivity()
+     * @generated
+     */
+    EClass ACTIVITY = eINSTANCE.getActivity();
+
+    /**
+     * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ACTIVITY__ID = eINSTANCE.getActivity_Id();
+
+    /**
+     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ACTIVITY__NAME = eINSTANCE.getActivity_Name();
+
+    /**
+     * The meta object literal for the '<em><b>Occurrence Frequency</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ACTIVITY__OCCURRENCE_FREQUENCY = eINSTANCE.getActivity_OccurrenceFrequency();
+
+    /**
      * The meta object literal for the '{@link org.tobbaumann.wt.domain.impl.WorkItemImpl <em>Work Item</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -813,12 +990,12 @@ public interface DomainPackage extends EPackage
     EClass WORK_ITEM = eINSTANCE.getWorkItem();
 
     /**
-     * The meta object literal for the '<em><b>ID</b></em>' attribute feature.
+     * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EAttribute WORK_ITEM__ID = eINSTANCE.getWorkItem_ID();
+    EAttribute WORK_ITEM__ID = eINSTANCE.getWorkItem_Id();
 
     /**
      * The meta object literal for the '<em><b>Activity</b></em>' reference feature.
@@ -917,24 +1094,6 @@ public interface DomainPackage extends EPackage
      * @generated
      */
     EAttribute WORK_ITEM_SUMMARY__SUM_OF_DESCRIPTIONS = eINSTANCE.getWorkItemSummary_SumOfDescriptions();
-
-    /**
-     * The meta object literal for the '{@link org.tobbaumann.wt.domain.impl.ActivityImpl <em>Activity</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.tobbaumann.wt.domain.impl.ActivityImpl
-     * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getActivity()
-     * @generated
-     */
-    EClass ACTIVITY = eINSTANCE.getActivity();
-
-    /**
-     * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute ACTIVITY__NAME = eINSTANCE.getActivity_Name();
 
     /**
      * The meta object literal for the '{@link org.tobbaumann.wt.domain.impl.TimeSpanImpl <em>Time Span</em>}' class.
