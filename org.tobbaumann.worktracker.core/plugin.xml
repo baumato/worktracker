@@ -10,7 +10,7 @@
       <!-- @generated model -->
       <package
             uri="org.tobbaumann.wt.model"
-            class="org.tobbaumann.wt.model.ModelPackage"
+            class="org.tobbaumann.wt.domain.DomainPackage"
             genModel="WorkTracker.xcore"/>
    </extension>
 
