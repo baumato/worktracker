@@ -22,3 +22,4 @@ Import-Package: javax.inject;version="1.0.0",
  org.tobbaumann.wt.core,
  org.tobbaumann.wt.domain,
  org.tobbaumann.wt.domain.util
+Bundle-ClassPath: .
