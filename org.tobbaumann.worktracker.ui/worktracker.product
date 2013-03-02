@@ -3,18 +3,32 @@
 
 <product name="WorkTracker" id="org.tobbaumann.worktracker.ui.product" application="org.eclipse.e4.ui.workbench.swt.E4Application" version="1.0.0.qualifier" useFeatures="false" includeLaunchers="true">
 
+   <aboutInfo>
+      <image path="/org.tobbaumann.worktracker.ui/icons/clock_128x128.png"/>
+      <text>
+         Copyright (c) 2013 Tobias Baumann.
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the Eclipse Public License v1.0
+which accompanies this distribution, and is available at
+http://www.eclipse.org/legal/epl-v10.html
+
+All clock icons are from http://www.icons-land.com.
+      </text>
+   </aboutInfo>
+
    <configIni use="default">
    </configIni>
 
    <launcherArgs>
-      <programArgs>-debug -consoleLog -clearPersistedState</programArgs>
+      <programArgs>-console -debug -consoleLog -clearPersistedState</programArgs>
       <vmArgs>-Dlogback.configurationFile=platform:/plugin/org.tobbaumann.worktracker.ui/logback.xml</vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
-   <windowImages/>
+   <windowImages i16="/org.tobbaumann.worktracker.ui/icons/clock_16x16.png" i32="/org.tobbaumann.worktracker.ui/icons/clock_32x32.png" i48="/org.tobbaumann.worktracker.ui/icons/clock_48x48.png" i64="/org.tobbaumann.worktracker.ui/icons/clock_64x64.png" i128="/org.tobbaumann.worktracker.ui/icons/clock_128x128.png"/>
 
-   <launcher>
+   <launcher name="WorkTracker">
+      <linux icon="/org.tobbaumann.worktracker.ui/icons/launcher.xpm"/>
       <solaris/>
       <win useIco="false">
          <bmp/>
@@ -22,7 +36,17 @@
    </launcher>
 
    <vm>
+      <linux include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7</linux>
+      <windows include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7</windows>
    </vm>
+
+   <license>
+        <url>http://www.eclipse.org/legal/epl-v10.html</url>
+        <text>
+   Copyright (c) 2013 Tobias Baumann.
+All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html.
+         </text>
+   </license>
 
    <plugins>
       <plugin id="ch.qos.logback.classic"/>
@@ -138,5 +162,11 @@
       <plugin id="org.w3c.dom.svg"/>
    </plugins>
 
+   <configurations>
+      <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.equinox.common" autoStart="true" startLevel="2" />
+      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="1" />
+      <plugin id="org.eclipse.osgi" autoStart="true" startLevel="0" />
+   </configurations>
 
 </product>

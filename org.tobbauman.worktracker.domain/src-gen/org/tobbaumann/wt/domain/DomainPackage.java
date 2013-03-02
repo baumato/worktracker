@@ -90,52 +90,6 @@ public interface DomainPackage extends EPackage
   int COMPARABLE_OPERATION_COUNT = 0;
 
   /**
-   * The meta object id for the '{@link org.tobbaumann.wt.domain.impl.ActivitiesImpl <em>Activities</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.tobbaumann.wt.domain.impl.ActivitiesImpl
-   * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getActivities()
-   * @generated
-   */
-  int ACTIVITIES = 1;
-
-  /**
-   * The feature id for the '<em><b>Activities</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ACTIVITIES__ACTIVITIES = 0;
-
-  /**
-   * The number of structural features of the '<em>Activities</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ACTIVITIES_FEATURE_COUNT = 1;
-
-  /**
-   * The operation id for the '<em>Get Most Used Activities</em>' operation.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ACTIVITIES___GET_MOST_USED_ACTIVITIES__INT = 0;
-
-  /**
-   * The number of operations of the '<em>Activities</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ACTIVITIES_OPERATION_COUNT = 1;
-
-  /**
    * The meta object id for the '{@link org.tobbaumann.wt.domain.impl.ActivityImpl <em>Activity</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -143,16 +97,7 @@ public interface DomainPackage extends EPackage
    * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getActivity()
    * @generated
    */
-  int ACTIVITY = 2;
-
-  /**
-   * The feature id for the '<em><b>Id</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ACTIVITY__ID = 0;
+  int ACTIVITY = 1;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -161,7 +106,7 @@ public interface DomainPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ACTIVITY__NAME = 1;
+  int ACTIVITY__NAME = 0;
 
   /**
    * The feature id for the '<em><b>Occurrence Frequency</b></em>' attribute.
@@ -170,7 +115,7 @@ public interface DomainPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ACTIVITY__OCCURRENCE_FREQUENCY = 2;
+  int ACTIVITY__OCCURRENCE_FREQUENCY = 1;
 
   /**
    * The number of structural features of the '<em>Activity</em>' class.
@@ -179,7 +124,16 @@ public interface DomainPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ACTIVITY_FEATURE_COUNT = 3;
+  int ACTIVITY_FEATURE_COUNT = 2;
+
+  /**
+   * The operation id for the '<em>Increment Occurrence Frequency</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACTIVITY___INCREMENT_OCCURRENCE_FREQUENCY = 0;
 
   /**
    * The number of operations of the '<em>Activity</em>' class.
@@ -188,7 +142,7 @@ public interface DomainPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ACTIVITY_OPERATION_COUNT = 0;
+  int ACTIVITY_OPERATION_COUNT = 1;
 
   /**
    * The meta object id for the '{@link org.tobbaumann.wt.domain.impl.WorkItemImpl <em>Work Item</em>}' class.
@@ -198,7 +152,7 @@ public interface DomainPackage extends EPackage
    * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getWorkItem()
    * @generated
    */
-  int WORK_ITEM = 3;
+  int WORK_ITEM = 2;
 
   /**
    * The feature id for the '<em><b>Id</b></em>' attribute.
@@ -273,13 +227,31 @@ public interface DomainPackage extends EPackage
   int WORK_ITEM_FEATURE_COUNT = COMPARABLE_FEATURE_COUNT + 7;
 
   /**
+   * The operation id for the '<em>Format Start</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WORK_ITEM___FORMAT_START__DATEFORMAT = COMPARABLE_OPERATION_COUNT + 0;
+
+  /**
+   * The operation id for the '<em>Format End</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WORK_ITEM___FORMAT_END__DATEFORMAT = COMPARABLE_OPERATION_COUNT + 1;
+
+  /**
    * The operation id for the '<em>Compare To</em>' operation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int WORK_ITEM___COMPARE_TO__WORKITEM = COMPARABLE_OPERATION_COUNT + 0;
+  int WORK_ITEM___COMPARE_TO__WORKITEM = COMPARABLE_OPERATION_COUNT + 2;
 
   /**
    * The number of operations of the '<em>Work Item</em>' class.
@@ -288,7 +260,7 @@ public interface DomainPackage extends EPackage
    * @generated
    * @ordered
    */
-  int WORK_ITEM_OPERATION_COUNT = COMPARABLE_OPERATION_COUNT + 1;
+  int WORK_ITEM_OPERATION_COUNT = COMPARABLE_OPERATION_COUNT + 3;
 
   /**
    * The meta object id for the '{@link org.tobbaumann.wt.domain.impl.WorkItemSummaryImpl <em>Work Item Summary</em>}' class.
@@ -298,7 +270,7 @@ public interface DomainPackage extends EPackage
    * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getWorkItemSummary()
    * @generated
    */
-  int WORK_ITEM_SUMMARY = 4;
+  int WORK_ITEM_SUMMARY = 3;
 
   /**
    * The feature id for the '<em><b>Work Items</b></em>' reference list.
@@ -362,7 +334,7 @@ public interface DomainPackage extends EPackage
    * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getTimeSpan()
    * @generated
    */
-  int TIME_SPAN = 5;
+  int TIME_SPAN = 4;
 
   /**
    * The feature id for the '<em><b>Millis</b></em>' attribute.
@@ -473,13 +445,13 @@ public interface DomainPackage extends EPackage
   int TIME_SPAN___IN_WEEKS = 4;
 
   /**
-   * The operation id for the '<em>As String</em>' operation.
+   * The operation id for the '<em>To String</em>' operation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int TIME_SPAN___AS_STRING = 5;
+  int TIME_SPAN___TO_STRING = 5;
 
   /**
    * The number of operations of the '<em>Time Span</em>' class.
@@ -498,7 +470,17 @@ public interface DomainPackage extends EPackage
    * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getDate()
    * @generated
    */
-  int DATE = 6;
+  int DATE = 5;
+
+  /**
+   * The meta object id for the '<em>Date Format</em>' data type.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see java.text.DateFormat
+   * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getDateFormat()
+   * @generated
+   */
+  int DATE_FORMAT = 6;
 
 
   /**
@@ -513,37 +495,6 @@ public interface DomainPackage extends EPackage
   EClass getComparable();
 
   /**
-   * Returns the meta object for class '{@link org.tobbaumann.wt.domain.Activities <em>Activities</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Activities</em>'.
-   * @see org.tobbaumann.wt.domain.Activities
-   * @generated
-   */
-  EClass getActivities();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link org.tobbaumann.wt.domain.Activities#getActivities <em>Activities</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Activities</em>'.
-   * @see org.tobbaumann.wt.domain.Activities#getActivities()
-   * @see #getActivities()
-   * @generated
-   */
-  EReference getActivities_Activities();
-
-  /**
-   * Returns the meta object for the '{@link org.tobbaumann.wt.domain.Activities#getMostUsedActivities(int) <em>Get Most Used Activities</em>}' operation.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the '<em>Get Most Used Activities</em>' operation.
-   * @see org.tobbaumann.wt.domain.Activities#getMostUsedActivities(int)
-   * @generated
-   */
-  EOperation getActivities__GetMostUsedActivities__int();
-
-  /**
    * Returns the meta object for class '{@link org.tobbaumann.wt.domain.Activity <em>Activity</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -552,17 +503,6 @@ public interface DomainPackage extends EPackage
    * @generated
    */
   EClass getActivity();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.tobbaumann.wt.domain.Activity#getId <em>Id</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Id</em>'.
-   * @see org.tobbaumann.wt.domain.Activity#getId()
-   * @see #getActivity()
-   * @generated
-   */
-  EAttribute getActivity_Id();
 
   /**
    * Returns the meta object for the attribute '{@link org.tobbaumann.wt.domain.Activity#getName <em>Name</em>}'.
@@ -585,6 +525,16 @@ public interface DomainPackage extends EPackage
    * @generated
    */
   EAttribute getActivity_OccurrenceFrequency();
+
+  /**
+   * Returns the meta object for the '{@link org.tobbaumann.wt.domain.Activity#incrementOccurrenceFrequency() <em>Increment Occurrence Frequency</em>}' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the '<em>Increment Occurrence Frequency</em>' operation.
+   * @see org.tobbaumann.wt.domain.Activity#incrementOccurrenceFrequency()
+   * @generated
+   */
+  EOperation getActivity__IncrementOccurrenceFrequency();
 
   /**
    * Returns the meta object for class '{@link org.tobbaumann.wt.domain.WorkItem <em>Work Item</em>}'.
@@ -672,6 +622,26 @@ public interface DomainPackage extends EPackage
    * @generated
    */
   EAttribute getWorkItem_Description();
+
+  /**
+   * Returns the meta object for the '{@link org.tobbaumann.wt.domain.WorkItem#formatStart(java.text.DateFormat) <em>Format Start</em>}' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the '<em>Format Start</em>' operation.
+   * @see org.tobbaumann.wt.domain.WorkItem#formatStart(java.text.DateFormat)
+   * @generated
+   */
+  EOperation getWorkItem__FormatStart__DateFormat();
+
+  /**
+   * Returns the meta object for the '{@link org.tobbaumann.wt.domain.WorkItem#formatEnd(java.text.DateFormat) <em>Format End</em>}' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the '<em>Format End</em>' operation.
+   * @see org.tobbaumann.wt.domain.WorkItem#formatEnd(java.text.DateFormat)
+   * @generated
+   */
+  EOperation getWorkItem__FormatEnd__DateFormat();
 
   /**
    * Returns the meta object for the '{@link org.tobbaumann.wt.domain.WorkItem#compareTo(org.tobbaumann.wt.domain.WorkItem) <em>Compare To</em>}' operation.
@@ -864,14 +834,14 @@ public interface DomainPackage extends EPackage
   EOperation getTimeSpan__InWeeks();
 
   /**
-   * Returns the meta object for the '{@link org.tobbaumann.wt.domain.TimeSpan#asString() <em>As String</em>}' operation.
+   * Returns the meta object for the '{@link org.tobbaumann.wt.domain.TimeSpan#toString() <em>To String</em>}' operation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the '<em>As String</em>' operation.
-   * @see org.tobbaumann.wt.domain.TimeSpan#asString()
+   * @return the meta object for the '<em>To String</em>' operation.
+   * @see org.tobbaumann.wt.domain.TimeSpan#toString()
    * @generated
    */
-  EOperation getTimeSpan__AsString();
+  EOperation getTimeSpan__ToString();
 
   /**
    * Returns the meta object for data type '{@link java.util.Date <em>Date</em>}'.
@@ -880,10 +850,20 @@ public interface DomainPackage extends EPackage
    * @return the meta object for data type '<em>Date</em>'.
    * @see java.util.Date
    * @model instanceClass="java.util.Date"
-   *        annotation="http://www.eclipse.org/emf/2002/GenModel create='try\n{\n\t<%java.text.SimpleDateFormat%> _simpleDateFormat = new <%java.text.SimpleDateFormat%>(\"yyyy-MM-dd\");\n\treturn _simpleDateFormat.parse(it);\n}\ncatch (final Throwable _t) {\n\tif (_t instanceof <%java.lang.RuntimeException%>) {\n\t\tfinal <%java.lang.RuntimeException%> e = (<%java.lang.RuntimeException%>)_t;\n\t\tthrow e;\n\t}\n\telse if (_t instanceof <%java.lang.Exception%>) {\n\t\tfinal <%java.lang.Exception%> e_1 = (<%java.lang.Exception%>)_t;\n\t\t<%java.lang.RuntimeException%> _runtimeException = new <%java.lang.RuntimeException%>(e_1);\n\t\tthrow _runtimeException;\n\t}\n\telse\n\t{\n\t\tthrow <%org.eclipse.xtext.xbase.lib.Exceptions%>.sneakyThrow(_t);\n\t}\n}' convert='try\n{\n\t<%java.text.SimpleDateFormat%> _simpleDateFormat = new <%java.text.SimpleDateFormat%>(\"yyyy-MM-dd\");\n\treturn _simpleDateFormat.format(it);\n}\ncatch (final Throwable _t) {\n\tif (_t instanceof <%java.lang.RuntimeException%>) {\n\t\tfinal <%java.lang.RuntimeException%> e = (<%java.lang.RuntimeException%>)_t;\n\t\tthrow e;\n\t}\n\telse if (_t instanceof <%java.lang.Exception%>) {\n\t\tfinal <%java.lang.Exception%> e_1 = (<%java.lang.Exception%>)_t;\n\t\t<%java.lang.RuntimeException%> _runtimeException = new <%java.lang.RuntimeException%>(e_1);\n\t\tthrow _runtimeException;\n\t}\n\telse\n\t{\n\t\tthrow <%org.eclipse.xtext.xbase.lib.Exceptions%>.sneakyThrow(_t);\n\t}\n}'"
    * @generated
    */
   EDataType getDate();
+
+  /**
+   * Returns the meta object for data type '{@link java.text.DateFormat <em>Date Format</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for data type '<em>Date Format</em>'.
+   * @see java.text.DateFormat
+   * @model instanceClass="java.text.DateFormat"
+   * @generated
+   */
+  EDataType getDateFormat();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -920,32 +900,6 @@ public interface DomainPackage extends EPackage
     EClass COMPARABLE = eINSTANCE.getComparable();
 
     /**
-     * The meta object literal for the '{@link org.tobbaumann.wt.domain.impl.ActivitiesImpl <em>Activities</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.tobbaumann.wt.domain.impl.ActivitiesImpl
-     * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getActivities()
-     * @generated
-     */
-    EClass ACTIVITIES = eINSTANCE.getActivities();
-
-    /**
-     * The meta object literal for the '<em><b>Activities</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference ACTIVITIES__ACTIVITIES = eINSTANCE.getActivities_Activities();
-
-    /**
-     * The meta object literal for the '<em><b>Get Most Used Activities</b></em>' operation.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EOperation ACTIVITIES___GET_MOST_USED_ACTIVITIES__INT = eINSTANCE.getActivities__GetMostUsedActivities__int();
-
-    /**
      * The meta object literal for the '{@link org.tobbaumann.wt.domain.impl.ActivityImpl <em>Activity</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -954,14 +908,6 @@ public interface DomainPackage extends EPackage
      * @generated
      */
     EClass ACTIVITY = eINSTANCE.getActivity();
-
-    /**
-     * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute ACTIVITY__ID = eINSTANCE.getActivity_Id();
 
     /**
      * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
@@ -978,6 +924,14 @@ public interface DomainPackage extends EPackage
      * @generated
      */
     EAttribute ACTIVITY__OCCURRENCE_FREQUENCY = eINSTANCE.getActivity_OccurrenceFrequency();
+
+    /**
+     * The meta object literal for the '<em><b>Increment Occurrence Frequency</b></em>' operation.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EOperation ACTIVITY___INCREMENT_OCCURRENCE_FREQUENCY = eINSTANCE.getActivity__IncrementOccurrenceFrequency();
 
     /**
      * The meta object literal for the '{@link org.tobbaumann.wt.domain.impl.WorkItemImpl <em>Work Item</em>}' class.
@@ -1044,6 +998,22 @@ public interface DomainPackage extends EPackage
      * @generated
      */
     EAttribute WORK_ITEM__DESCRIPTION = eINSTANCE.getWorkItem_Description();
+
+    /**
+     * The meta object literal for the '<em><b>Format Start</b></em>' operation.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EOperation WORK_ITEM___FORMAT_START__DATEFORMAT = eINSTANCE.getWorkItem__FormatStart__DateFormat();
+
+    /**
+     * The meta object literal for the '<em><b>Format End</b></em>' operation.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EOperation WORK_ITEM___FORMAT_END__DATEFORMAT = eINSTANCE.getWorkItem__FormatEnd__DateFormat();
 
     /**
      * The meta object literal for the '<em><b>Compare To</b></em>' operation.
@@ -1194,12 +1164,12 @@ public interface DomainPackage extends EPackage
     EOperation TIME_SPAN___IN_WEEKS = eINSTANCE.getTimeSpan__InWeeks();
 
     /**
-     * The meta object literal for the '<em><b>As String</b></em>' operation.
+     * The meta object literal for the '<em><b>To String</b></em>' operation.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
-    EOperation TIME_SPAN___AS_STRING = eINSTANCE.getTimeSpan__AsString();
+    EOperation TIME_SPAN___TO_STRING = eINSTANCE.getTimeSpan__ToString();
 
     /**
      * The meta object literal for the '<em>Date</em>' data type.
@@ -1210,6 +1180,16 @@ public interface DomainPackage extends EPackage
      * @generated
      */
     EDataType DATE = eINSTANCE.getDate();
+
+    /**
+     * The meta object literal for the '<em>Date Format</em>' data type.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see java.text.DateFormat
+     * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getDateFormat()
+     * @generated
+     */
+    EDataType DATE_FORMAT = eINSTANCE.getDateFormat();
 
   }
 

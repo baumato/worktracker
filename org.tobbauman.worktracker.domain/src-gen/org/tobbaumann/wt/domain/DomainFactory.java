@@ -23,15 +23,6 @@ public interface DomainFactory extends EFactory
   DomainFactory eINSTANCE = org.tobbaumann.wt.domain.impl.DomainFactoryImpl.init();
 
   /**
-   * Returns a new object of class '<em>Activities</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Activities</em>'.
-   * @generated
-   */
-  Activities createActivities();
-
-  /**
    * Returns a new object of class '<em>Activity</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

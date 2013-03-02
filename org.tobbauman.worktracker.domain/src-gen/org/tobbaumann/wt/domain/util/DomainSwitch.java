@@ -7,7 +7,6 @@ import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
 
-import org.tobbaumann.wt.domain.Activities;
 import org.tobbaumann.wt.domain.Activity;
 import org.tobbaumann.wt.domain.DomainPackage;
 import org.tobbaumann.wt.domain.TimeSpan;
@@ -77,13 +76,6 @@ public class DomainSwitch<T> extends Switch<T>
   {
     switch (classifierID)
     {
-      case DomainPackage.ACTIVITIES:
-      {
-        Activities activities = (Activities)theEObject;
-        T result = caseActivities(activities);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
       case DomainPackage.ACTIVITY:
       {
         Activity activity = (Activity)theEObject;
@@ -129,22 +121,6 @@ public class DomainSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseComparable(Comparable<WorkItem> object)
-  {
-    return null;
-  }
-
-  /**
-   * Returns the result of interpreting the object as an instance of '<em>Activities</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Activities</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseActivities(Activities object)
   {
     return null;
   }

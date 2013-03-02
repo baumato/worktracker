@@ -6,6 +6,8 @@ import com.google.common.base.Objects;
 
 import java.lang.reflect.InvocationTargetException;
 
+import java.text.DateFormat;
+
 import java.util.Date;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -387,6 +389,30 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
    * <!-- end-user-doc -->
    * @generated
    */
+  public String formatStart(DateFormat df)
+  {
+    WorkItem _this = this;
+    Date _start = _this.getStart();
+    return df.format(_start);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String formatEnd(DateFormat df)
+  {
+    WorkItem _this = this;
+    Date _end = _this.getEnd();
+    return df.format(_end);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public int compareTo(WorkItem wi)
   {
     WorkItem _this = this;
@@ -536,6 +562,10 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
   {
     switch (operationID)
     {
+      case DomainPackage.WORK_ITEM___FORMAT_START__DATEFORMAT:
+        return formatStart((DateFormat)arguments.get(0));
+      case DomainPackage.WORK_ITEM___FORMAT_END__DATEFORMAT:
+        return formatEnd((DateFormat)arguments.get(0));
       case DomainPackage.WORK_ITEM___COMPARE_TO__WORKITEM:
         return compareTo((WorkItem)arguments.get(0));
     }

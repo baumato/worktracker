@@ -11,6 +11,7 @@
 package org.tobbaumann.wt.ui.views;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -19,6 +20,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -39,14 +41,12 @@ import org.tobbaumann.wt.domain.WorkItemSummary;
 public class WorkItemSummaryView {
 
 	private TableViewer tableViewer;
-	private WorkTrackingService service;
-	@Inject
-	private ESelectionService selectionService;
 
 	@Inject
-	public WorkItemSummaryView(WorkTrackingService service) {
-		this.service = service;
-	}
+	private WorkTrackingService service;
+
+	@Inject
+	private ESelectionService selectionService;
 
 	/**
 	 * Create contents of the view part.
@@ -85,7 +85,7 @@ public class WorkItemSummaryView {
 	}
 
 	@Inject
-	public void updateDate(@Named(IServiceConstants.ACTIVE_SELECTION) @Optional String date) {
+	public void updateDate(@Named(IServiceConstants.ACTIVE_SELECTION) @Optional Date date) {
 		if (date == null) {
 			return;
 		}
@@ -94,9 +94,15 @@ public class WorkItemSummaryView {
 		packColumns();
 	}
 
-
 	@PreDestroy
 	public void dispose() {
+	}
+
+	@Focus
+	public void focus() {
+		if (tableViewer != null && !tableViewer.getTable().isDisposed()) {
+			tableViewer.getTable().setFocus();
+		}
 	}
 
 	private static final class LabelProvider extends StyledCellLabelProvider {
@@ -108,7 +114,7 @@ public class WorkItemSummaryView {
 				cell.setText(s.getActivityName());
 				break;
 			case 1:
-				cell.setText(s.getSumOfDurations().asString());
+				cell.setText(s.getSumOfDurations().toString());
 				break;
 			default:
 				break;

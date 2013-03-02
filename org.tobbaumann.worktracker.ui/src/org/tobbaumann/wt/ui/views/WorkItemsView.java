@@ -12,6 +12,7 @@ package org.tobbaumann.wt.ui.views;
 
 import java.text.DateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -20,6 +21,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -86,7 +88,7 @@ public class WorkItemsView {
 	}
 
 	@Inject
-	public void updateDate(@Named(IServiceConstants.ACTIVE_SELECTION) @Optional String date) {
+	public void updateDate(@Named(IServiceConstants.ACTIVE_SELECTION) @Optional Date date) {
 		if (date == null) {
 			return;
 		}
@@ -99,6 +101,14 @@ public class WorkItemsView {
 	@PreDestroy
 	public void dispose() {
 	}
+
+	@Focus
+	public void focus() {
+		if (tableViewer != null && !tableViewer.getTable().isDisposed()) {
+			tableViewer.getTable().setFocus();
+		}
+	}
+
 
 	private static final class LabelProvider extends StyledCellLabelProvider {
 		@Override
@@ -115,7 +125,7 @@ public class WorkItemsView {
 				cell.setText(DateFormat.getTimeInstance().format(wi.getEnd()));
 				break;
 			case 3:
-				cell.setText(wi.getDuration().asString());
+				cell.setText(wi.getDuration().toString());
 				break;
 			default:
 				break;

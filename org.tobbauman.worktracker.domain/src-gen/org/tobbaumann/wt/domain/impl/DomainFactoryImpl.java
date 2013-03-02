@@ -2,7 +2,7 @@
  */
 package org.tobbaumann.wt.domain.impl;
 
-import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 
 import java.util.Date;
 
@@ -15,9 +15,6 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import org.eclipse.xtext.xbase.lib.Exceptions;
-
-import org.tobbaumann.wt.domain.Activities;
 import org.tobbaumann.wt.domain.Activity;
 import org.tobbaumann.wt.domain.DomainFactory;
 import org.tobbaumann.wt.domain.DomainPackage;
@@ -77,7 +74,6 @@ public class DomainFactoryImpl extends EFactoryImpl implements DomainFactory
   {
     switch (eClass.getClassifierID())
     {
-      case DomainPackage.ACTIVITIES: return createActivities();
       case DomainPackage.ACTIVITY: return createActivity();
       case DomainPackage.WORK_ITEM: return createWorkItem();
       case DomainPackage.WORK_ITEM_SUMMARY: return createWorkItemSummary();
@@ -99,6 +95,8 @@ public class DomainFactoryImpl extends EFactoryImpl implements DomainFactory
     {
       case DomainPackage.DATE:
         return createDateFromString(eDataType, initialValue);
+      case DomainPackage.DATE_FORMAT:
+        return createDateFormatFromString(eDataType, initialValue);
       default:
         throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
     }
@@ -116,20 +114,11 @@ public class DomainFactoryImpl extends EFactoryImpl implements DomainFactory
     {
       case DomainPackage.DATE:
         return convertDateToString(eDataType, instanceValue);
+      case DomainPackage.DATE_FORMAT:
+        return convertDateFormatToString(eDataType, instanceValue);
       default:
         throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
     }
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public Activities createActivities()
-  {
-    ActivitiesImpl activities = new ActivitiesImpl();
-    return activities;
   }
 
   /**
@@ -181,67 +170,9 @@ public class DomainFactoryImpl extends EFactoryImpl implements DomainFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public Date createDate(String it)
-  {
-    try
-    {
-      SimpleDateFormat _simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-      return _simpleDateFormat.parse(it);
-    }
-    catch (final Throwable _t) {
-      if (_t instanceof RuntimeException) {
-        final RuntimeException e = (RuntimeException)_t;
-        throw e;
-      }
-      else if (_t instanceof Exception) {
-        final Exception e_1 = (Exception)_t;
-        RuntimeException _runtimeException = new RuntimeException(e_1);
-        throw _runtimeException;
-      }
-      else
-      {
-        throw Exceptions.sneakyThrow(_t);
-      }
-    }
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public Date createDateFromString(EDataType eDataType, String initialValue)
   {
-    return createDate(initialValue);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public String convertDate(Date it)
-  {
-    try
-    {
-      SimpleDateFormat _simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-      return _simpleDateFormat.format(it);
-    }
-    catch (final Throwable _t) {
-      if (_t instanceof RuntimeException) {
-        final RuntimeException e = (RuntimeException)_t;
-        throw e;
-      }
-      else if (_t instanceof Exception) {
-        final Exception e_1 = (Exception)_t;
-        RuntimeException _runtimeException = new RuntimeException(e_1);
-        throw _runtimeException;
-      }
-      else
-      {
-        throw Exceptions.sneakyThrow(_t);
-      }
-    }
+    return (Date)super.createFromString(eDataType, initialValue);
   }
 
   /**
@@ -251,7 +182,27 @@ public class DomainFactoryImpl extends EFactoryImpl implements DomainFactory
    */
   public String convertDateToString(EDataType eDataType, Object instanceValue)
   {
-    return convertDate((Date)instanceValue);
+    return super.convertToString(eDataType, instanceValue);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public DateFormat createDateFormatFromString(EDataType eDataType, String initialValue)
+  {
+    return (DateFormat)super.createFromString(eDataType, initialValue);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String convertDateFormatToString(EDataType eDataType, Object instanceValue)
+  {
+    return super.convertToString(eDataType, instanceValue);
   }
 
   /**

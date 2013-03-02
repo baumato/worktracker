@@ -289,7 +289,7 @@ public class TimeSpanImpl extends MinimalEObjectImpl.Container implements TimeSp
    * <!-- end-user-doc -->
    * @generated
    */
-  public String asString()
+  public String toString()
   {
     StringBuilder _stringBuilder = new StringBuilder();
     final StringBuilder s = _stringBuilder;
@@ -459,27 +459,10 @@ public class TimeSpanImpl extends MinimalEObjectImpl.Container implements TimeSp
         return inDays();
       case DomainPackage.TIME_SPAN___IN_WEEKS:
         return inWeeks();
-      case DomainPackage.TIME_SPAN___AS_STRING:
-        return asString();
+      case DomainPackage.TIME_SPAN___TO_STRING:
+        return toString();
     }
     return super.eInvoke(operationID, arguments);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  @Override
-  public String toString()
-  {
-    if (eIsProxy()) return super.toString();
-
-    StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (millis: ");
-    result.append(millis);
-    result.append(')');
-    return result.toString();
   }
 
 } //TimeSpanImpl

@@ -20,8 +20,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.tobbaumann.wt.core.WorkTrackingService;
-import org.tobbaumann.wt.domain.Activities;
 import org.tobbaumann.wt.domain.Activity;
 import org.tobbaumann.wt.domain.DomainFactory;
 import org.tobbaumann.wt.domain.WorkItem;
@@ -47,16 +47,14 @@ public class WorkTrackingServiceInitializer {
 
 	private void initialize() {
 		addActivities();
-		service.createWorkItems(createItems());
+		service.readWorkItems().addAll(createItems());
 	}
 
 	private void addActivities() {
-		for (Activity a : createActivities()) {
-			service.createActivity(a);
-		}
+		service.getActivities().addAll(createActivities());
 	}
 
-	private Iterable<Activity> createActivities() {
+	private List<Activity> createActivities() {
 		List<Activity> res = newArrayList();
 		List<String> activities = Arrays.asList(
 				"Doing some work", "Support 3rd party",
@@ -66,7 +64,7 @@ public class WorkTrackingServiceInitializer {
 		for (String name : activities) {
 			Activity activity = DomainFactory.eINSTANCE.createActivity();
 			activity.setName(name);
-			activity.setOccurrenceFrequency(0);
+			activity.setOccurrenceFrequency(random.nextInt(30));
 			res.add(activity);
 		}
 		return res;
@@ -83,13 +81,13 @@ public class WorkTrackingServiceInitializer {
 			Throwables.propagate(e);
 		}
 
-		Activities activities = service.readActivities();
+		IObservableList activities = service.getActivities();
 
 		for (int dayOfMonth = 1; dayOfMonth <= 28; dayOfMonth++) {
 			Date startDate = createRandomDateTime(9, dayOfMonth);
 			for (int hourOfDay = 10; hourOfDay <= 19; hourOfDay++) {
 				Date endDate = createRandomDateTime(hourOfDay, dayOfMonth);
-				Activity activity = activities.getActivities().get(random.nextInt(activities.getActivities().size()));
+				Activity activity = (Activity) activities.get(random.nextInt(activities.size()));
 				String description = descriptions.get(random.nextInt(descriptions.size()));
 				items.add(createWorkItem(activity, startDate, endDate, description));
 				startDate = endDate;

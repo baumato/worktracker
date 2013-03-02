@@ -12,17 +12,19 @@ package org.tobbaumann.wt.ui.views;
 
 import java.net.URI;
 import java.net.URL;
-import java.util.List;
+import java.util.Date;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.core.databinding.observable.list.IObservableList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.preference.JFacePreferences;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.StyledString.Styler;
@@ -31,6 +33,8 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
@@ -43,9 +47,11 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.tobbaumann.wt.core.WorkTrackingService;
-import org.tobbaumann.wt.domain.Activities;
 import org.tobbaumann.wt.domain.Activity;
+import org.tobbaumann.wt.domain.DomainFactory;
+import org.tobbaumann.wt.domain.WorkItem;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
 
 public class ChangeActivityView {
@@ -86,8 +92,9 @@ public class ChangeActivityView {
 	private void createMostUsedActivitiesButtons(Composite leftCompParent) {
 		GridLayout layout = new GridLayout(1, true);
 		leftCompParent.setLayout(layout);
-		List<Activity> mua = service.readActivities().getMostUsedActivities(6);
-		for (Activity a : mua) {
+		IObservableList mua = service.getMostUsedActivities(6);
+		for (Object o : mua) {
+			Activity a = (Activity) o;
 			Button btn = new Button(leftCompParent, SWT.PUSH);
 			btn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 			btn.setText(a.getName());
@@ -98,21 +105,56 @@ public class ChangeActivityView {
 		Composite parent = new Composite(rightCompParent, SWT.NONE);
 		parent.setLayout(new GridLayout(1, false));
 
+		createActivitiesTableStripe(parent);
+
+		activitiesTable = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION);
+		activitiesTable.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		activitiesTable.setLabelProvider(new ChangeActivitiesViewLabelProvider());
+
+		activitiesTable.setContentProvider(new ObservableListContentProvider());
+		activitiesTable.setComparator(new ViewerComparator(Ordering.natural()));
+	}
+
+	private void createActivitiesTableStripe(Composite parent) {
 		Composite stripe = new Composite(parent, SWT.NONE);
 		stripe.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		stripe.setLayout(new GridLayout(2, false));
-		Text txtActivity = new Text(stripe, SWT.SINGLE | SWT.LEAD | SWT.BORDER);
+		final Text txtActivity = new Text(stripe, SWT.SINGLE | SWT.LEAD | SWT.BORDER);
 		txtActivity.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtActivity.setMessage("Enter activity here...");
 		Button btnAdd = new Button(stripe, SWT.PUSH);
 		btnAdd.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 		btnAdd.setImage(getAddImage());
+		btnAdd.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Optional<Activity> oa = service.getActivity(txtActivity.getText());
+				final Activity activity;
+				if (oa.isPresent()) {
+					activity = oa.get();
+					activity.incrementOccurrenceFrequency();
+				} else {
+					activity = DomainFactory.eINSTANCE.createActivity();
+					activity.setName(txtActivity.getText());
+					service.getActivities().add(activity);
+				}
 
-		activitiesTable = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION);
-		activitiesTable.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		activitiesTable.setLabelProvider(new ChangeActivitiesViewLabelProvider());
-		activitiesTable.setContentProvider(new ArrayContentProvider());
-		activitiesTable.setComparator(new ViewerComparator(Ordering.natural()));
+				// update currently active work item
+				Optional<WorkItem> ow = service.getActiveWorkItem();
+				Date now = new Date();
+				if (ow.isPresent()) {
+					ow.get().setEnd(now);
+				}
+
+				// add new work item
+				WorkItem wi = DomainFactory.eINSTANCE.createWorkItem();
+				wi.setId(EcoreUtil.generateUUID());
+				wi.setActivity(activity);
+				wi.setStart(now);
+
+				service.readWorkItems().add(wi);
+			}
+		});
 	}
 
 	private Image getAddImage() {
@@ -132,8 +174,8 @@ public class ChangeActivityView {
 	}
 
 	private void updateActivitiesTable() {
-		Activities activities = service.readActivities();
-		activitiesTable.setInput(activities.getActivities());
+		IObservableList activities = service.getActivities();
+		activitiesTable.setInput(activities);
 	}
 
 	/**

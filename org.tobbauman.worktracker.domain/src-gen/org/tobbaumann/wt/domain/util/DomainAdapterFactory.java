@@ -9,7 +9,6 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 
 import org.eclipse.emf.ecore.EObject;
 
-import org.tobbaumann.wt.domain.Activities;
 import org.tobbaumann.wt.domain.Activity;
 import org.tobbaumann.wt.domain.DomainPackage;
 import org.tobbaumann.wt.domain.TimeSpan;
@@ -85,11 +84,6 @@ public class DomainAdapterFactory extends AdapterFactoryImpl
         return createComparableAdapter();
       }
       @Override
-      public Adapter caseActivities(Activities object)
-      {
-        return createActivitiesAdapter();
-      }
-      @Override
       public Adapter caseActivity(Activity object)
       {
         return createActivityAdapter();
@@ -142,21 +136,6 @@ public class DomainAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createComparableAdapter()
-  {
-    return null;
-  }
-
-  /**
-   * Creates a new adapter for an object of class '{@link org.tobbaumann.wt.domain.Activities <em>Activities</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.tobbaumann.wt.domain.Activities
-   * @generated
-   */
-  public Adapter createActivitiesAdapter()
   {
     return null;
   }

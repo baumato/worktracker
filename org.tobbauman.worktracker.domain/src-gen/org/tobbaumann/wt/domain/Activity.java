@@ -12,7 +12,6 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link org.tobbaumann.wt.domain.Activity#getId <em>Id</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.Activity#getName <em>Name</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.Activity#getOccurrenceFrequency <em>Occurrence Frequency</em>}</li>
  * </ul>
@@ -25,32 +24,6 @@ import org.eclipse.emf.ecore.EObject;
 public interface Activity extends EObject
 {
   /**
-   * Returns the value of the '<em><b>Id</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Id</em>' attribute isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Id</em>' attribute.
-   * @see #setId(String)
-   * @see org.tobbaumann.wt.domain.DomainPackage#getActivity_Id()
-   * @model unique="false"
-   * @generated
-   */
-  String getId();
-
-  /**
-   * Sets the value of the '{@link org.tobbaumann.wt.domain.Activity#getId <em>Id</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Id</em>' attribute.
-   * @see #getId()
-   * @generated
-   */
-  void setId(String value);
-
-  /**
    * Returns the value of the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <p>
@@ -61,7 +34,7 @@ public interface Activity extends EObject
    * @return the value of the '<em>Name</em>' attribute.
    * @see #setName(String)
    * @see org.tobbaumann.wt.domain.DomainPackage#getActivity_Name()
-   * @model unique="false"
+   * @model unique="false" id="true"
    * @generated
    */
   String getName();
@@ -101,5 +74,13 @@ public interface Activity extends EObject
    * @generated
    */
   void setOccurrenceFrequency(long value);
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @model annotation="http://www.eclipse.org/emf/2002/GenModel body='<%org.tobbaumann.wt.domain.Activity%> _this = this;\n<%org.tobbaumann.wt.domain.Activity%> _this_1 = this;\nlong _occurrenceFrequency = _this_1.getOccurrenceFrequency();\nlong _plus = (_occurrenceFrequency + 1);\n_this.setOccurrenceFrequency(_plus);'"
+   * @generated
+   */
+  void incrementOccurrenceFrequency();
 
 } // Activity

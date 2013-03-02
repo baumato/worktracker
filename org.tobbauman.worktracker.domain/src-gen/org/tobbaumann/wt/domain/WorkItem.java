@@ -4,6 +4,8 @@ package org.tobbaumann.wt.domain;
 
 import java.lang.Comparable;
 
+import java.text.DateFormat;
+
 import java.util.Date;
 
 import org.eclipse.emf.ecore.EObject;
@@ -193,6 +195,24 @@ public interface WorkItem extends EObject, Comparable<WorkItem>
    * @generated
    */
   void setDescription(String value);
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @model unique="false" dfDataType="org.tobbaumann.wt.domain.DateFormat" dfUnique="false"
+   *        annotation="http://www.eclipse.org/emf/2002/GenModel body='<%org.tobbaumann.wt.domain.WorkItem%> _this = this;\n<%java.util.Date%> _start = _this.getStart();\nreturn df.format(_start);'"
+   * @generated
+   */
+  String formatStart(DateFormat df);
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @model unique="false" dfDataType="org.tobbaumann.wt.domain.DateFormat" dfUnique="false"
+   *        annotation="http://www.eclipse.org/emf/2002/GenModel body='<%org.tobbaumann.wt.domain.WorkItem%> _this = this;\n<%java.util.Date%> _end = _this.getEnd();\nreturn df.format(_end);'"
+   * @generated
+   */
+  String formatEnd(DateFormat df);
 
   /**
    * <!-- begin-user-doc -->

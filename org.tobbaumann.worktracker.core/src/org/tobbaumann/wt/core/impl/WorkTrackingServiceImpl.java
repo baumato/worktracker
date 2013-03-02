@@ -10,45 +10,64 @@
  ******************************************************************************/
 package org.tobbaumann.wt.core.impl;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Sets.newLinkedHashSet;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
-import java.util.TreeSet;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.core.databinding.observable.list.IListChangeListener;
+import org.eclipse.core.databinding.observable.list.IObservableList;
+import org.eclipse.core.databinding.observable.list.ListChangeEvent;
+import org.eclipse.core.databinding.observable.list.ListDiffVisitor;
+import org.eclipse.core.databinding.observable.list.WritableList;
+import org.eclipse.core.databinding.observable.set.IObservableSet;
+import org.eclipse.core.databinding.observable.set.WritableSet;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tobbaumann.wt.core.WorkTrackingService;
-import org.tobbaumann.wt.domain.Activities;
 import org.tobbaumann.wt.domain.Activity;
 import org.tobbaumann.wt.domain.DomainFactory;
-import org.tobbaumann.wt.domain.DomainPackage;
 import org.tobbaumann.wt.domain.WorkItem;
 import org.tobbaumann.wt.domain.WorkItemSummary;
 
+import com.google.common.base.Optional;
+import com.google.common.base.Predicate;
+import com.google.common.base.Throwables;
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.Ordering;
 
 public class WorkTrackingServiceImpl implements WorkTrackingService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(WorkTrackingServiceImpl.class
 			.getName());
 
-	private final Set<WorkItem> items = new TreeSet<WorkItem>();
-	private final Activities activities = DomainFactory.eINSTANCE.createActivities();
+	private final IObservableList activities;
+	private final IObservableSet workItemDates;
+	private final IObservableList workItems;
+	private WorkItem activeWorkItem;
 
 	public WorkTrackingServiceImpl() {
-		init();
-	}
-
-	private void init() {
 		LOGGER.trace("init");
+		this.activities = new WritableList(newArrayList(), Activity.class);
+		this.workItemDates = new WritableSet(newArrayList(), Date.class);
+		this.workItems = new WritableList(newArrayList(), WorkItem.class);
+		this.workItems.addListChangeListener(new WorkItemDatesUpdater());
+		this.workItems.addListChangeListener(new ActiveWorkItemUpdater());
 		WorkTrackingServiceInitializer.initialize(this);
 	}
 
@@ -61,96 +80,200 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	}
 
 	@Override
-	public Activities readActivities() {
+	@SuppressWarnings("unchecked")
+	public Optional<Activity> getActivity(final String activityName) {
+		return Iterables.tryFind(activities, new Predicate<Activity>() {
+			@Override
+			public boolean apply(Activity a) {
+				if (a.getName().equals(activityName)) {
+					return true;
+				}
+				return false;
+			}
+		});
+	}
+
+	@Override
+	public IObservableList getActivities() {
+		LOGGER.trace("enter getActivities");
 		return activities;
 	}
 
 	@Override
-	public void createActivity(Activity activity) {
-		checkArgument(activity.getId() == null);
-		activity.setId(EcoreUtil.generateUUID());
-		activities.getActivities().add(activity);
-	}
-
-	@Override
-	public void createWorkItems(Iterable<WorkItem> workItems) {
-		List<WorkItem> itemsToAdd = newArrayList();
-		for (WorkItem wi : workItems) {
-			checkArgument(wi.getId() == null);
-			wi.setId(EcoreUtil.generateUUID());
-			itemsToAdd.add(wi);
-		}
-		items.addAll(itemsToAdd);
-	}
-
-	@Override
-	public void updateWorkItems(Iterable<WorkItem> workItems) {
-		List<WorkItem> itemsToUpdate = newArrayList();
-		for (WorkItem wi : workItems) {
-			checkArgument(wi.getId() != null);
-			itemsToUpdate.add(wi);
-		}
-		items.addAll(itemsToUpdate);
-	}
-
-	@Override
-	public void deleteWorkItems(Iterable<WorkItem> workItems) {
-		items.removeAll(ImmutableList.copyOf(workItems));
-	}
-
-	@Override
-	public List<WorkItem> readWorkItems() {
-		return ImmutableList.copyOf(items);
-	}
-
-	@Override
-	public WorkItem readWorkItem(String id) {
-		for (WorkItem wi : items) {
-			if (wi.getId().equals(id)) {
-				return wi;
+	public IObservableList getMostUsedActivities(int numberOfActivities) {
+		@SuppressWarnings("unchecked")
+		List<Activity> sorted = newArrayList(activities);
+		Comparator<Activity> order = new Comparator<Activity>() {
+			@Override
+			public int compare(Activity o1, Activity o2) {
+				return ComparisonChain.start()
+						.compare(o1.getOccurrenceFrequency(), o2.getOccurrenceFrequency())
+						.result();
 			}
-		}
-		throw new NoSuchElementException();
+		};
+		Collections.sort(sorted, Ordering.from(order).reverse());
+		WritableList res = new WritableList(sorted.subList(0, numberOfActivities), Activity.class);
+		res.addListChangeListener(new ActivityListChangeListener());
+		return res;
 	}
 
 	@Override
-	public List<WorkItem> readWorkItems(String strDate) {
+	public IObservableSet readDates() {
+		return workItemDates;
+	}
+
+	@Override
+	public Optional<WorkItem> getActiveWorkItem() {
+		return Optional.fromNullable(activeWorkItem);
+	}
+
+	@Override
+	public IObservableList readWorkItems() {
+		return new WritableList(workItems, WorkItem.class);
+	}
+
+	@Override
+	public IObservableList readWorkItems(Date date) {
 		List<WorkItem> itemList = newArrayList();
-		for (WorkItem wi : items) {
-			String wiDate = DomainFactory.eINSTANCE.convertToString(DomainPackage.Literals.DATE, wi.getStart());
-			if (strDate.equals(wiDate)) {
+		for (Object o : workItems) {
+			WorkItem wi = (WorkItem) o;
+			String wiDate = toString(wi.getStart());
+			if (wiDate.equals(toString(date))) {
 				itemList.add(wi);
 			}
 		}
-		return itemList;
+		WritableList res = new WritableList(itemList, WorkItem.class);
+		res.addListChangeListener(new WorkItemListChangeListener());
+		return res;
+	}
+
+	private String toString(Date date) {
+		return new SimpleDateFormat("yyyy-MM-dd").format(date);
 	}
 
 	@Override
-	public List<WorkItemSummary> readWorkItemSummaries(String date) {
-		List<WorkItem> items = readWorkItems(date);
+	public List<WorkItemSummary> readWorkItemSummaries(Date date) {
+		IObservableList items = readWorkItems(date);
 		Multimap<String, WorkItem> map = ArrayListMultimap.create();
-		for (WorkItem wi : items) {
+		for (Object o : items) {
+			WorkItem wi = (WorkItem) o;
 			map.put(wi.getActivityName(), wi);
 		}
-		List<WorkItemSummary> res = newArrayList();
+		ImmutableList.Builder<WorkItemSummary> res = ImmutableList.builder();
 		for (String a : map.keySet()) {
 			Collection<WorkItem> itemsWithActivity = map.get(a);
 			WorkItemSummary wis = DomainFactory.eINSTANCE.createWorkItemSummary();
 			wis.getWorkItems().addAll(itemsWithActivity);
 			res.add(wis);
 		}
-		return res;
+		return res.build();
+	}
+
+	private void store() {
+		try {
+			ResourceSet resourceSet = new ResourceSetImpl();
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
+			.put("storage", new XMIResourceFactoryImpl());
+
+			Resource res = resourceSet.createResource(URI
+					.createFileURI("/tmp/storage/worktracker.storage"));
+			res.getContents().addAll(activities);
+			res.getContents().addAll(workItems);
+
+			for (Resource resource : resourceSet.getResources()) {
+				resource.save(null);
+			}
+		} catch (Exception e) {
+			Throwables.propagate(e);
+		}
 	}
 
 
+	private final class ActiveWorkItemUpdater implements IListChangeListener {
+		@Override
+		public void handleListChange(ListChangeEvent event) {
+			event.diff.accept(new ListDiffVisitor() {
+				@Override
+				public void handleRemove(int index, Object element) {
+				}
 
-	@Override
-	public Set<String> readDates() {
-		Set<String> dates = newLinkedHashSet();
-		DomainFactory df = DomainFactory.eINSTANCE;
-		for (WorkItem wi : items) {
-			dates.add(df.convertToString(DomainPackage.Literals.DATE, wi.getStart()));
+				@Override
+				public void handleAdd(int index, Object element) {
+					activeWorkItem = (WorkItem) element;
+				}
+			});
 		}
-		return dates;
+	}
+
+
+	private final class WorkItemDatesUpdater implements IListChangeListener {
+		@Override
+		public void handleListChange(ListChangeEvent event) {
+			event.diff.accept(new ListDiffVisitor() {
+				@Override
+				public void handleRemove(int index, Object element) {
+					WorkItem wi = (WorkItem) element;
+					Date date = getDatePartOfWorkItemStart(wi);
+					if (readWorkItems(date).isEmpty()) {
+						workItemDates.remove(date);
+					}
+				}
+
+				@Override
+				public void handleAdd(int index, Object element) {
+					WorkItem wi = (WorkItem) element;
+					workItemDates.add(getDatePartOfWorkItemStart(wi));
+				}
+			});
+		}
+
+		private Date getDatePartOfWorkItemStart(WorkItem wi) {
+			try {
+				DateFormat df = DateFormat.getDateInstance();
+				return df.parse(wi.formatStart(df));
+			} catch (ParseException e) {
+				throw new RuntimeException(e);
+			}
+		}
+	}
+
+
+	private final class ActivityListChangeListener implements IListChangeListener {
+		@Override
+		public void handleListChange(ListChangeEvent event) {
+			event.diff.accept(new ListDiffVisitor() {
+				@Override
+				public void handleRemove(int index, Object element) {
+					Activity a = (Activity) element;
+					activities.remove(a.getName());
+				}
+
+				@Override
+				public void handleAdd(int index, Object element) {
+					Activity a = (Activity) element;
+					activities.add(a);
+				}
+			});
+		}
+	}
+
+
+	private final class WorkItemListChangeListener implements IListChangeListener {
+		@Override
+		public void handleListChange(ListChangeEvent event) {
+			event.diff.accept(new ListDiffVisitor() {
+				@Override
+				public void handleRemove(int index, Object element) {
+					WorkItem wi = (WorkItem) element;
+					workItems.remove(wi.getId());
+				}
+
+				@Override
+				public void handleAdd(int index, Object element) {
+					WorkItem wi = (WorkItem) element;
+					workItems.remove(wi);
+				}
+			});
+		}
 	}
 }

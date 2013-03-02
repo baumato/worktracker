@@ -10,34 +10,37 @@
  ******************************************************************************/
 package org.tobbaumann.wt.core;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
-import org.tobbaumann.wt.domain.Activities;
+import org.eclipse.core.databinding.observable.list.IObservableList;
+import org.eclipse.core.databinding.observable.set.IObservableSet;
 import org.tobbaumann.wt.domain.Activity;
 import org.tobbaumann.wt.domain.WorkItem;
 import org.tobbaumann.wt.domain.WorkItemSummary;
 
+import com.google.common.base.Optional;
+
 public interface WorkTrackingService {
 
-	Activities readActivities();
+	Optional<Activity> getActivity(String activityName);
 
-	void createActivity(Activity activity);
+	IObservableList getActivities();
 
-	void createWorkItems(Iterable<WorkItem> workItems);
+	IObservableList getMostUsedActivities(int numberOfActivities);
 
-	void updateWorkItems(Iterable<WorkItem> workItems);
+	IObservableSet readDates();
 
-	void deleteWorkItems(Iterable<WorkItem> workItems);
+	Optional<WorkItem> getActiveWorkItem();
 
-	WorkItem readWorkItem(String id);
+	IObservableList readWorkItems();
 
-	List<WorkItem> readWorkItems(String date);
+	IObservableList readWorkItems(Date date);
 
-	List<WorkItemSummary> readWorkItemSummaries(String date);
+	//void createActivity(Activity activity);
+	//void createWorkItems(Iterable<WorkItem> workItems);
+	//void updateWorkItems(Iterable<WorkItem> workItems);
+	//void deleteWorkItems(Iterable<WorkItem> workItems);
 
-	List<WorkItem> readWorkItems();
-
-	Set<String> readDates();
-
+	List<WorkItemSummary> readWorkItemSummaries(Date date);
 }
