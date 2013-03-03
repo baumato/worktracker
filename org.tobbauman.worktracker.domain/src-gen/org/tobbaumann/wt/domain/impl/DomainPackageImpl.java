@@ -253,7 +253,7 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getWorkItem_End()
+  public EAttribute getWorkItem_EndDate()
   {
     return (EAttribute)workItemEClass.getEStructuralFeatures().get(4);
   }
@@ -263,9 +263,19 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EAttribute getWorkItem_End()
+  {
+    return (EAttribute)workItemEClass.getEStructuralFeatures().get(5);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EReference getWorkItem_Duration()
   {
-    return (EReference)workItemEClass.getEStructuralFeatures().get(5);
+    return (EReference)workItemEClass.getEStructuralFeatures().get(6);
   }
 
   /**
@@ -275,7 +285,7 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
    */
   public EAttribute getWorkItem_Description()
   {
-    return (EAttribute)workItemEClass.getEStructuralFeatures().get(6);
+    return (EAttribute)workItemEClass.getEStructuralFeatures().get(7);
   }
 
   /**
@@ -550,6 +560,7 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
     createEReference(workItemEClass, WORK_ITEM__ACTIVITY);
     createEAttribute(workItemEClass, WORK_ITEM__ACTIVITY_NAME);
     createEAttribute(workItemEClass, WORK_ITEM__START);
+    createEAttribute(workItemEClass, WORK_ITEM__END_DATE);
     createEAttribute(workItemEClass, WORK_ITEM__END);
     createEReference(workItemEClass, WORK_ITEM__DURATION);
     createEAttribute(workItemEClass, WORK_ITEM__DESCRIPTION);
@@ -630,7 +641,8 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
     initEReference(getWorkItem_Activity(), this.getActivity(), null, "activity", null, 0, 1, WorkItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getWorkItem_ActivityName(), theEcorePackage.getEString(), "activityName", null, 0, 1, WorkItem.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, IS_DERIVED, IS_ORDERED);
     initEAttribute(getWorkItem_Start(), this.getDate(), "start", null, 0, 1, WorkItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getWorkItem_End(), this.getDate(), "end", null, 0, 1, WorkItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getWorkItem_EndDate(), this.getDate(), "endDate", null, 0, 1, WorkItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getWorkItem_End(), this.getDate(), "end", null, 0, 1, WorkItem.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, IS_DERIVED, IS_ORDERED);
     initEReference(getWorkItem_Duration(), this.getTimeSpan(), null, "duration", null, 0, 1, WorkItem.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
     initEAttribute(getWorkItem_Description(), theEcorePackage.getEString(), "description", null, 0, 1, WorkItem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -697,7 +709,7 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
        {
        "Ecore", "http://www.eclipse.org/emf/2002/Ecore",
        "GenModel", "http://www.eclipse.org/emf/2002/GenModel"
-       });																				
+       });																					
   }
 
 } //DomainPackageImpl

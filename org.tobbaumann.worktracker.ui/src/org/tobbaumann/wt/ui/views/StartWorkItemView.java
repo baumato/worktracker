@@ -12,19 +12,18 @@ package org.tobbaumann.wt.ui.views;
 
 import java.net.URI;
 import java.net.URL;
-import java.util.Date;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.core.databinding.observable.list.IObservableList;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.preference.JFacePreferences;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.StyledString.Styler;
@@ -48,13 +47,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.Activity;
-import org.tobbaumann.wt.domain.DomainFactory;
-import org.tobbaumann.wt.domain.WorkItem;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Ordering;
 
-public class ChangeActivityView {
+public class StartWorkItemView {
 
 	@Inject
 	private WorkTrackingService service;
@@ -63,7 +59,7 @@ public class ChangeActivityView {
 	private TableViewer activitiesTable;
 
 
-	public ChangeActivityView() {
+	public StartWorkItemView() {
 	}
 
 	@PreDestroy
@@ -110,7 +106,6 @@ public class ChangeActivityView {
 		activitiesTable = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION);
 		activitiesTable.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		activitiesTable.setLabelProvider(new ChangeActivitiesViewLabelProvider());
-
 		activitiesTable.setContentProvider(new ObservableListContentProvider());
 		activitiesTable.setComparator(new ViewerComparator(Ordering.natural()));
 	}
@@ -128,31 +123,7 @@ public class ChangeActivityView {
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Optional<Activity> oa = service.getActivity(txtActivity.getText());
-				final Activity activity;
-				if (oa.isPresent()) {
-					activity = oa.get();
-					activity.incrementOccurrenceFrequency();
-				} else {
-					activity = DomainFactory.eINSTANCE.createActivity();
-					activity.setName(txtActivity.getText());
-					service.getActivities().add(activity);
-				}
-
-				// update currently active work item
-				Optional<WorkItem> ow = service.getActiveWorkItem();
-				Date now = new Date();
-				if (ow.isPresent()) {
-					ow.get().setEnd(now);
-				}
-
-				// add new work item
-				WorkItem wi = DomainFactory.eINSTANCE.createWorkItem();
-				wi.setId(EcoreUtil.generateUUID());
-				wi.setActivity(activity);
-				wi.setStart(now);
-
-				service.readWorkItems().add(wi);
+				service.startWorkItem(txtActivity.getText());
 			}
 		});
 	}
@@ -183,7 +154,7 @@ public class ChangeActivityView {
 	 * @author tobbaumann
 	 *
 	 */
-	private class ChangeActivitiesViewLabelProvider extends StyledCellLabelProvider {
+	private class ChangeActivitiesViewLabelProvider extends StyledCellLabelProvider implements ILabelProvider {
 
 		Styler styler = new FrequenzStyler();
 
@@ -215,6 +186,17 @@ public class ChangeActivityView {
 				Color color = JFaceResources.getColorRegistry().get(JFacePreferences.COUNTER_COLOR);
 				textStyle.foreground = color;
 			}
+		}
+
+		@Override
+		public Image getImage(Object element) {
+			return null;
+		}
+
+		@Override
+		public String getText(Object element) {
+			Activity a = (Activity) element;
+			return a.getName() + " (" + a.getOccurrenceFrequency() + ")";
 		}
 	}
 }

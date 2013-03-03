@@ -38,6 +38,7 @@ import org.tobbaumann.wt.domain.WorkItem;
  *   <li>{@link org.tobbaumann.wt.domain.impl.WorkItemImpl#getActivity <em>Activity</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.impl.WorkItemImpl#getActivityName <em>Activity Name</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.impl.WorkItemImpl#getStart <em>Start</em>}</li>
+ *   <li>{@link org.tobbaumann.wt.domain.impl.WorkItemImpl#getEndDate <em>End Date</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.impl.WorkItemImpl#getEnd <em>End</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.impl.WorkItemImpl#getDuration <em>Duration</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.impl.WorkItemImpl#getDescription <em>Description</em>}</li>
@@ -109,6 +110,26 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
   protected Date start = START_EDEFAULT;
 
   /**
+   * The default value of the '{@link #getEndDate() <em>End Date</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getEndDate()
+   * @generated
+   * @ordered
+   */
+  protected static final Date END_DATE_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getEndDate() <em>End Date</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getEndDate()
+   * @generated
+   * @ordered
+   */
+  protected Date endDate = END_DATE_EDEFAULT;
+
+  /**
    * The default value of the '{@link #getEnd() <em>End</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -117,16 +138,6 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
    * @ordered
    */
   protected static final Date END_EDEFAULT = null;
-
-  /**
-   * The cached value of the '{@link #getEnd() <em>End</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getEnd()
-   * @generated
-   * @ordered
-   */
-  protected Date end = END_EDEFAULT;
 
   /**
    * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
@@ -286,9 +297,9 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
    * <!-- end-user-doc -->
    * @generated
    */
-  public Date getEnd()
+  public Date getEndDate()
   {
-    return end;
+    return endDate;
   }
 
   /**
@@ -296,12 +307,35 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setEnd(Date newEnd)
+  public void setEndDate(Date newEndDate)
   {
-    Date oldEnd = end;
-    end = newEnd;
+    Date oldEndDate = endDate;
+    endDate = newEndDate;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, DomainPackage.WORK_ITEM__END, oldEnd, end));
+      eNotify(new ENotificationImpl(this, Notification.SET, DomainPackage.WORK_ITEM__END_DATE, oldEndDate, endDate));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public Date getEnd()
+  {
+    Date _xifexpression = null;
+    Date _end = this.getEnd();
+    boolean _equals = Objects.equal(_end, null);
+    if (_equals)
+    {
+      Date _date = new Date();
+      _xifexpression = _date;
+    }
+    else
+    {
+      Date _end_1 = this.getEnd();
+      _xifexpression = _end_1;
+    }
+    return _xifexpression;
   }
 
   /**
@@ -456,6 +490,8 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
         return getActivityName();
       case DomainPackage.WORK_ITEM__START:
         return getStart();
+      case DomainPackage.WORK_ITEM__END_DATE:
+        return getEndDate();
       case DomainPackage.WORK_ITEM__END:
         return getEnd();
       case DomainPackage.WORK_ITEM__DURATION:
@@ -485,8 +521,8 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
       case DomainPackage.WORK_ITEM__START:
         setStart((Date)newValue);
         return;
-      case DomainPackage.WORK_ITEM__END:
-        setEnd((Date)newValue);
+      case DomainPackage.WORK_ITEM__END_DATE:
+        setEndDate((Date)newValue);
         return;
       case DomainPackage.WORK_ITEM__DESCRIPTION:
         setDescription((String)newValue);
@@ -514,8 +550,8 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
       case DomainPackage.WORK_ITEM__START:
         setStart(START_EDEFAULT);
         return;
-      case DomainPackage.WORK_ITEM__END:
-        setEnd(END_EDEFAULT);
+      case DomainPackage.WORK_ITEM__END_DATE:
+        setEndDate(END_DATE_EDEFAULT);
         return;
       case DomainPackage.WORK_ITEM__DESCRIPTION:
         setDescription(DESCRIPTION_EDEFAULT);
@@ -542,8 +578,10 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
         return ACTIVITY_NAME_EDEFAULT == null ? getActivityName() != null : !ACTIVITY_NAME_EDEFAULT.equals(getActivityName());
       case DomainPackage.WORK_ITEM__START:
         return START_EDEFAULT == null ? start != null : !START_EDEFAULT.equals(start);
+      case DomainPackage.WORK_ITEM__END_DATE:
+        return END_DATE_EDEFAULT == null ? endDate != null : !END_DATE_EDEFAULT.equals(endDate);
       case DomainPackage.WORK_ITEM__END:
-        return END_EDEFAULT == null ? end != null : !END_EDEFAULT.equals(end);
+        return END_EDEFAULT == null ? getEnd() != null : !END_EDEFAULT.equals(getEnd());
       case DomainPackage.WORK_ITEM__DURATION:
         return getDuration() != null;
       case DomainPackage.WORK_ITEM__DESCRIPTION:
@@ -587,8 +625,8 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
     result.append(id);
     result.append(", start: ");
     result.append(start);
-    result.append(", end: ");
-    result.append(end);
+    result.append(", endDate: ");
+    result.append(endDate);
     result.append(", description: ");
     result.append(description);
     result.append(')');

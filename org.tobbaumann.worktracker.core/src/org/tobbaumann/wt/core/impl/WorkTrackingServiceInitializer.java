@@ -47,7 +47,7 @@ public class WorkTrackingServiceInitializer {
 
 	private void initialize() {
 		addActivities();
-		service.readWorkItems().addAll(createItems());
+		service.getWorkItems().addAll(createItems());
 	}
 
 	private void addActivities() {
@@ -111,7 +111,7 @@ public class WorkTrackingServiceInitializer {
 		WorkItem wi = DomainFactory.eINSTANCE.createWorkItem();
 		wi.setActivity(activity);
 		wi.setStart(start);
-		wi.setEnd(end);
+		wi.setEndDate(end);
 		wi.setDescription(description);
 		return wi;
 	}

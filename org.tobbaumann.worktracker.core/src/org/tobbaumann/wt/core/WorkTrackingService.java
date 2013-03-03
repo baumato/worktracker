@@ -16,7 +16,6 @@ import java.util.List;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.set.IObservableSet;
 import org.tobbaumann.wt.domain.Activity;
-import org.tobbaumann.wt.domain.WorkItem;
 import org.tobbaumann.wt.domain.WorkItemSummary;
 
 import com.google.common.base.Optional;
@@ -31,16 +30,19 @@ public interface WorkTrackingService {
 
 	IObservableSet readDates();
 
-	Optional<WorkItem> getActiveWorkItem();
+	void startWorkItem(String activityName);
 
-	IObservableList readWorkItems();
+	//Optional<WorkItem> getActiveWorkItem();
 
-	IObservableList readWorkItems(Date date);
+	IObservableList getWorkItems();
+
+	IObservableList getWorkItems(Date date);
 
 	//void createActivity(Activity activity);
 	//void createWorkItems(Iterable<WorkItem> workItems);
 	//void updateWorkItems(Iterable<WorkItem> workItems);
 	//void deleteWorkItems(Iterable<WorkItem> workItems);
 
-	List<WorkItemSummary> readWorkItemSummaries(Date date);
+	List<WorkItemSummary> getWorkItemSummaries(Date date);
+
 }

@@ -191,13 +191,22 @@ public interface DomainPackage extends EPackage
   int WORK_ITEM__START = COMPARABLE_FEATURE_COUNT + 3;
 
   /**
+   * The feature id for the '<em><b>End Date</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WORK_ITEM__END_DATE = COMPARABLE_FEATURE_COUNT + 4;
+
+  /**
    * The feature id for the '<em><b>End</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int WORK_ITEM__END = COMPARABLE_FEATURE_COUNT + 4;
+  int WORK_ITEM__END = COMPARABLE_FEATURE_COUNT + 5;
 
   /**
    * The feature id for the '<em><b>Duration</b></em>' containment reference.
@@ -206,7 +215,7 @@ public interface DomainPackage extends EPackage
    * @generated
    * @ordered
    */
-  int WORK_ITEM__DURATION = COMPARABLE_FEATURE_COUNT + 5;
+  int WORK_ITEM__DURATION = COMPARABLE_FEATURE_COUNT + 6;
 
   /**
    * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -215,7 +224,7 @@ public interface DomainPackage extends EPackage
    * @generated
    * @ordered
    */
-  int WORK_ITEM__DESCRIPTION = COMPARABLE_FEATURE_COUNT + 6;
+  int WORK_ITEM__DESCRIPTION = COMPARABLE_FEATURE_COUNT + 7;
 
   /**
    * The number of structural features of the '<em>Work Item</em>' class.
@@ -224,7 +233,7 @@ public interface DomainPackage extends EPackage
    * @generated
    * @ordered
    */
-  int WORK_ITEM_FEATURE_COUNT = COMPARABLE_FEATURE_COUNT + 7;
+  int WORK_ITEM_FEATURE_COUNT = COMPARABLE_FEATURE_COUNT + 8;
 
   /**
    * The operation id for the '<em>Format Start</em>' operation.
@@ -589,6 +598,17 @@ public interface DomainPackage extends EPackage
    * @generated
    */
   EAttribute getWorkItem_Start();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.tobbaumann.wt.domain.WorkItem#getEndDate <em>End Date</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>End Date</em>'.
+   * @see org.tobbaumann.wt.domain.WorkItem#getEndDate()
+   * @see #getWorkItem()
+   * @generated
+   */
+  EAttribute getWorkItem_EndDate();
 
   /**
    * Returns the meta object for the attribute '{@link org.tobbaumann.wt.domain.WorkItem#getEnd <em>End</em>}'.
@@ -974,6 +994,14 @@ public interface DomainPackage extends EPackage
      * @generated
      */
     EAttribute WORK_ITEM__START = eINSTANCE.getWorkItem_Start();
+
+    /**
+     * The meta object literal for the '<em><b>End Date</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute WORK_ITEM__END_DATE = eINSTANCE.getWorkItem_EndDate();
 
     /**
      * The meta object literal for the '<em><b>End</b></em>' attribute feature.

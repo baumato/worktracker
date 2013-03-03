@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.tobbaumann.wt.ui.views;
 
+import static com.google.common.base.Objects.firstNonNull;
+
 import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -20,11 +22,12 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
-import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -57,7 +60,7 @@ public class WorkItemsView {
 	@PostConstruct
 	public void createControls(Composite parent) {
 		tableViewer = new TableViewer(parent, SWT.FULL_SELECTION);
-		tableViewer.setContentProvider(new ArrayContentProvider());
+		tableViewer.setContentProvider(new ObservableListContentProvider());
 		tableViewer.setLabelProvider(new LabelProvider());
 		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
@@ -92,7 +95,7 @@ public class WorkItemsView {
 		if (date == null) {
 			return;
 		}
-		List<WorkItem> workItems = service.readWorkItems(date);
+		IObservableList workItems = service.getWorkItems(date);
 		tableViewer.setInput(workItems);
 		packColumns();
 	}
@@ -122,7 +125,8 @@ public class WorkItemsView {
 				cell.setText(DateFormat.getTimeInstance().format(wi.getStart()));
 				break;
 			case 2:
-				cell.setText(DateFormat.getTimeInstance().format(wi.getEnd()));
+				final Date d = firstNonNull(wi.getEnd(), new Date());
+				cell.setText(DateFormat.getTimeInstance().format(d));
 				break;
 			case 3:
 				cell.setText(wi.getDuration().toString());

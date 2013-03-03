@@ -19,6 +19,9 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.eclipse.core.databinding.observable.list.IListChangeListener;
+import org.eclipse.core.databinding.observable.list.ListChangeEvent;
+import org.eclipse.core.databinding.observable.list.ListDiffVisitor;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -63,6 +66,7 @@ public class WorkItemSummaryView {
 				selectionService.setSelection(selectedObject);
 			}
 		});
+		service.getWorkItems().addListChangeListener(new WorkItemSummariesUpdater());
 
 		Table table = tableViewer.getTable();
 		table.setHeaderVisible(true);
@@ -89,7 +93,7 @@ public class WorkItemSummaryView {
 		if (date == null) {
 			return;
 		}
-		List<WorkItemSummary> wis = service.readWorkItemSummaries(date);
+		List<WorkItemSummary> wis = service.getWorkItemSummaries(date);
 		tableViewer.setInput(wis);
 		packColumns();
 	}
@@ -120,6 +124,29 @@ public class WorkItemSummaryView {
 				break;
 			}
 			super.update(cell);
+		}
+	}
+
+	private final class WorkItemSummariesUpdater implements IListChangeListener {
+		@Override
+		public void handleListChange(ListChangeEvent event) {
+			event.diff.accept(new ListDiffVisitor() {
+				@Override
+				public void handleRemove(int index, Object element) {
+					update(element);
+				}
+
+				@Override
+				public void handleAdd(int index, Object element) {
+					update(element);
+				}
+
+				private void update(Object element) {
+					List<WorkItemSummary> wis = (List<WorkItemSummary>) tableViewer.getInput();
+					Date date = wis.get(0).getWorkItems().get(0).getStart();
+					updateDate(date);
+				}
+			});
 		}
 	}
 }

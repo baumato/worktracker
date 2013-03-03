@@ -32,6 +32,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +68,6 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		this.workItemDates = new WritableSet(newArrayList(), Date.class);
 		this.workItems = new WritableList(newArrayList(), WorkItem.class);
 		this.workItems.addListChangeListener(new WorkItemDatesUpdater());
-		this.workItems.addListChangeListener(new ActiveWorkItemUpdater());
 		WorkTrackingServiceInitializer.initialize(this);
 	}
 
@@ -82,6 +82,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	@Override
 	@SuppressWarnings("unchecked")
 	public Optional<Activity> getActivity(final String activityName) {
+		LOGGER.trace("enter getActivity - {}", activityName);
 		return Iterables.tryFind(activities, new Predicate<Activity>() {
 			@Override
 			public boolean apply(Activity a) {
@@ -101,6 +102,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 
 	@Override
 	public IObservableList getMostUsedActivities(int numberOfActivities) {
+		LOGGER.trace("enter getMostUsedActivities - {}", numberOfActivities);
 		@SuppressWarnings("unchecked")
 		List<Activity> sorted = newArrayList(activities);
 		Comparator<Activity> order = new Comparator<Activity>() {
@@ -123,17 +125,42 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	}
 
 	@Override
-	public Optional<WorkItem> getActiveWorkItem() {
-		return Optional.fromNullable(activeWorkItem);
+	public void startWorkItem(String activityName) {
+		Optional<Activity> oa = getActivity(activityName);
+		final Activity activity;
+		if (oa.isPresent()) {
+			activity = oa.get();
+			activity.incrementOccurrenceFrequency();
+		} else {
+			activity = DomainFactory.eINSTANCE.createActivity();
+			activity.setName(activityName);
+			activities.add(activity);
+		}
+
+		// update currently active work item
+		Date now = new Date();
+		if (activeWorkItem != null) {
+			activeWorkItem.setEndDate(now);
+		}
+
+		// add new work item
+		WorkItem wi = DomainFactory.eINSTANCE.createWorkItem();
+		wi.setId(EcoreUtil.generateUUID());
+		wi.setActivity(activity);
+		wi.setStart(now);
+		activeWorkItem = wi;
+
+		workItems.add(wi);
 	}
 
 	@Override
-	public IObservableList readWorkItems() {
-		return new WritableList(workItems, WorkItem.class);
+	public IObservableList getWorkItems() {
+		LOGGER.trace("enter getWorkItems");
+		return workItems;
 	}
 
 	@Override
-	public IObservableList readWorkItems(Date date) {
+	public IObservableList getWorkItems(Date date) {
 		List<WorkItem> itemList = newArrayList();
 		for (Object o : workItems) {
 			WorkItem wi = (WorkItem) o;
@@ -152,8 +179,8 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	}
 
 	@Override
-	public List<WorkItemSummary> readWorkItemSummaries(Date date) {
-		IObservableList items = readWorkItems(date);
+	public List<WorkItemSummary> getWorkItemSummaries(Date date) {
+		IObservableList items = getWorkItems(date);
 		Multimap<String, WorkItem> map = ArrayListMultimap.create();
 		for (Object o : items) {
 			WorkItem wi = (WorkItem) o;
@@ -188,24 +215,6 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		}
 	}
 
-
-	private final class ActiveWorkItemUpdater implements IListChangeListener {
-		@Override
-		public void handleListChange(ListChangeEvent event) {
-			event.diff.accept(new ListDiffVisitor() {
-				@Override
-				public void handleRemove(int index, Object element) {
-				}
-
-				@Override
-				public void handleAdd(int index, Object element) {
-					activeWorkItem = (WorkItem) element;
-				}
-			});
-		}
-	}
-
-
 	private final class WorkItemDatesUpdater implements IListChangeListener {
 		@Override
 		public void handleListChange(ListChangeEvent event) {
@@ -214,7 +223,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 				public void handleRemove(int index, Object element) {
 					WorkItem wi = (WorkItem) element;
 					Date date = getDatePartOfWorkItemStart(wi);
-					if (readWorkItems(date).isEmpty()) {
+					if (getWorkItems(date).isEmpty()) {
 						workItemDates.remove(date);
 					}
 				}

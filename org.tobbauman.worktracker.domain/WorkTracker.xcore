@@ -44,10 +44,14 @@ class WorkItem extends Comparable {
 		return df.format(start);
 	}
 	
-	Date end
+	Date endDate
 	
 	op String formatEnd(DateFormat df) {
 		return df.format(end)
+	}
+	
+	derived Date end get {
+		return if (end == null) new Date() else end
 	}
 	
 	contains derived TimeSpan duration get {

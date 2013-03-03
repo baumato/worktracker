@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.tobbaumann.wt.domain.WorkItem#getActivity <em>Activity</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.WorkItem#getActivityName <em>Activity Name</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.WorkItem#getStart <em>Start</em>}</li>
+ *   <li>{@link org.tobbaumann.wt.domain.WorkItem#getEndDate <em>End Date</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.WorkItem#getEnd <em>End</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.WorkItem#getDuration <em>Duration</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.WorkItem#getDescription <em>Description</em>}</li>
@@ -129,6 +130,32 @@ public interface WorkItem extends EObject, Comparable<WorkItem>
   void setStart(Date value);
 
   /**
+   * Returns the value of the '<em><b>End Date</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>End Date</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>End Date</em>' attribute.
+   * @see #setEndDate(Date)
+   * @see org.tobbaumann.wt.domain.DomainPackage#getWorkItem_EndDate()
+   * @model unique="false" dataType="org.tobbaumann.wt.domain.Date"
+   * @generated
+   */
+  Date getEndDate();
+
+  /**
+   * Sets the value of the '{@link org.tobbaumann.wt.domain.WorkItem#getEndDate <em>End Date</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>End Date</em>' attribute.
+   * @see #getEndDate()
+   * @generated
+   */
+  void setEndDate(Date value);
+
+  /**
    * Returns the value of the '<em><b>End</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <p>
@@ -137,22 +164,12 @@ public interface WorkItem extends EObject, Comparable<WorkItem>
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>End</em>' attribute.
-   * @see #setEnd(Date)
    * @see org.tobbaumann.wt.domain.DomainPackage#getWorkItem_End()
-   * @model unique="false" dataType="org.tobbaumann.wt.domain.Date"
+   * @model unique="false" dataType="org.tobbaumann.wt.domain.Date" transient="true" changeable="false" volatile="true" derived="true"
+   *        annotation="http://www.eclipse.org/emf/2002/GenModel get='<%java.util.Date%> _xifexpression = null;\n<%java.util.Date%> _end = this.getEnd();\nboolean _equals = <%com.google.common.base.Objects%>.equal(_end, null);\nif (_equals)\n{\n\t<%java.util.Date%> _date = new <%java.util.Date%>();\n\t_xifexpression = _date;\n}\nelse\n{\n\t<%java.util.Date%> _end_1 = this.getEnd();\n\t_xifexpression = _end_1;\n}\nreturn _xifexpression;'"
    * @generated
    */
   Date getEnd();
-
-  /**
-   * Sets the value of the '{@link org.tobbaumann.wt.domain.WorkItem#getEnd <em>End</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>End</em>' attribute.
-   * @see #getEnd()
-   * @generated
-   */
-  void setEnd(Date value);
 
   /**
    * Returns the value of the '<em><b>Duration</b></em>' containment reference.
