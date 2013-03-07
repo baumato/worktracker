@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
@@ -13,6 +13,7 @@ package org.tobbaumann.wt.ui.views;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -80,12 +81,7 @@ public class WorkItemSummaryView {
 		}
 		new TableColumn(table, SWT.LEFT); // empty column
 		packColumns();
-	}
-
-	private void packColumns() {
-		for (TableColumn c : tableViewer.getTable().getColumns()) {
-			c.pack();
-		}
+		refreshViewerPeriodically();
 	}
 
 	@Inject
@@ -96,6 +92,16 @@ public class WorkItemSummaryView {
 		List<WorkItemSummary> wis = service.getWorkItemSummaries(date);
 		tableViewer.setInput(wis);
 		packColumns();
+	}
+
+	private void packColumns() {
+		for (TableColumn c : tableViewer.getTable().getColumns()) {
+			c.pack();
+		}
+	}
+
+	private void refreshViewerPeriodically() {
+		ViewUtils.refreshViewerPeriodically(tableViewer, 1, TimeUnit.MINUTES);
 	}
 
 	@PreDestroy

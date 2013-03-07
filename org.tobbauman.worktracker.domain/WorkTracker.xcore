@@ -51,7 +51,7 @@ class WorkItem extends Comparable {
 	}
 	
 	derived Date end get {
-		return if (end == null) new Date() else end
+		return if (endDate == null) new Date() else endDate
 	}
 	
 	contains derived TimeSpan duration get {

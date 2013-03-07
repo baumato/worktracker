@@ -323,8 +323,8 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
   public Date getEnd()
   {
     Date _xifexpression = null;
-    Date _end = this.getEnd();
-    boolean _equals = Objects.equal(_end, null);
+    Date _endDate = this.getEndDate();
+    boolean _equals = Objects.equal(_endDate, null);
     if (_equals)
     {
       Date _date = new Date();
@@ -332,8 +332,8 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
     }
     else
     {
-      Date _end_1 = this.getEnd();
-      _xifexpression = _end_1;
+      Date _endDate_1 = this.getEndDate();
+      _xifexpression = _endDate_1;
     }
     return _xifexpression;
   }

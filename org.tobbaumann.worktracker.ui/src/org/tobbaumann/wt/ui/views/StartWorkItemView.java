@@ -24,6 +24,9 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.StyledString.Styler;
@@ -56,7 +59,9 @@ public class StartWorkItemView {
 	private WorkTrackingService service;
 
 	private Composite leftCompParent;
+	private Text txtActivity;
 	private TableViewer activitiesTable;
+
 
 
 	public StartWorkItemView() {
@@ -108,13 +113,20 @@ public class StartWorkItemView {
 		activitiesTable.setLabelProvider(new ChangeActivitiesViewLabelProvider());
 		activitiesTable.setContentProvider(new ObservableListContentProvider());
 		activitiesTable.setComparator(new ViewerComparator(Ordering.natural()));
+		activitiesTable.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				Activity selectedActivity = (Activity) ((IStructuredSelection)event.getSelection()).getFirstElement();
+				txtActivity.setText(selectedActivity.getName());
+			}
+		});
 	}
 
 	private void createActivitiesTableStripe(Composite parent) {
 		Composite stripe = new Composite(parent, SWT.NONE);
 		stripe.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		stripe.setLayout(new GridLayout(2, false));
-		final Text txtActivity = new Text(stripe, SWT.SINGLE | SWT.LEAD | SWT.BORDER);
+		txtActivity = new Text(stripe, SWT.SINGLE | SWT.LEAD | SWT.BORDER);
 		txtActivity.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtActivity.setMessage("Enter activity here...");
 		Button btnAdd = new Button(stripe, SWT.PUSH);
@@ -124,6 +136,7 @@ public class StartWorkItemView {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				service.startWorkItem(txtActivity.getText());
+				txtActivity.setText("");
 			}
 		});
 	}

@@ -11,6 +11,7 @@
 package org.tobbaumann.wt.ui.views;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -26,6 +27,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerCell;
@@ -37,6 +39,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.ui.UserProfile;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 
 public class DatesView {
@@ -58,21 +61,18 @@ public class DatesView {
 	@PostConstruct
 	public void createControls(Composite parent) {
 		viewer = new TableViewer(parent, SWT.FULL_SELECTION);
+		viewer.setUseHashlookup(true);
 		viewer.setContentProvider(new ObservableSetContentProvider());
 		viewer.setLabelProvider(new DatesViewLabelProvider());
 		viewer.setComparator(new ViewerComparator(Ordering.natural().reverse()));
 		IObservableSet dates = wtService.readDates();
-		dates.addSetChangeListener(new ISetChangeListener() {
-			@Override
-			public void handleSetChange(SetChangeEvent event) {
-				//FIXME
-				//				Set<?> added = event.diff.getAdditions();
-				//				Date d = (Date) Iterables.getLast(added);
-				//				selectionService.setSelection(d);
-			}
-		});
 		viewer.setInput(dates);
 		viewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		updateSelectionServiceIfViewerSelectionChanges();
+		updateViewerSelectionIfnewDateAdded(dates);
+	}
+
+	private void updateSelectionServiceIfViewerSelectionChanges() {
 		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -82,20 +82,42 @@ public class DatesView {
 		});
 	}
 
+	private void updateViewerSelectionIfnewDateAdded(IObservableSet dates) {
+		// this listener registration must be after setInput,
+		// otherwise the contentprovider has not updated the viewer and
+		// the selection can be set.
+		dates.addSetChangeListener(new ISetChangeListener() {
+			@Override
+			public void handleSetChange(SetChangeEvent event) {
+				Set<?> added = event.diff.getAdditions();
+				if (!added.isEmpty()) {
+					final Date d = (Date) Iterables.getLast(added);
+					viewer.setSelection(new StructuredSelection(d));
+					requestFocus();
+					viewer.getControl().getDisplay().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+						}
+					});
+				}
+			}
+		});
+	}
+
 	@PreDestroy
 	public void dispose() {
 	}
 
 	@Focus
-	public void focus() {
+	public void requestFocus() {
 		if (viewer != null && !viewer.getTable().isDisposed()) {
 			viewer.getTable().setFocus();
 		}
 	}
 
 
-
 	private class DatesViewLabelProvider extends StyledCellLabelProvider implements ILabelProvider {
+
 		@Override
 		public void update(ViewerCell cell) {
 			Date date = (Date) cell.getElement();

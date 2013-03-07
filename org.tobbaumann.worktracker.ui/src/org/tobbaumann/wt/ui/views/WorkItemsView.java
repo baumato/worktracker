@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
@@ -12,10 +12,10 @@ package org.tobbaumann.wt.ui.views;
 
 import static com.google.common.base.Objects.firstNonNull;
 
-import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -41,13 +41,18 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.WorkItem;
+import org.tobbaumann.wt.ui.UserProfile;
 
 public class WorkItemsView {
 
 	private TableViewer tableViewer;
 	private WorkTrackingService service;
+
 	@Inject
 	private ESelectionService selectionService;
+
+	@Inject
+	private UserProfile userProfile;
 
 	@Inject
 	public WorkItemsView(WorkTrackingService service) {
@@ -82,12 +87,8 @@ public class WorkItemsView {
 		}
 		new TableColumn(table, SWT.LEFT); // empty column
 		packColumns();
-	}
 
-	private void packColumns() {
-		for (TableColumn c : tableViewer.getTable().getColumns()) {
-			c.pack();
-		}
+		refreshViewerPeriodically();
 	}
 
 	@Inject
@@ -98,6 +99,16 @@ public class WorkItemsView {
 		IObservableList workItems = service.getWorkItems(date);
 		tableViewer.setInput(workItems);
 		packColumns();
+	}
+
+	private void packColumns() {
+		for (TableColumn c : tableViewer.getTable().getColumns()) {
+			c.pack();
+		}
+	}
+
+	private void refreshViewerPeriodically() {
+		ViewUtils.refreshViewerPeriodically(tableViewer, 1, TimeUnit.MINUTES);
 	}
 
 
@@ -113,7 +124,8 @@ public class WorkItemsView {
 	}
 
 
-	private static final class LabelProvider extends StyledCellLabelProvider {
+	private final class LabelProvider extends StyledCellLabelProvider {
+
 		@Override
 		public void update(ViewerCell cell) {
 			WorkItem wi = (WorkItem) cell.getElement();
@@ -122,11 +134,11 @@ public class WorkItemsView {
 				cell.setText(wi.getActivityName());
 				break;
 			case 1:
-				cell.setText(DateFormat.getTimeInstance().format(wi.getStart()));
+				cell.setText(userProfile.getTimeFormat().format(wi.getStart()));
 				break;
 			case 2:
 				final Date d = firstNonNull(wi.getEnd(), new Date());
-				cell.setText(DateFormat.getTimeInstance().format(d));
+				cell.setText(userProfile.getTimeFormat().format(d));
 				break;
 			case 3:
 				cell.setText(wi.getDuration().toString());

@@ -166,7 +166,7 @@ public interface WorkItem extends EObject, Comparable<WorkItem>
    * @return the value of the '<em>End</em>' attribute.
    * @see org.tobbaumann.wt.domain.DomainPackage#getWorkItem_End()
    * @model unique="false" dataType="org.tobbaumann.wt.domain.Date" transient="true" changeable="false" volatile="true" derived="true"
-   *        annotation="http://www.eclipse.org/emf/2002/GenModel get='<%java.util.Date%> _xifexpression = null;\n<%java.util.Date%> _end = this.getEnd();\nboolean _equals = <%com.google.common.base.Objects%>.equal(_end, null);\nif (_equals)\n{\n\t<%java.util.Date%> _date = new <%java.util.Date%>();\n\t_xifexpression = _date;\n}\nelse\n{\n\t<%java.util.Date%> _end_1 = this.getEnd();\n\t_xifexpression = _end_1;\n}\nreturn _xifexpression;'"
+   *        annotation="http://www.eclipse.org/emf/2002/GenModel get='<%java.util.Date%> _xifexpression = null;\n<%java.util.Date%> _endDate = this.getEndDate();\nboolean _equals = <%com.google.common.base.Objects%>.equal(_endDate, null);\nif (_equals)\n{\n\t<%java.util.Date%> _date = new <%java.util.Date%>();\n\t_xifexpression = _date;\n}\nelse\n{\n\t<%java.util.Date%> _endDate_1 = this.getEndDate();\n\t_xifexpression = _endDate_1;\n}\nreturn _xifexpression;'"
    * @generated
    */
   Date getEnd();

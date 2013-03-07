@@ -86,7 +86,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		return Iterables.tryFind(activities, new Predicate<Activity>() {
 			@Override
 			public boolean apply(Activity a) {
-				if (a.getName().equals(activityName)) {
+				if (a.getName().equalsIgnoreCase(activityName)) {
 					return true;
 				}
 				return false;
@@ -134,6 +134,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		} else {
 			activity = DomainFactory.eINSTANCE.createActivity();
 			activity.setName(activityName);
+			activity.setOccurrenceFrequency(1);
 			activities.add(activity);
 		}
 
