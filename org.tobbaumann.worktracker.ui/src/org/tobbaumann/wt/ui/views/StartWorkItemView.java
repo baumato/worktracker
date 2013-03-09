@@ -137,18 +137,28 @@ public class StartWorkItemView {
 		txtActivity = new Text(stripe, SWT.SINGLE | SWT.LEAD | SWT.BORDER);
 		txtActivity.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtActivity.setMessage("Enter activity here...");
-		startWorkItemsOnEnter();
+		startWorkItemsOnKeyboardShortcut();
 	}
 
-	private void startWorkItemsOnEnter() {
+	private void startWorkItemsOnKeyboardShortcut() {
 		txtActivity.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if (e.character == SWT.CR) {
+				if (enterPressed(e) || altAPressed(e)) {
 					startWorkItem();
 				}
 			}
+
 		});
+	}
+
+	private boolean enterPressed(KeyEvent e) {
+		return e.character == SWT.CR;
+	}
+
+	private boolean altAPressed(KeyEvent e) {
+		return ((e.stateMask & SWT.ALT) != 0)
+				&& (e.character == 'a');
 	}
 
 	private void startWorkItem() {

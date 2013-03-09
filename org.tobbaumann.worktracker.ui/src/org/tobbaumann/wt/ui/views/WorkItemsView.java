@@ -30,13 +30,16 @@ import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
@@ -44,6 +47,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.WorkItem;
 import org.tobbaumann.wt.ui.UserProfile;
+
+import com.google.common.collect.Ordering;
 
 public class WorkItemsView {
 
@@ -76,6 +81,7 @@ public class WorkItemsView {
 				selectionService.setSelection(selectedObject);
 			}
 		});
+		tableViewer.setComparator(new ViewerComparator(Ordering.natural().reverse()));
 		service.getWorkItems().addListChangeListener(new WorkItemsUpdater());
 
 		Table table = tableViewer.getTable();
@@ -83,15 +89,20 @@ public class WorkItemsView {
 		table.setLinesVisible(false);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
+		createColumns();
+		packColumns();
+
+		refreshViewerPeriodically();
+	}
+
+	private void createColumns() {
+		Table table = tableViewer.getTable();
 		List<String> columnNames = Arrays.asList("Activity", "Start", "End", "Duration");
 		for (String colName : columnNames) {
 			TableColumn tcol = new TableColumn(table, SWT.LEFT);
 			tcol.setText(colName);
 		}
 		new TableColumn(table, SWT.LEFT); // empty column
-		packColumns();
-
-		refreshViewerPeriodically();
 	}
 
 	@Inject
@@ -126,7 +137,7 @@ public class WorkItemsView {
 	}
 
 
-	private final class LabelProvider extends StyledCellLabelProvider {
+	private final class LabelProvider extends StyledCellLabelProvider implements ILabelProvider {
 
 		@Override
 		public void update(ViewerCell cell) {
@@ -149,6 +160,18 @@ public class WorkItemsView {
 				break;
 			}
 			super.update(cell);
+		}
+
+		@Override
+		public Image getImage(Object element) {
+			return null;
+		}
+
+		@Override
+		// ILabelProvider#getText used during sorting the viewer
+		public String getText(Object element) {
+			WorkItem item = (WorkItem) element;
+			return String.valueOf(item.getStart().getTime());
 		}
 	}
 
