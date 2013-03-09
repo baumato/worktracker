@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
@@ -18,6 +18,7 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.core.databinding.observable.list.IObservableList;
+import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.preference.JFacePreferences;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -35,6 +36,8 @@ import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -126,17 +129,41 @@ public class StartWorkItemView {
 		Composite stripe = new Composite(parent, SWT.NONE);
 		stripe.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		stripe.setLayout(new GridLayout(2, false));
+		createActivityTextField(stripe);
+		createStartWorkItemButton(stripe);
+	}
+
+	private void createActivityTextField(Composite stripe) {
 		txtActivity = new Text(stripe, SWT.SINGLE | SWT.LEAD | SWT.BORDER);
 		txtActivity.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtActivity.setMessage("Enter activity here...");
+		startWorkItemsOnEnter();
+	}
+
+	private void startWorkItemsOnEnter() {
+		txtActivity.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (e.character == SWT.CR) {
+					startWorkItem();
+				}
+			}
+		});
+	}
+
+	private void startWorkItem() {
+		service.startWorkItem(txtActivity.getText());
+		txtActivity.setText("");
+	}
+
+	private void createStartWorkItemButton(Composite stripe) {
 		Button btnAdd = new Button(stripe, SWT.PUSH);
 		btnAdd.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 		btnAdd.setImage(getAddImage());
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				service.startWorkItem(txtActivity.getText());
-				txtActivity.setText("");
+				startWorkItem();
 			}
 		});
 	}
@@ -162,8 +189,15 @@ public class StartWorkItemView {
 		activitiesTable.setInput(activities);
 	}
 
+	@Focus
+	public void requestFocus() {
+		if (txtActivity != null && !txtActivity.isDisposed()) {
+			txtActivity.setFocus();
+		}
+	}
+
 	/**
-	 * 
+	 *
 	 * @author tobbaumann
 	 *
 	 */
@@ -180,6 +214,17 @@ public class StartWorkItemView {
 			cell.setText(text.toString());
 			cell.setStyleRanges(text.getStyleRanges());
 			super.update(cell);
+		}
+
+		@Override
+		public Image getImage(Object element) {
+			return null;
+		}
+
+		@Override
+		public String getText(Object element) {
+			Activity a = (Activity) element;
+			return a.getName() + " (" + a.getOccurrenceFrequency() + ")";
 		}
 
 		private final class FrequenzStyler extends Styler {
@@ -199,17 +244,6 @@ public class StartWorkItemView {
 				Color color = JFaceResources.getColorRegistry().get(JFacePreferences.COUNTER_COLOR);
 				textStyle.foreground = color;
 			}
-		}
-
-		@Override
-		public Image getImage(Object element) {
-			return null;
-		}
-
-		@Override
-		public String getText(Object element) {
-			Activity a = (Activity) element;
-			return a.getName() + " (" + a.getOccurrenceFrequency() + ")";
 		}
 	}
 }

@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
@@ -16,6 +16,7 @@ import java.util.List;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.set.IObservableSet;
 import org.tobbaumann.wt.domain.Activity;
+import org.tobbaumann.wt.domain.WorkItem;
 import org.tobbaumann.wt.domain.WorkItemSummary;
 
 import com.google.common.base.Optional;
@@ -36,7 +37,7 @@ public interface WorkTrackingService {
 
 	IObservableList getWorkItems();
 
-	IObservableList getWorkItems(Date date);
+	List<WorkItem> getWorkItems(Date date);
 
 	//void createActivity(Activity activity);
 	//void createWorkItems(Iterable<WorkItem> workItems);

@@ -56,7 +56,9 @@ public class DescriptionsView {
 			@Override
 			public void focusLost(FocusEvent e) {
 				WorkItem wi = (WorkItem) current;
-				wi.setDescription(txtDescr.getText());
+				if (wi != null) {
+					wi.setDescription(txtDescr.getText());
+				}
 			}
 		});
 	}

@@ -22,12 +22,14 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.eclipse.core.databinding.observable.list.IObservableList;
+import org.eclipse.core.databinding.observable.list.IListChangeListener;
+import org.eclipse.core.databinding.observable.list.ListChangeEvent;
+import org.eclipse.core.databinding.observable.list.ListDiffVisitor;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
-import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -65,7 +67,7 @@ public class WorkItemsView {
 	@PostConstruct
 	public void createControls(Composite parent) {
 		tableViewer = new TableViewer(parent, SWT.FULL_SELECTION);
-		tableViewer.setContentProvider(new ObservableListContentProvider());
+		tableViewer.setContentProvider(new ArrayContentProvider());
 		tableViewer.setLabelProvider(new LabelProvider());
 		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
@@ -74,6 +76,7 @@ public class WorkItemsView {
 				selectionService.setSelection(selectedObject);
 			}
 		});
+		service.getWorkItems().addListChangeListener(new WorkItemsUpdater());
 
 		Table table = tableViewer.getTable();
 		table.setHeaderVisible(true);
@@ -96,8 +99,7 @@ public class WorkItemsView {
 		if (date == null) {
 			return;
 		}
-		IObservableList workItems = service.getWorkItems(date);
-		tableViewer.setInput(workItems);
+		tableViewer.setInput(service.getWorkItems(date));
 		packColumns();
 	}
 
@@ -147,6 +149,29 @@ public class WorkItemsView {
 				break;
 			}
 			super.update(cell);
+		}
+	}
+
+	private final class WorkItemsUpdater implements IListChangeListener {
+		@Override
+		public void handleListChange(ListChangeEvent event) {
+			event.diff.accept(new ListDiffVisitor() {
+				@Override
+				public void handleRemove(int index, Object element) {
+					update(element);
+				}
+
+				@Override
+				public void handleAdd(int index, Object element) {
+					update(element);
+				}
+
+				private void update(Object element) {
+					List<WorkItem> items = (List<WorkItem>) tableViewer.getInput();
+					Date date = items.get(0).getStart();
+					updateDate(date);
+				}
+			});
 		}
 	}
 }

@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
@@ -161,7 +161,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	}
 
 	@Override
-	public IObservableList getWorkItems(Date date) {
+	public List<WorkItem> getWorkItems(Date date) {
 		List<WorkItem> itemList = newArrayList();
 		for (Object o : workItems) {
 			WorkItem wi = (WorkItem) o;
@@ -170,9 +170,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 				itemList.add(wi);
 			}
 		}
-		WritableList res = new WritableList(itemList, WorkItem.class);
-		res.addListChangeListener(new WorkItemListChangeListener());
-		return res;
+		return itemList;
 	}
 
 	private String toString(Date date) {
@@ -181,7 +179,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 
 	@Override
 	public List<WorkItemSummary> getWorkItemSummaries(Date date) {
-		IObservableList items = getWorkItems(date);
+		List<WorkItem> items = getWorkItems(date);
 		Multimap<String, WorkItem> map = ArrayListMultimap.create();
 		for (Object o : items) {
 			WorkItem wi = (WorkItem) o;
@@ -262,26 +260,6 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 				public void handleAdd(int index, Object element) {
 					Activity a = (Activity) element;
 					activities.add(a);
-				}
-			});
-		}
-	}
-
-
-	private final class WorkItemListChangeListener implements IListChangeListener {
-		@Override
-		public void handleListChange(ListChangeEvent event) {
-			event.diff.accept(new ListDiffVisitor() {
-				@Override
-				public void handleRemove(int index, Object element) {
-					WorkItem wi = (WorkItem) element;
-					workItems.remove(wi.getId());
-				}
-
-				@Override
-				public void handleAdd(int index, Object element) {
-					WorkItem wi = (WorkItem) element;
-					workItems.remove(wi);
 				}
 			});
 		}
