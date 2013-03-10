@@ -3,14 +3,12 @@
   <children xsi:type="basic:TrimmedWindow" xmi:id="_MZMgEDYtEeKvpYoU2mBS0w" elementId="worktracker.ui.trimmedwindow.0" label="WorkTracker" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/clocks/clock_16x16.png" x="0" y="0" width="1024" height="768">
     <children xsi:type="basic:PartSashContainer" xmi:id="_xw1AsDY0EeKiNZbXiGFecg" elementId="partsashcontainer" containerData="" horizontal="true">
       <children xsi:type="basic:PartStack" xmi:id="_ezqTQIkOEeKX0dm4WNPgyQ" elementId="org.tobbaumann.worktracker.ui.partstack.1" containerData="15">
-        <children xsi:type="basic:Part" xmi:id="_ts_NQDYzEeKiNZbXiGFecg" elementId="datesview" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.DatesView" label="Dates" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/calendar.png">
-          <toolbar xmi:id="_TD5EUH3oEeKFsd_OL35zgg" elementId="worktracker.ui.toolbar.0"/>
-        </children>
+        <children xsi:type="basic:Part" xmi:id="_ts_NQDYzEeKiNZbXiGFecg" elementId="datesview" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.DatesView" label="Dates" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/calendar.png"/>
       </children>
       <children xsi:type="basic:PartSashContainer" xmi:id="_1JeiEDY1EeKiNZbXiGFecg" elementId="worktracker.ui.partsashcontainer.0" containerData="85">
         <children xsi:type="basic:PartSashContainer" xmi:id="_w9c1EIkMEeKX0dm4WNPgyQ" elementId="org.tobbaumann.worktracker.ui.partsashcontainer.0" containerData="45" horizontal="true">
           <children xsi:type="basic:PartStack" xmi:id="_1nAaIIkMEeKX0dm4WNPgyQ" elementId="org.tobbaumann.worktracker.ui.partstack.0" containerData="50">
-            <children xsi:type="basic:Part" xmi:id="_9orKgIkMEeKX0dm4WNPgyQ" elementId="worktracker.ui.part.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.StartWorkItemWithButtonView" label="Start Work Item" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/current-work.png" closeable="true"/>
+            <children xsi:type="basic:Part" xmi:id="_9orKgIkMEeKX0dm4WNPgyQ" elementId="worktracker.ui.part.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.StartWorkItemWithButtonView" label="Start Work Item" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/current-work.png"/>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_2Fal4DY1EeKiNZbXiGFecg" elementId="worktracker.ui.partstack.0" containerData="50">
             <children xsi:type="basic:Part" xmi:id="_26J1gDY1EeKiNZbXiGFecg" elementId="worktracker.ui.part.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.StartWorkItemView" label="Start Work Item" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/current-work.png"/>
