@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.tobbaumann.wt.ui.views;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
+
 import java.net.URI;
 import java.net.URL;
 
@@ -35,7 +37,6 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -61,14 +62,9 @@ public class StartWorkItemView {
 	@Inject
 	private WorkTrackingService service;
 
-	private Composite leftCompParent;
 	private Text txtActivity;
 	private TableViewer activitiesTable;
-
-
-
-	public StartWorkItemView() {
-	}
+	private Button btnAdd;
 
 	@PreDestroy
 	public void dispose() {
@@ -79,30 +75,10 @@ public class StartWorkItemView {
 	 */
 	@PostConstruct
 	private void createControls(Composite parent) {
-		SashForm sashForm = new SashForm(parent, SWT.HORIZONTAL);
-		sashForm.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
-		leftCompParent = new Composite(sashForm, SWT.NONE);
-		createMostUsedActivitiesButtons(leftCompParent);
-
-		Composite rightCompParent = new Composite(sashForm, SWT.NONE);
+		Composite rightCompParent = new Composite(parent, SWT.NONE);
 		rightCompParent.setLayout(new FillLayout(SWT.HORIZONTAL));
 		createActivitiesTable(rightCompParent);
 		updateActivitiesTable();
-
-		sashForm.setWeights(new int[] { 1, 1 });
-	}
-
-	private void createMostUsedActivitiesButtons(Composite leftCompParent) {
-		GridLayout layout = new GridLayout(1, true);
-		leftCompParent.setLayout(layout);
-		IObservableList mua = service.getMostUsedActivities(6);
-		for (Object o : mua) {
-			Activity a = (Activity) o;
-			Button btn = new Button(leftCompParent, SWT.PUSH);
-			btn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-			btn.setText(a.getName());
-		}
 	}
 
 	private void createActivitiesTable(Composite rightCompParent) {
@@ -138,12 +114,22 @@ public class StartWorkItemView {
 		txtActivity.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtActivity.setMessage("Enter activity here...");
 		startWorkItemsOnKeyboardShortcut();
+		updateAddButtonEnabling();
+	}
+
+	private void updateAddButtonEnabling() {
+		txtActivity.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				btnAdd.setEnabled(!isNullOrEmpty(txtActivity.getText()));
+			}
+		});
 	}
 
 	private void startWorkItemsOnKeyboardShortcut() {
 		txtActivity.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyReleased(KeyEvent e) {
+			public void keyPressed(KeyEvent e) {
 				if (enterPressed(e) || altAPressed(e)) {
 					startWorkItem();
 				}
@@ -167,9 +153,11 @@ public class StartWorkItemView {
 	}
 
 	private void createStartWorkItemButton(Composite stripe) {
-		Button btnAdd = new Button(stripe, SWT.PUSH);
+		btnAdd = new Button(stripe, SWT.PUSH);
 		btnAdd.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 		btnAdd.setImage(getAddImage());
+		btnAdd.setToolTipText("Starts a new work item with the entered activity.");
+		btnAdd.setEnabled(false);
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -183,7 +171,7 @@ public class StartWorkItemView {
 			ImageRegistry imageRegistry = JFaceResources.getImageRegistry();
 			Image imgAdd = imageRegistry.get("Add_Icon");
 			if (imgAdd == null) {
-				URL imgUrl = URI.create("platform:/plugin/org.tobbaumann.worktracker.ui/icons/add.png").toURL();
+				URL imgUrl = URI.create("platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/plus.png").toURL();
 				ImageDescriptor imageDescriptor = ImageDescriptor.createFromURL(imgUrl);
 				imageRegistry.put("Add_Icon", imageDescriptor);
 				return imageRegistry.get("Add_Icon");
