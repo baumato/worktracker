@@ -17,7 +17,7 @@
          </property>
          <property
                name="applicationCSS"
-               value="org.tobbaumann.worktracker.ui/css/default.css">
+               value="platform:/plugin/org.tobbaumann.worktracker.ui/css/default.css">
          </property>
          <property
                name="aboutImage"
