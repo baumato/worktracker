@@ -11,7 +11,12 @@
             <children xsi:type="basic:Part" xmi:id="_9orKgIkMEeKX0dm4WNPgyQ" elementId="worktracker.ui.part.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.StartWorkItemWithButtonView" label="Start Work Item" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/current-work.png"/>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_2Fal4DY1EeKiNZbXiGFecg" elementId="worktracker.ui.partstack.0" containerData="50">
-            <children xsi:type="basic:Part" xmi:id="_26J1gDY1EeKiNZbXiGFecg" elementId="worktracker.ui.part.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.StartWorkItemView" label="Start Work Item" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/current-work.png"/>
+            <children xsi:type="basic:Part" xmi:id="_26J1gDY1EeKiNZbXiGFecg" elementId="worktracker.ui.part.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.StartWorkItemView" label="Start Work Item" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/current-work.png">
+              <toolbar xmi:id="_cKLnMIkcEeK0HcWX2dKTKA" elementId="org.tobbaumann.worktracker.ui.toolbar.0">
+                <children xsi:type="menu:DirectToolItem" xmi:id="_vs3uQIkdEeK0HcWX2dKTKA" elementId="org.tobbaumann.worktracker.ui.directtoolitem.0" label="Sort by usage" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/arrow_down.png" tooltip="Sort by usage" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.SortByUsageHandler"/>
+                <children xsi:type="menu:DirectToolItem" xmi:id="_lrx5QIkcEeK0HcWX2dKTKA" elementId="org.tobbaumann.worktracker.ui.directtoolitem.1" label="Sort by name" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/arrow_down.png" tooltip="Sorty by name" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.SortByNameHandler"/>
+              </toolbar>
+            </children>
           </children>
         </children>
         <children xsi:type="basic:PartSashContainer" xmi:id="_FSfNADY2EeKiNZbXiGFecg" elementId="worktracker.ui.partsashcontainer.0" containerData="45" horizontal="true">

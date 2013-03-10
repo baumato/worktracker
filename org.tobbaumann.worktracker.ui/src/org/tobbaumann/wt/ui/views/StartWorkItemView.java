@@ -14,6 +14,7 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.net.URI;
 import java.net.URL;
+import java.util.Comparator;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -91,7 +92,6 @@ public class StartWorkItemView {
 		activitiesTable.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		activitiesTable.setLabelProvider(new ChangeActivitiesViewLabelProvider());
 		activitiesTable.setContentProvider(new ObservableListContentProvider());
-		activitiesTable.setComparator(new ViewerComparator(Ordering.natural()));
 		activitiesTable.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -99,6 +99,7 @@ public class StartWorkItemView {
 				txtActivity.setText(selectedActivity.getName());
 			}
 		});
+		sortActivitiesByName();
 	}
 
 	private void createActivitiesTableStripe(Composite parent) {
@@ -191,6 +192,27 @@ public class StartWorkItemView {
 	public void requestFocus() {
 		if (txtActivity != null && !txtActivity.isDisposed()) {
 			txtActivity.setFocus();
+		}
+	}
+
+	void sortActivitiesByUsage() {
+		activitiesTable.setComparator(new ViewerComparator(new UsageComparator()));
+	}
+
+	void sortActivitiesByName() {
+		activitiesTable.setComparator(new ViewerComparator(Ordering.natural()));
+	}
+
+	private final class UsageComparator implements Comparator<String> {
+		@Override
+		public int compare(String o1, String o2) {
+			String s1 = getUsageOutOfString(o1);
+			String s2 = getUsageOutOfString(o2);
+			return Long.valueOf(s2).compareTo(Long.valueOf(s1));
+		}
+
+		private String getUsageOutOfString(String o1) {
+			return o1.substring(o1.indexOf("(")+1, o1.length()-1);
 		}
 	}
 
