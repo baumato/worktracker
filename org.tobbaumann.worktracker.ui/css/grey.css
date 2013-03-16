@@ -1,9 +1,16 @@
-@import url("e4_basestyle.css");
- 
-/*
-References:
-https://gist.github.com/golimpio/3096330
-*/
+/*******************************************************************************
+ * Copyright (c) 2013 Tobias Baumann.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     Tobias Baumann - initial API and implementation
+ ******************************************************************************/
+/* Reference: https://gist.github.com/golimpio/3096330 */
+
+@import url("e4_basestyle.css"); 
  
 .MTrimmedWindow {
 	margin-top: 3px;
