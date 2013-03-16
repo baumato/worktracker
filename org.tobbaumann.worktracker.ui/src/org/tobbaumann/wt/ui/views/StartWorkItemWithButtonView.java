@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -27,6 +28,7 @@ public class StartWorkItemWithButtonView {
 
 	private final WorkTrackingService service;
 	private Composite parent;
+	private Button btn;
 
 	@Inject
 	public StartWorkItemWithButtonView(WorkTrackingService service) {
@@ -35,7 +37,8 @@ public class StartWorkItemWithButtonView {
 
 	@PostConstruct
 	public void createControls(Composite parent) {
-		this.parent = parent;
+		parent.setLayout(new FillLayout());
+		this.parent = new Composite(parent, SWT.NONE);
 		createMostUsedActivitiesButtons();
 	}
 
@@ -52,10 +55,9 @@ public class StartWorkItemWithButtonView {
 	}
 
 	@Focus
-	public void onFocus() {
+	public void requestFocus() {
 		if (parent != null && !parent.isDisposed()) {
 			parent.setFocus();
 		}
 	}
-
 }

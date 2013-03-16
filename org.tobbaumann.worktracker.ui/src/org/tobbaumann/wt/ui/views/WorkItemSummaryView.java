@@ -13,7 +13,6 @@ package org.tobbaumann.wt.ui.views;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -57,6 +56,13 @@ public class WorkItemSummaryView {
 	 */
 	@PostConstruct
 	public void createControls(Composite parent) {
+		createAndConfigureTableViewer(parent);
+		createAndConfigureTable();
+		createColumns();
+		packColumns();
+	}
+
+	private void createAndConfigureTableViewer(Composite parent) {
 		tableViewer = new TableViewer(parent, SWT.FULL_SELECTION);
 		tableViewer.setContentProvider(new ArrayContentProvider());
 		tableViewer.setLabelProvider(new LabelProvider());
@@ -68,20 +74,24 @@ public class WorkItemSummaryView {
 			}
 		});
 		service.getWorkItems().addListChangeListener(new WorkItemSummariesUpdater());
+		ViewUtils.requestFocusOnMouseEnter(tableViewer);
+		ViewUtils.refreshViewerPeriodically(tableViewer);
+	}
 
+	private void createAndConfigureTable() {
 		Table table = tableViewer.getTable();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(false);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+	}
 
+	private void createColumns() {
 		List<String> columnNames = Arrays.asList("Activity", "Duration");
 		for (String colName : columnNames) {
-			TableColumn tcol = new TableColumn(table, SWT.LEFT);
+			TableColumn tcol = new TableColumn(tableViewer.getTable(), SWT.LEFT);
 			tcol.setText(colName);
 		}
-		new TableColumn(table, SWT.LEFT); // empty column
-		packColumns();
-		refreshViewerPeriodically();
+		new TableColumn(tableViewer.getTable(), SWT.LEFT); // empty column
 	}
 
 	@Inject
@@ -98,10 +108,6 @@ public class WorkItemSummaryView {
 		for (TableColumn c : tableViewer.getTable().getColumns()) {
 			c.pack();
 		}
-	}
-
-	private void refreshViewerPeriodically() {
-		ViewUtils.refreshViewerPeriodically(tableViewer, 1, TimeUnit.MINUTES);
 	}
 
 	@PreDestroy

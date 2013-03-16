@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.tobbaumann.wt.ui.views;
 
-import static com.google.common.base.Strings.isNullOrEmpty;
+import static com.google.common.base.Strings.nullToEmpty;
 
 import java.net.URI;
 import java.net.URL;
@@ -40,6 +40,8 @@ import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -71,6 +73,17 @@ public class StartWorkItemView {
 	public void dispose() {
 	}
 
+	@Focus
+	public void requestFocus() {
+		if (txtActivity != null && !txtActivity.isDisposed()) {
+			txtActivity.setFocus();
+		}
+	}
+
+	void sortActivitiesByUsage() {
+		activitiesTable.setComparator(new ViewerComparator(new UsageComparator()));
+	}
+
 	/**
 	 * Create contents of the view part.
 	 */
@@ -85,21 +98,8 @@ public class StartWorkItemView {
 	private void createActivitiesTable(Composite rightCompParent) {
 		Composite parent = new Composite(rightCompParent, SWT.NONE);
 		parent.setLayout(new GridLayout(1, false));
-
 		createActivitiesTableStripe(parent);
-
-		activitiesTable = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION);
-		activitiesTable.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		activitiesTable.setLabelProvider(new ChangeActivitiesViewLabelProvider());
-		activitiesTable.setContentProvider(new ObservableListContentProvider());
-		activitiesTable.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				Activity selectedActivity = (Activity) ((IStructuredSelection)event.getSelection()).getFirstElement();
-				txtActivity.setText(selectedActivity.getName());
-			}
-		});
-		sortActivitiesByName();
+		createAndConfigureActivitiesTable(parent);
 	}
 
 	private void createActivitiesTableStripe(Composite parent) {
@@ -118,15 +118,6 @@ public class StartWorkItemView {
 		updateAddButtonEnabling();
 	}
 
-	private void updateAddButtonEnabling() {
-		txtActivity.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				btnAdd.setEnabled(!isNullOrEmpty(txtActivity.getText()));
-			}
-		});
-	}
-
 	private void startWorkItemsOnKeyboardShortcut() {
 		txtActivity.addKeyListener(new KeyAdapter() {
 			@Override
@@ -135,22 +126,16 @@ public class StartWorkItemView {
 					startWorkItem();
 				}
 			}
-
 		});
 	}
 
-	private boolean enterPressed(KeyEvent e) {
-		return e.character == SWT.CR;
-	}
-
-	private boolean altAPressed(KeyEvent e) {
-		return ((e.stateMask & SWT.ALT) != 0)
-				&& (e.character == 'a');
-	}
-
-	private void startWorkItem() {
-		service.startWorkItem(txtActivity.getText());
-		txtActivity.setText("");
+	private void updateAddButtonEnabling() {
+		txtActivity.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				btnAdd.setEnabled(!nullToEmpty(txtActivity.getText()).trim().isEmpty());
+			}
+		});
 	}
 
 	private void createStartWorkItemButton(Composite stripe) {
@@ -183,26 +168,50 @@ public class StartWorkItemView {
 		return null;
 	}
 
-	private void updateActivitiesTable() {
-		IObservableList activities = service.getActivities();
-		activitiesTable.setInput(activities);
-	}
-
-	@Focus
-	public void requestFocus() {
-		if (txtActivity != null && !txtActivity.isDisposed()) {
-			txtActivity.setFocus();
-		}
-	}
-
-	void sortActivitiesByUsage() {
-		activitiesTable.setComparator(new ViewerComparator(new UsageComparator()));
+	private void createAndConfigureActivitiesTable(Composite parent) {
+		activitiesTable = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION);
+		activitiesTable.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		activitiesTable.setLabelProvider(new ChangeActivitiesViewLabelProvider());
+		activitiesTable.setContentProvider(new ObservableListContentProvider());
+		activitiesTable.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				Activity selectedActivity = (Activity) ((IStructuredSelection)event.getSelection()).getFirstElement();
+				txtActivity.setText(selectedActivity.getName());
+			}
+		});
+		sortActivitiesByName();
+		ViewUtils.requestFocusOnMouseEnter(activitiesTable);
 	}
 
 	void sortActivitiesByName() {
 		activitiesTable.setComparator(new ViewerComparator(Ordering.natural()));
 	}
 
+	private void updateActivitiesTable() {
+		IObservableList activities = service.getActivities();
+		activitiesTable.setInput(activities);
+	}
+
+	private boolean enterPressed(KeyEvent e) {
+		return e.character == SWT.CR;
+	}
+
+	private boolean altAPressed(KeyEvent e) {
+		return ((e.stateMask & SWT.ALT) != 0)
+				&& (e.character == 'a');
+	}
+
+	private void startWorkItem() {
+		service.startWorkItem(txtActivity.getText());
+		txtActivity.setText("");
+	}
+
+	/**
+	 *
+	 * @author tobbaumann
+	 *
+	 */
 	private final class UsageComparator implements Comparator<String> {
 		@Override
 		public int compare(String o1, String o2) {
@@ -223,7 +232,7 @@ public class StartWorkItemView {
 	 */
 	private class ChangeActivitiesViewLabelProvider extends StyledCellLabelProvider implements ILabelProvider {
 
-		Styler styler = new FrequenzStyler();
+		private Styler styler = new FrequenzStyler();
 
 		@Override
 		public void update(ViewerCell cell) {
@@ -248,6 +257,7 @@ public class StartWorkItemView {
 		}
 
 		private final class FrequenzStyler extends Styler {
+
 			private static final String FREQUENZ_STYLER_FONT = "FrequenzStylerFont";
 
 			FrequenzStyler() {

@@ -86,7 +86,7 @@ public class DescriptionsView {
 	}
 
 	private void updateEnablement() {
-		txtDescr.setEnabled(isWorkItem());
+		//txtDescr.setEnabled(isWorkItem());
 		txtDescr.setEditable(isWorkItem());
 	}
 

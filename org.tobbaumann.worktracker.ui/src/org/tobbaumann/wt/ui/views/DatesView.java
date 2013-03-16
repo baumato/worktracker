@@ -69,6 +69,7 @@ public class DatesView {
 		viewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		updateSelectionServiceIfViewerSelectionChanges();
 		updateViewerSelectionIfnewDateAdded(wtService.readDates());
+		ViewUtils.requestFocusOnMouseEnter(viewer);
 	}
 
 	private void updateSelectionServiceIfViewerSelectionChanges() {

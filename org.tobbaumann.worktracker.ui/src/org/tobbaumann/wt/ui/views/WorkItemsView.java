@@ -15,7 +15,6 @@ import static com.google.common.base.Objects.firstNonNull;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -71,6 +70,13 @@ public class WorkItemsView {
 	 */
 	@PostConstruct
 	public void createControls(Composite parent) {
+		createAndConfigureTableViewer(parent);
+		createAndConfigureTable();
+		createColumns();
+		packColumns();
+	}
+
+	private void createAndConfigureTableViewer(Composite parent) {
 		tableViewer = new TableViewer(parent, SWT.FULL_SELECTION);
 		tableViewer.setContentProvider(new ArrayContentProvider());
 		tableViewer.setLabelProvider(new LabelProvider());
@@ -83,16 +89,15 @@ public class WorkItemsView {
 		});
 		tableViewer.setComparator(new ViewerComparator(Ordering.natural().reverse()));
 		service.getWorkItems().addListChangeListener(new WorkItemsUpdater());
+		ViewUtils.requestFocusOnMouseEnter(tableViewer);
+		ViewUtils.refreshViewerPeriodically(tableViewer);
+	}
 
+	private void createAndConfigureTable() {
 		Table table = tableViewer.getTable();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(false);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
-		createColumns();
-		packColumns();
-
-		refreshViewerPeriodically();
 	}
 
 	private void createColumns() {
@@ -119,11 +124,6 @@ public class WorkItemsView {
 			c.pack();
 		}
 	}
-
-	private void refreshViewerPeriodically() {
-		ViewUtils.refreshViewerPeriodically(tableViewer, 1, TimeUnit.MINUTES);
-	}
-
 
 	@PreDestroy
 	public void dispose() {
