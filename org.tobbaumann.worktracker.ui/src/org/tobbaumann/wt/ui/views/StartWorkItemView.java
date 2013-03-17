@@ -49,11 +49,11 @@ import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.TextStyle;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.Activity;
@@ -66,8 +66,9 @@ public class StartWorkItemView {
 	private WorkTrackingService service;
 
 	private Text txtActivity;
-	private TableViewer activitiesTable;
+	private Spinner startedSpinner;
 	private Button btnAdd;
+	private TableViewer activitiesTable;
 
 	@PreDestroy
 	public void dispose() {
@@ -89,24 +90,18 @@ public class StartWorkItemView {
 	 */
 	@PostConstruct
 	private void createControls(Composite parent) {
-		Composite rightCompParent = new Composite(parent, SWT.NONE);
-		rightCompParent.setLayout(new FillLayout(SWT.HORIZONTAL));
-		createActivitiesTable(rightCompParent);
-		updateActivitiesTable();
-	}
-
-	private void createActivitiesTable(Composite rightCompParent) {
-		Composite parent = new Composite(rightCompParent, SWT.NONE);
 		parent.setLayout(new GridLayout(1, false));
 		createActivitiesTableStripe(parent);
 		createAndConfigureActivitiesTable(parent);
+		updateActivitiesTable();
 	}
 
 	private void createActivitiesTableStripe(Composite parent) {
 		Composite stripe = new Composite(parent, SWT.NONE);
 		stripe.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		stripe.setLayout(new GridLayout(2, false));
+		stripe.setLayout(new GridLayout(3, false));
 		createActivityTextField(stripe);
+		createStartedNumberOfMintuesBeforeSpinner(stripe);
 		createStartWorkItemButton(stripe);
 	}
 
@@ -114,6 +109,7 @@ public class StartWorkItemView {
 		txtActivity = new Text(stripe, SWT.SINGLE | SWT.LEAD | SWT.BORDER);
 		txtActivity.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtActivity.setMessage("Enter activity here...");
+		txtActivity.setToolTipText("Enter the name of your activity you want to start.");
 		startWorkItemsOnKeyboardShortcut();
 		updateAddButtonEnabling();
 	}
@@ -138,12 +134,31 @@ public class StartWorkItemView {
 		});
 	}
 
+	private void createStartedNumberOfMintuesBeforeSpinner(Composite stripe) {
+		startedSpinner = new Spinner (stripe, SWT.BORDER);
+		startedSpinner.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+		startedSpinner.setMinimum(0);
+		startedSpinner.setMaximum(24*60);
+		startedSpinner.setSelection(0);
+		startedSpinner.setIncrement(1);
+		startedSpinner.setPageIncrement(10);
+		startedSpinner.setToolTipText("Enter how many minutes ago this activity has been started?");
+	}
+
 	private void createStartWorkItemButton(Composite stripe) {
 		btnAdd = new Button(stripe, SWT.PUSH);
 		btnAdd.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 		btnAdd.setImage(getAddImage());
 		btnAdd.setToolTipText("Starts a new work item with the entered activity.");
 		btnAdd.setEnabled(false);
+		btnAdd.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (enterPressed(e)) {
+					startWorkItem();
+				}
+			}
+		});
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -181,7 +196,7 @@ public class StartWorkItemView {
 			}
 		});
 		sortActivitiesByName();
-		ViewUtils.requestFocusOnMouseEnter(activitiesTable);
+		ViewerUtils.requestFocusOnMouseEnter(activitiesTable);
 	}
 
 	void sortActivitiesByName() {
@@ -203,8 +218,9 @@ public class StartWorkItemView {
 	}
 
 	private void startWorkItem() {
-		service.startWorkItem(txtActivity.getText());
+		service.startWorkItem(txtActivity.getText(), startedSpinner.getSelection());
 		txtActivity.setText("");
+		startedSpinner.setSelection(0);
 	}
 
 	/**

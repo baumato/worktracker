@@ -29,26 +29,21 @@
          </property>
          <property
                name="cssTheme"
-               value="theme.darker">
+               value="theme.blue">
          </property>
       </product>
    </extension>
    <extension
          point="org.eclipse.e4.ui.css.swt.theme">
       <theme
+            basestylesheeturi="css/default.css"
+            id="theme.default"
+            label="Default Theme">
+      </theme>
+      <theme
             basestylesheeturi="css/blue-gradient.css"
             id="theme.blue"
             label="Blue Theme">
-      </theme>
-      <theme
-            basestylesheeturi="css/bright-gradient.css"
-            id="theme.bright"
-            label="Bright Theme">
-      </theme>
-      <theme
-            basestylesheeturi="css/dark-gradient.css"
-            id="theme.darker"
-            label="Even Darker Theme">
       </theme>
       <theme
             basestylesheeturi="css/grey.css"
@@ -56,14 +51,19 @@
             label="Grey Theme">
       </theme>
       <theme
-            basestylesheeturi="css/dark.css"
-            id="theme.juno"
-            label="Juno Theme">
+            basestylesheeturi="css/bright-gradient.css"
+            id="theme.bright"
+            label="Bright Theme">
       </theme>
       <theme
             basestylesheeturi="css/dark.css"
             id="theme.dark"
             label="Dark Theme">
+      </theme>
+      <theme
+            basestylesheeturi="css/dark-gradient.css"
+            id="theme.darker"
+            label="Even Darker Theme">
       </theme>
    </extension>
 

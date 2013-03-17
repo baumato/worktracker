@@ -13,16 +13,14 @@ package org.tobbaumann.wt.ui.views;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jface.viewers.StructuredViewer;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseTrackAdapter;
 
-public class ViewUtils {
+public class ViewerUtils {
 
-	private ViewUtils() {
+	private ViewerUtils() {
 	}
 
 	static void refreshViewerPeriodically(final StructuredViewer viewer) {
-		refreshViewerPeriodically(viewer, 1, TimeUnit.SECONDS);
+		refreshViewerPeriodically(viewer, 30, TimeUnit.SECONDS);
 	}
 
 	private static void refreshViewerPeriodically(final StructuredViewer viewer, final long delay, final TimeUnit timeUnit) {
@@ -39,12 +37,12 @@ public class ViewUtils {
 	}
 
 	static void requestFocusOnMouseEnter(final StructuredViewer viewer) {
-		viewer.getControl().addMouseTrackListener(new MouseTrackAdapter() {
-			@Override
-			public void mouseEnter(MouseEvent e) {
-				viewer.getControl().setFocus();
-			}
-		});
+//		viewer.getControl().addMouseTrackListener(new MouseTrackAdapter() {
+//			@Override
+//			public void mouseEnter(MouseEvent e) {
+//				viewer.getControl().setFocus();
+//			}
+//		});
 	}
 
 }

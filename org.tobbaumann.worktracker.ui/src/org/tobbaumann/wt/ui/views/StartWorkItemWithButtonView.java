@@ -28,7 +28,6 @@ public class StartWorkItemWithButtonView {
 
 	private final WorkTrackingService service;
 	private Composite parent;
-	private Button btn;
 
 	@Inject
 	public StartWorkItemWithButtonView(WorkTrackingService service) {

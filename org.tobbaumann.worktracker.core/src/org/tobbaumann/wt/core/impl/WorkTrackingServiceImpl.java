@@ -10,11 +10,13 @@
  ******************************************************************************/
 package org.tobbaumann.wt.core.impl;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -28,6 +30,7 @@ import org.eclipse.core.databinding.observable.list.ListDiffVisitor;
 import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.databinding.observable.set.IObservableSet;
 import org.eclipse.core.databinding.observable.set.WritableSet;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -125,33 +128,28 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	}
 
 	@Override
-	public void startWorkItem(String activityName) {
+	public void startWorkItem(String activityName, int numberOfMinutesBeforeNow) {
 		Optional<Activity> oa = getActivity(activityName);
 		final Activity activity;
 		if (oa.isPresent()) {
 			activity = oa.get();
-			activity.incrementOccurrenceFrequency();
 		} else {
-			activity = DomainFactory.eINSTANCE.createActivity();
-			activity.setName(activityName);
-			activity.setOccurrenceFrequency(1);
-			activities.add(activity);
+			activity = createActivity(activityName);
 		}
+		activity.incrementOccurrenceFrequency();
 
 		// update currently active work item
-		Date now = new Date();
+		Calendar nowCal = Calendar.getInstance();
+		nowCal.set(Calendar.MINUTE, nowCal.get(Calendar.MINUTE) - numberOfMinutesBeforeNow);
+		Date now = nowCal.getTime();
+
 		if (activeWorkItem != null) {
 			activeWorkItem.setEndDate(now);
 		}
 
 		// add new work item
-		WorkItem wi = DomainFactory.eINSTANCE.createWorkItem();
-		wi.setId(EcoreUtil.generateUUID());
-		wi.setActivity(activity);
-		wi.setStart(now);
+		WorkItem wi = createWorkItem(activity, now, null, null);
 		activeWorkItem = wi;
-
-		workItems.add(wi);
 	}
 
 	@Override
@@ -195,6 +193,68 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		return res.build();
 	}
 
+	@Override
+	public Activity createActivity(String activityName) {
+		Optional<Activity> a = getActivity(activityName);
+		if (a.isPresent()) {
+			throw new ActivityAlreadyExistsException(a.get().getName());
+		}
+		Activity activity = createActivityInternal(activityName);
+		activities.add(activity);
+		return activity;
+	}
+
+	Activity createActivityInternal(String activityName) {
+		Activity activity = DomainFactory.eINSTANCE.createActivity();
+		activity.setName(activityName);
+		activity.setOccurrenceFrequency(0);
+		return activity;
+	}
+
+	void addActivities(final Collection<Activity> as) {
+		this.activities.getRealm().exec(new Runnable() {
+			@Override
+			public void run() {
+				activities.addAll(as);
+			}
+		});
+	}
+
+	@Override
+	public WorkItem createWorkItem(Activity activity, Date start, Date end, String description) {
+		WorkItem wi = createWorkItemInternal(activity, start, end, description);
+		workItems.add(wi);
+		return wi;
+	}
+
+	WorkItem createWorkItemInternal(Activity activity, Date start, Date end, String description) {
+		WorkItem wi = DomainFactory.eINSTANCE.createWorkItem();
+		wi.setId(EcoreUtil.generateUUID());
+		wi.setActivity(checkNotNull(activity));
+		wi.setStart(checkNotNull(start));
+		if (end != null) {
+			wi.setEndDate(end);
+		}
+		if (description != null) {
+			wi.setDescription(description);
+		}
+		return wi;
+	}
+
+	void addWorkItems(final Collection<WorkItem> ws) {
+		this.workItems.getRealm().exec(new Runnable() {
+			@Override
+			public void run() {
+				workItems.addAll(ws);
+			}
+		});
+	}
+
+	@Override
+	public ImportResult importData(String strPath, IProgressMonitor monitor) {
+		return new WorkTrackerDataImporter(this).importData(strPath, monitor);
+	}
+
 	private void store() {
 		try {
 			ResourceSet resourceSet = new ResourceSetImpl();
@@ -214,6 +274,11 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		}
 	}
 
+	/**
+	 *
+	 * @author tobbaumann
+	 *
+	 */
 	private final class WorkItemDatesUpdater implements IListChangeListener {
 		@Override
 		public void handleListChange(ListChangeEvent event) {
@@ -245,7 +310,11 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		}
 	}
 
-
+	/**
+	 *
+	 * @author tobbaumann
+	 *
+	 */
 	private final class ActivityListChangeListener implements IListChangeListener {
 		@Override
 		public void handleListChange(ListChangeEvent event) {

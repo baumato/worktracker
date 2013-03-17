@@ -21,9 +21,6 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.eclipse.core.databinding.observable.list.IListChangeListener;
-import org.eclipse.core.databinding.observable.list.ListChangeEvent;
-import org.eclipse.core.databinding.observable.list.ListDiffVisitor;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -89,8 +86,8 @@ public class WorkItemsView {
 		});
 		tableViewer.setComparator(new ViewerComparator(Ordering.natural().reverse()));
 		service.getWorkItems().addListChangeListener(new WorkItemsUpdater());
-		ViewUtils.requestFocusOnMouseEnter(tableViewer);
-		ViewUtils.refreshViewerPeriodically(tableViewer);
+		ViewerUtils.requestFocusOnMouseEnter(tableViewer);
+		ViewerUtils.refreshViewerPeriodically(tableViewer);
 	}
 
 	private void createAndConfigureTable() {
@@ -175,26 +172,18 @@ public class WorkItemsView {
 		}
 	}
 
-	private final class WorkItemsUpdater implements IListChangeListener {
+
+	private final class WorkItemsUpdater extends OnWorkItemListChangeUpdater {
+
 		@Override
-		public void handleListChange(ListChangeEvent event) {
-			event.diff.accept(new ListDiffVisitor() {
-				@Override
-				public void handleRemove(int index, Object element) {
-					update(element);
-				}
+		Date getCurrentlySelectedDate() {
+			List<?> items = (List<?>) tableViewer.getInput();
+			return getDateFromElement(items.get(0));
+		}
 
-				@Override
-				public void handleAdd(int index, Object element) {
-					update(element);
-				}
-
-				private void update(Object element) {
-					List<WorkItem> items = (List<WorkItem>) tableViewer.getInput();
-					Date date = items.get(0).getStart();
-					updateDate(date);
-				}
-			});
+		@Override
+		void update(Date date) {
+			updateDate(date);
 		}
 	}
 }

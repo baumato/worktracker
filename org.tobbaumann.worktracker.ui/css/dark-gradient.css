@@ -20,19 +20,6 @@ Button {
 	color: rgb(240, 240, 240);
 }
 
-Composite Button:selected {
-	background-color: red red;
-	color: red;
-}
-Composite Button:active {
-	background-color: red red;
-	color: red;
-}
-Composite Button:focus {
-	background-color: red red;
-	color: red;
-}
-
 Composite Label {
 	color: white;
 }
@@ -41,11 +28,11 @@ Composite Label {
 	color: #f08d00;
 }
 
-Text {
-	font: Verdana 8px;
+Text, Spinner {
+	font: Verdana 8px bold;
 }
 
-Composite Text {
+Composite Text, Spinner {
 	background-color: rgb(100, 100, 100);
 	color: white;
 }

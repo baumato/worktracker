@@ -19,9 +19,6 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.eclipse.core.databinding.observable.list.IListChangeListener;
-import org.eclipse.core.databinding.observable.list.ListChangeEvent;
-import org.eclipse.core.databinding.observable.list.ListDiffVisitor;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -43,13 +40,16 @@ import org.tobbaumann.wt.domain.WorkItemSummary;
 
 public class WorkItemSummaryView {
 
+	private WorkTrackingService service;
+	private ESelectionService selectionService;
+
 	private TableViewer tableViewer;
 
 	@Inject
-	private WorkTrackingService service;
-
-	@Inject
-	private ESelectionService selectionService;
+	public WorkItemSummaryView(WorkTrackingService service, ESelectionService selectionService) {
+		this.service = service;
+		this.selectionService = selectionService;
+	}
 
 	/**
 	 * Create contents of the view part.
@@ -74,8 +74,8 @@ public class WorkItemSummaryView {
 			}
 		});
 		service.getWorkItems().addListChangeListener(new WorkItemSummariesUpdater());
-		ViewUtils.requestFocusOnMouseEnter(tableViewer);
-		ViewUtils.refreshViewerPeriodically(tableViewer);
+		ViewerUtils.requestFocusOnMouseEnter(tableViewer);
+		ViewerUtils.refreshViewerPeriodically(tableViewer);
 	}
 
 	private void createAndConfigureTable() {
@@ -139,26 +139,18 @@ public class WorkItemSummaryView {
 		}
 	}
 
-	private final class WorkItemSummariesUpdater implements IListChangeListener {
+
+	private final class WorkItemSummariesUpdater extends OnWorkItemListChangeUpdater {
+
 		@Override
-		public void handleListChange(ListChangeEvent event) {
-			event.diff.accept(new ListDiffVisitor() {
-				@Override
-				public void handleRemove(int index, Object element) {
-					update(element);
-				}
+		Date getCurrentlySelectedDate() {
+			List<?> wis = (List<?>) tableViewer.getInput();
+			return getDateFromElement(((WorkItemSummary)wis.get(0)).getWorkItems().get(0));
+		}
 
-				@Override
-				public void handleAdd(int index, Object element) {
-					update(element);
-				}
-
-				private void update(Object element) {
-					List<WorkItemSummary> wis = (List<WorkItemSummary>) tableViewer.getInput();
-					Date date = wis.get(0).getWorkItems().get(0).getStart();
-					updateDate(date);
-				}
-			});
+		@Override
+		void update(Date date) {
+			updateDate(date);
 		}
 	}
 }

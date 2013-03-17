@@ -35,12 +35,13 @@
     <mainMenu xmi:id="_QawRADYtEeKvpYoU2mBS0w" elementId="menu:org.eclipse.ui.main.menu">
       <children xsi:type="menu:Menu" xmi:id="_m8-GcDY9EeKHouPeRF3fXg" elementId="worktracker.ui.menu.0" label="&amp;WorkTracker">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_EtDOkDY_EeKHouPeRF3fXg" elementId="worktracker.ui.handledmenuitem.0" label="&amp;Preferences" tooltip="Opens the preferences" command="_-hJtADY-EeKHouPeRF3fXg"/>
+        <children xsi:type="menu:DirectMenuItem" xmi:id="_APzZ0I5oEeKzvsrGpQnnXQ" elementId="org.tobbaumann.worktracker.ui.directmenuitem.0" label="&amp;Import WorkTracker Data" tooltip="Imports the data from previous version of WorkTracker" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.handlers.ImportOldWorkTrackerDataHandler"/>
         <children xsi:type="menu:DirectMenuItem" xmi:id="_rFW4IDY9EeKHouPeRF3fXg" elementId="worktracker.ui.directmenuitem.0" label="E&amp;xit" tooltip="Leaves this application" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.handlers.ExitHandler"/>
       </children>
     </mainMenu>
   </children>
   <handlers xmi:id="_Zo-LsDY7EeKHouPeRF3fXg" elementId="worktracker.ui.handler.preferences" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.handlers.OpenPreferencesHandler" command="_-hJtADY-EeKHouPeRF3fXg"/>
-  <handlers xmi:id="_OYyi0I4dEeK-pKqvz6n4Lw" elementId="handler.themeswitch" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.worktracker.ui.theme.ThemeSwitchHandler" command="_jIezEI4fEeK-pKqvz6n4Lw"/>
+  <handlers xmi:id="_OYyi0I4dEeK-pKqvz6n4Lw" elementId="handler.themeswitch" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.handlers.ThemeSwitchHandler" command="_jIezEI4fEeK-pKqvz6n4Lw"/>
   <commands xmi:id="_-hJtADY-EeKHouPeRF3fXg" elementId="worktracker.commands.openpreferences" commandName="Open Preferences"/>
   <commands xmi:id="_jIezEI4fEeK-pKqvz6n4Lw" elementId="command.switchtheme" commandName="SwitchTheme">
     <parameters xmi:id="_DXyMII4gEeK-pKqvz6n4Lw" elementId="commandparameter.themeid" name="ThemeId" optional="false"/>
