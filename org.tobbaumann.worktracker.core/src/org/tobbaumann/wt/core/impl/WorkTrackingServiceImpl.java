@@ -13,6 +13,7 @@ package org.tobbaumann.wt.core.impl;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,6 +23,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.databinding.observable.list.IListChangeListener;
 import org.eclipse.core.databinding.observable.list.IObservableList;
@@ -32,6 +34,7 @@ import org.eclipse.core.databinding.observable.set.IObservableSet;
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -42,6 +45,7 @@ import org.slf4j.LoggerFactory;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.Activity;
 import org.tobbaumann.wt.domain.DomainFactory;
+import org.tobbaumann.wt.domain.DomainPackage;
 import org.tobbaumann.wt.domain.WorkItem;
 import org.tobbaumann.wt.domain.WorkItemSummary;
 
@@ -70,8 +74,11 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		this.activities = new WritableList(newArrayList(), Activity.class);
 		this.workItemDates = new WritableSet(newArrayList(), Date.class);
 		this.workItems = new WritableList(newArrayList(), WorkItem.class);
+		WorkItemsPersister persister = new WorkItemsPersister();
+		this.workItems.addListChangeListener(persister);
 		this.workItems.addListChangeListener(new WorkItemDatesUpdater());
-		WorkTrackingServiceInitializer.initialize(this);
+		//WorkTrackingServiceInitializer.initialize(this);
+		//persister.load();
 	}
 
 	public void activate() {
@@ -122,7 +129,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 			}
 		};
 		Collections.sort(sorted, Ordering.from(order).reverse());
-		WritableList res = new WritableList(sorted.subList(0, numberOfActivities), Activity.class);
+		WritableList res = new WritableList(sorted.subList(0, Math.min(numberOfActivities, sorted.size())), Activity.class);
 		res.addListChangeListener(new ActivityListChangeListener());
 		return res;
 	}
@@ -260,24 +267,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		return new WorkTrackerDataImporter(this).importData(strPath, monitor);
 	}
 
-	private void store() {
-		try {
-			ResourceSet resourceSet = new ResourceSetImpl();
-			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-			.put("storage", new XMIResourceFactoryImpl());
 
-			Resource res = resourceSet.createResource(URI
-					.createFileURI("/tmp/storage/worktracker.storage"));
-			res.getContents().addAll(activities);
-			res.getContents().addAll(workItems);
-
-			for (Resource resource : resourceSet.getResources()) {
-				resource.save(null);
-			}
-		} catch (Exception e) {
-			Throwables.propagate(e);
-		}
-	}
 
 	/**
 	 *
@@ -336,6 +326,72 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 					activities.add(a);
 				}
 			});
+		}
+	}
+
+	/**
+	 *
+	 * @author tobbaumann
+	 *
+	 */
+	private final class WorkItemsPersister implements IListChangeListener {
+
+		private static final String WORKTRACKER_STORAGE_URI = "storage/worktracker.storage";
+
+		public WorkItemsPersister() {
+			DomainPackage.eINSTANCE.eClass();
+			Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
+		    Map<String, Object> m = reg.getExtensionToFactoryMap();
+		    m.put("storage", new XMIResourceFactoryImpl());
+		}
+
+		@Override
+		public void handleListChange(ListChangeEvent event) {
+			commit();
+		}
+
+		private void commit() {
+			try {
+				commitUnchecked();
+			} catch (Exception e) {
+				Throwables.propagate(e);
+			}
+		}
+
+		private void commitUnchecked() throws IOException {
+			ResourceSet resourceSet = new ResourceSetImpl();
+			Resource all = resourceSet.createResource(URI.createURI(WORKTRACKER_STORAGE_URI));
+			all.getContents().addAll(activities);
+			all.getContents().addAll(workItems);
+			for (Resource resource : resourceSet.getResources()) {
+				resource.save(Collections.emptyMap());
+			}
+		}
+
+		public void load() {
+		    ResourceSet resSet = new ResourceSetImpl();
+		    Resource resource = resSet.getResource(URI.createURI(WORKTRACKER_STORAGE_URI), true);
+		    List<Activity> activities = newArrayList();
+		    List<WorkItem> workItems = newArrayList();
+		    for (EObject e : resource.getContents()) {
+		    	if (isWorkItem(e)) {
+		    		workItems.add((WorkItem) e);
+		    	} else if (isActivity(e)) {
+		    		activities.add((Activity) e);
+		    	} else {
+		    		throw new RuntimeException("Unknown object: "+ e);
+		    	}
+		    }
+		    addActivities(activities);
+		    addWorkItems(workItems);
+		}
+
+		private boolean isWorkItem(EObject e) {
+			return e.eClass().equals(DomainPackage.Literals.WORK_ITEM);
+		}
+
+		private boolean isActivity(EObject e) {
+			return e.eClass().equals(DomainPackage.Literals.ACTIVITY);
 		}
 	}
 }

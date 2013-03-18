@@ -44,7 +44,7 @@ class WorkTrackerDataImporter {
 			SubMonitor progress = SubMonitor.convert(monitor, "Import data from directory " + path.getFileName(), 100);
 			DirectoryScanner scanner = new DirectoryScanner(path);
 			XmlFileProcessor fp = new XmlFileProcessor();
-			scanner.scanDirectory(fp, progress.newChild(100));
+			scanner.scanDirectoryRecursively(fp, progress.newChild(100));
 			service.addActivities(fp.handler.activities);
 			service.addWorkItems(fp.handler.workItems);
 			int activitiesSize = fp.handler.activities.size();
@@ -68,7 +68,7 @@ class WorkTrackerDataImporter {
 			this.path = path;
 		}
 
-		public void scanDirectory(final FileProcessor fp, SubMonitor progress) throws IOException {
+		public void scanDirectoryRecursively(final FileProcessor fp, SubMonitor progress) throws IOException {
 			scanDirectory(path, fp, progress);
 		}
 

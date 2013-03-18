@@ -115,14 +115,7 @@ public class StartWorkItemView {
 	}
 
 	private void startWorkItemsOnKeyboardShortcut() {
-		txtActivity.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (enterPressed(e) || altAPressed(e)) {
-					startWorkItem();
-				}
-			}
-		});
+		txtActivity.addKeyListener(new StartWorkItemOnKeyShortcutListener());
 	}
 
 	private void updateAddButtonEnabling() {
@@ -143,6 +136,7 @@ public class StartWorkItemView {
 		startedSpinner.setIncrement(1);
 		startedSpinner.setPageIncrement(10);
 		startedSpinner.setToolTipText("Enter how many minutes ago this activity has been started?");
+		startedSpinner.addKeyListener(new StartWorkItemOnKeyShortcutListener());
 	}
 
 	private void createStartWorkItemButton(Composite stripe) {
@@ -151,14 +145,7 @@ public class StartWorkItemView {
 		btnAdd.setImage(getAddImage());
 		btnAdd.setToolTipText("Starts a new work item with the entered activity.");
 		btnAdd.setEnabled(false);
-		btnAdd.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (enterPressed(e)) {
-					startWorkItem();
-				}
-			}
-		});
+		btnAdd.addKeyListener(new StartWorkItemOnKeyShortcutListener());
 		btnAdd.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -221,6 +208,16 @@ public class StartWorkItemView {
 		service.startWorkItem(txtActivity.getText(), startedSpinner.getSelection());
 		txtActivity.setText("");
 		startedSpinner.setSelection(0);
+		updateActivitiesTable();
+	}
+
+	private final class StartWorkItemOnKeyShortcutListener extends KeyAdapter {
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if (enterPressed(e) || altAPressed(e)) {
+				startWorkItem();
+			}
+		}
 	}
 
 	/**
