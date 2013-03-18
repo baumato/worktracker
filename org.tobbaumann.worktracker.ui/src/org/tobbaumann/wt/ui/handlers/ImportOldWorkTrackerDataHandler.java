@@ -52,14 +52,14 @@ public class ImportOldWorkTrackerDataHandler {
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException,
 						InterruptedException {
-					eventBroker.send(Events.START_IMPORT, Events.START_IMPORT+"Blub");
+					eventBroker.send(Events.START_IMPORT, Events.START_IMPORT);
 					ImportResult ir = null;
 					try {
 						ir = service.importData(path, monitor);
 					} catch (OperationCanceledException e) {
 						throw new InterruptedException(Throwables.getStackTraceAsString(e));
 					}
-					eventBroker.send(Events.END_IMPORT, Events.END_IMPORT+"diwub");
+					eventBroker.send(Events.END_IMPORT, Events.END_IMPORT);
 					handleImportResult(shell, errMsg, ir);
 				}
 			});

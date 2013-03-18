@@ -98,13 +98,11 @@ public class DatesView {
 
 	@Inject @Optional
 	void startViewerSelectionUpdating(@UIEventTopic(Events.END_IMPORT) String s) {
-		System.out.println(s);
 		this.selectionUpdater.startUpdating();
 	}
 
 	@Inject @Optional
 	void stopViewerSelectionUpdating(@UIEventTopic(Events.START_IMPORT) String s) {
-		System.out.println(s);
 		this.selectionUpdater.stopUdating();
 	}
 
