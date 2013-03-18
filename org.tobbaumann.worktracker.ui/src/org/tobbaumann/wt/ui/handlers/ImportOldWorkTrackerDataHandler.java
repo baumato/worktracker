@@ -47,24 +47,24 @@ public class ImportOldWorkTrackerDataHandler {
 			if (path == null) {
 				return;
 			}
+			final ImportResult[] resultExchange = new ImportResult[1];
 			ProgressMonitorDialog dlg = new ProgressMonitorDialog(shell);
-			dlg.run(false, true, new IRunnableWithProgress() {
+			dlg.run(true, true, new IRunnableWithProgress() {
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException,
 						InterruptedException {
 					eventBroker.send(Events.START_IMPORT, Events.START_IMPORT);
-					ImportResult ir = null;
 					try {
-						ir = service.importData(path, monitor);
+						resultExchange[0] = service.importData(path, monitor);
 					} catch (OperationCanceledException e) {
 						throw new InterruptedException(Throwables.getStackTraceAsString(e));
 					}
 					eventBroker.send(Events.END_IMPORT, Events.END_IMPORT);
-					handleImportResult(shell, errMsg, ir);
 				}
 			});
+			handleImportResult(shell, errMsg, resultExchange[0]);
 		} catch (InterruptedException e) {
-			ErrorDialog.openError(shell, "Aborted", "Import has been aborted", Status.CANCEL_STATUS);
+			MessageDialog.openInformation(shell, "Aborted", "Import has been aborted. No data has been changed.");
 		} catch (Exception e) {
 			ErrorDialog.openError(shell, "Error", errMsg,
 					new Status(IStatus.ERROR, "WorkTracker", firstNonNull(e.getCause(), e).getMessage(), firstNonNull(e.getCause(), e)));
