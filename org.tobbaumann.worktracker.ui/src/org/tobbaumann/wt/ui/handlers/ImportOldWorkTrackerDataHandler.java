@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.tobbaumann.worktracker.ui.event.Events;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.core.WorkTrackingService.ImportResult;
-import org.tobbaumann.wt.core.WorkTrackingService.ProgressMonitorInterruptedException;
+import org.tobbaumann.wt.core.WorkTrackingService.OperationCanceledException;
 
 import com.google.common.base.Throwables;
 
@@ -56,7 +56,7 @@ public class ImportOldWorkTrackerDataHandler {
 					ImportResult ir = null;
 					try {
 						ir = service.importData(path, monitor);
-					} catch (ProgressMonitorInterruptedException e) {
+					} catch (OperationCanceledException e) {
 						throw new InterruptedException(Throwables.getStackTraceAsString(e));
 					}
 					eventBroker.send(Events.END_IMPORT, Events.END_IMPORT+"diwub");

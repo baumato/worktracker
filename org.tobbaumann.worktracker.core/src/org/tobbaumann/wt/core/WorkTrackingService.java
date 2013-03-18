@@ -58,7 +58,7 @@ public interface WorkTrackingService {
 	 * @param path the path to be searched for old WorkTracker data
 	 * @param monitor the progress monitor
 	 * @return the description of the done import
-	 * @throws ProgressMonitorInterruptedException
+	 * @throws OperationCanceledException
 	 */
 	ImportResult importData(String path, IProgressMonitor monitor);
 
@@ -106,6 +106,6 @@ public interface WorkTrackingService {
 	 * @author tobbaumann
 	 *
 	 */
-	public static final class ProgressMonitorInterruptedException extends RuntimeException {
+	public static final class OperationCanceledException extends RuntimeException {
 	}
 }

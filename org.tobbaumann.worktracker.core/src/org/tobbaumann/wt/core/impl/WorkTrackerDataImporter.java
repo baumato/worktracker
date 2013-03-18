@@ -20,7 +20,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.tobbaumann.wt.core.WorkTrackingService.ImportResult;
-import org.tobbaumann.wt.core.WorkTrackingService.ProgressMonitorInterruptedException;
+import org.tobbaumann.wt.core.WorkTrackingService.OperationCanceledException;
 import org.tobbaumann.wt.domain.Activity;
 import org.tobbaumann.wt.domain.WorkItem;
 import org.xml.sax.Attributes;
@@ -74,7 +74,7 @@ class WorkTrackerDataImporter {
 
 		private void scanDirectory(Path path, final FileProcessor fp, final SubMonitor progress) throws IOException {
 			if (progress.isCanceled()) {
-				throw new ProgressMonitorInterruptedException();
+				throw new OperationCanceledException();
 			}
 			DirectoryStream<Path> ds = Files.newDirectoryStream(path,
 					new DirectoryStream.Filter<Path>() {
@@ -167,7 +167,7 @@ class WorkTrackerDataImporter {
 			elementContent = new StringBuilder();
 			if (isActivityElement(qName)) {
 				String activityName = attributes.getValue(ACTIVITY_NAME_ATTRIBUTE);
-				Optional<Activity> a = service.getActivity(activityName);
+				Optional<Activity> a = service.getActivity(activities, activityName);
 				if (a.isPresent()) {
 					activity = a.get();
 				} else {

@@ -86,6 +86,11 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	@SuppressWarnings("unchecked")
 	public Optional<Activity> getActivity(final String activityName) {
 		LOGGER.trace("enter getActivity - {}", activityName);
+		return getActivity(this.activities, activityName);
+	}
+
+	Optional<Activity> getActivity(List<Activity> activities, final String activityName) {
+		LOGGER.trace("enter getActivity - {}", activityName);
 		return Iterables.tryFind(activities, new Predicate<Activity>() {
 			@Override
 			public boolean apply(Activity a) {
@@ -136,7 +141,6 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		} else {
 			activity = createActivity(activityName);
 		}
-		activity.incrementOccurrenceFrequency();
 
 		// update currently active work item
 		Calendar nowCal = Calendar.getInstance();
@@ -231,6 +235,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		WorkItem wi = DomainFactory.eINSTANCE.createWorkItem();
 		wi.setId(EcoreUtil.generateUUID());
 		wi.setActivity(checkNotNull(activity));
+		activity.incrementOccurrenceFrequency();
 		wi.setStart(checkNotNull(start));
 		if (end != null) {
 			wi.setEndDate(end);

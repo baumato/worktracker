@@ -237,7 +237,7 @@ public class StartWorkItemView {
 		}
 
 		private String getUsageOutOfString(String o1) {
-			return o1.substring(o1.indexOf("(")+1, o1.length()-1);
+			return o1.substring(o1.lastIndexOf('(')+1, o1.length()-1);
 		}
 	}
 
