@@ -411,19 +411,16 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		@Override
 		public XMIResource createResource(URI uri) {
 			XMIResource resource = new XMIResourceImpl(uri);
-
 			Map<Object, Object> saveOptions = resource.getDefaultSaveOptions();
 			saveOptions.put(XMLResource.OPTION_DECLARE_XML, Boolean.TRUE);
 			saveOptions.put(XMLResource.OPTION_CONFIGURATION_CACHE, Boolean.TRUE);
 			saveOptions.put(XMLResource.OPTION_USE_CACHED_LOOKUP_TABLE, lookupTable);
-
 			Map<Object, Object> loadOptions = resource.getDefaultSaveOptions();
 			loadOptions.put(XMLResource.OPTION_DEFER_ATTACHMENT, Boolean.TRUE);
 			loadOptions.put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, Boolean.TRUE);
 			loadOptions.put(XMLResource.OPTION_USE_DEPRECATED_METHODS, Boolean.FALSE);
 			loadOptions.put(XMLResource.OPTION_USE_PARSER_POOL, parserPool);
 			loadOptions.put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, nameToFeatureMap);
-
 			return resource;
 		}
 
