@@ -110,12 +110,8 @@ public class StartWorkItemView {
 		txtActivity.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtActivity.setMessage("Enter activity here...");
 		txtActivity.setToolTipText("Enter the name of your activity you want to start.");
-		startWorkItemsOnKeyboardShortcut();
-		updateAddButtonEnabling();
-	}
-
-	private void startWorkItemsOnKeyboardShortcut() {
 		txtActivity.addKeyListener(new StartWorkItemOnKeyShortcutListener());
+		updateAddButtonEnabling();
 	}
 
 	private void updateAddButtonEnabling() {
