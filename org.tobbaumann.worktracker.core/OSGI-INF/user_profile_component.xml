@@ -10,8 +10,8 @@
       Tobias Baumann - initial API and implementation
 -->
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.tobbaumann.worktracker.ui">
-   <implementation class="org.tobbaumann.wt.ui.DefaultUserProfile"/>
    <service>
-      <provide interface="org.tobbaumann.wt.ui.UserProfile"/>
+      <provide interface="org.tobbaumann.wt.core.UserProfile"/>
    </service>
+   <implementation class="org.tobbaumann.wt.core.impl.DefaultUserProfile"/>
 </scr:component>

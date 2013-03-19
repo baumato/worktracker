@@ -8,7 +8,7 @@
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
-package org.tobbaumann.wt.ui;
+package org.tobbaumann.wt.core.impl;
 
 import static com.google.common.base.Objects.firstNonNull;
 
@@ -22,6 +22,7 @@ import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.di.extensions.Preference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tobbaumann.wt.core.UserProfile;
 
 public class DefaultUserProfile implements UserProfile {
 

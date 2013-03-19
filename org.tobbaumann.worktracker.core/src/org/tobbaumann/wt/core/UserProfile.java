@@ -8,7 +8,7 @@
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
-package org.tobbaumann.wt.ui;
+package org.tobbaumann.wt.core;
 
 import java.text.DateFormat;
 import java.util.Locale;
