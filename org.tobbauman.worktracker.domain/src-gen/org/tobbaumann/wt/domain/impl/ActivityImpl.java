@@ -23,6 +23,7 @@ import org.tobbaumann.wt.domain.DomainPackage;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link org.tobbaumann.wt.domain.impl.ActivityImpl#getId <em>Id</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.impl.ActivityImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.impl.ActivityImpl#getOccurrenceFrequency <em>Occurrence Frequency</em>}</li>
  * </ul>
@@ -32,6 +33,26 @@ import org.tobbaumann.wt.domain.DomainPackage;
  */
 public class ActivityImpl extends MinimalEObjectImpl.Container implements Activity
 {
+  /**
+   * The default value of the '{@link #getId() <em>Id</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getId()
+   * @generated
+   * @ordered
+   */
+  protected static final String ID_EDEFAULT = null;
+
+  /**
+   * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getId()
+   * @generated
+   * @ordered
+   */
+  protected String id = ID_EDEFAULT;
+
   /**
    * The default value of the '{@link #getName() <em>Name</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -91,6 +112,29 @@ public class ActivityImpl extends MinimalEObjectImpl.Container implements Activi
   protected EClass eStaticClass()
   {
     return DomainPackage.Literals.ACTIVITY;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String getId()
+  {
+    return id;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setId(String newId)
+  {
+    String oldId = id;
+    id = newId;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, DomainPackage.ACTIVITY__ID, oldId, id));
   }
 
   /**
@@ -163,6 +207,8 @@ public class ActivityImpl extends MinimalEObjectImpl.Container implements Activi
   {
     switch (featureID)
     {
+      case DomainPackage.ACTIVITY__ID:
+        return getId();
       case DomainPackage.ACTIVITY__NAME:
         return getName();
       case DomainPackage.ACTIVITY__OCCURRENCE_FREQUENCY:
@@ -181,6 +227,9 @@ public class ActivityImpl extends MinimalEObjectImpl.Container implements Activi
   {
     switch (featureID)
     {
+      case DomainPackage.ACTIVITY__ID:
+        setId((String)newValue);
+        return;
       case DomainPackage.ACTIVITY__NAME:
         setName((String)newValue);
         return;
@@ -201,6 +250,9 @@ public class ActivityImpl extends MinimalEObjectImpl.Container implements Activi
   {
     switch (featureID)
     {
+      case DomainPackage.ACTIVITY__ID:
+        setId(ID_EDEFAULT);
+        return;
       case DomainPackage.ACTIVITY__NAME:
         setName(NAME_EDEFAULT);
         return;
@@ -221,6 +273,8 @@ public class ActivityImpl extends MinimalEObjectImpl.Container implements Activi
   {
     switch (featureID)
     {
+      case DomainPackage.ACTIVITY__ID:
+        return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
       case DomainPackage.ACTIVITY__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
       case DomainPackage.ACTIVITY__OCCURRENCE_FREQUENCY:
@@ -257,7 +311,9 @@ public class ActivityImpl extends MinimalEObjectImpl.Container implements Activi
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (name: ");
+    result.append(" (id: ");
+    result.append(id);
+    result.append(", name: ");
     result.append(name);
     result.append(", occurrenceFrequency: ");
     result.append(occurrenceFrequency);

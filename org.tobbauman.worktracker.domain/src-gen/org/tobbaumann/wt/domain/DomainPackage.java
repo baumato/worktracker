@@ -100,13 +100,22 @@ public interface DomainPackage extends EPackage
   int ACTIVITY = 1;
 
   /**
+   * The feature id for the '<em><b>Id</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACTIVITY__ID = 0;
+
+  /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ACTIVITY__NAME = 0;
+  int ACTIVITY__NAME = 1;
 
   /**
    * The feature id for the '<em><b>Occurrence Frequency</b></em>' attribute.
@@ -115,7 +124,7 @@ public interface DomainPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ACTIVITY__OCCURRENCE_FREQUENCY = 1;
+  int ACTIVITY__OCCURRENCE_FREQUENCY = 2;
 
   /**
    * The number of structural features of the '<em>Activity</em>' class.
@@ -124,7 +133,7 @@ public interface DomainPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ACTIVITY_FEATURE_COUNT = 2;
+  int ACTIVITY_FEATURE_COUNT = 3;
 
   /**
    * The operation id for the '<em>Increment Occurrence Frequency</em>' operation.
@@ -512,6 +521,17 @@ public interface DomainPackage extends EPackage
    * @generated
    */
   EClass getActivity();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.tobbaumann.wt.domain.Activity#getId <em>Id</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Id</em>'.
+   * @see org.tobbaumann.wt.domain.Activity#getId()
+   * @see #getActivity()
+   * @generated
+   */
+  EAttribute getActivity_Id();
 
   /**
    * Returns the meta object for the attribute '{@link org.tobbaumann.wt.domain.Activity#getName <em>Name</em>}'.
@@ -928,6 +948,14 @@ public interface DomainPackage extends EPackage
      * @generated
      */
     EClass ACTIVITY = eINSTANCE.getActivity();
+
+    /**
+     * The meta object literal for the '<em><b>Id</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ACTIVITY__ID = eINSTANCE.getActivity_Id();
 
     /**
      * The meta object literal for the '<em><b>Name</b></em>' attribute feature.

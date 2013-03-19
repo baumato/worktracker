@@ -145,7 +145,7 @@ public class WorkItemSummaryView {
 		@Override
 		Date getCurrentlySelectedDate() {
 			List<?> wis = (List<?>) tableViewer.getInput();
-			return getDateFromElement(((WorkItemSummary)wis.get(0)).getWorkItems().get(0));
+			return (wis == null || wis.isEmpty()) ? new Date() : getDateFromElement(((WorkItemSummary)wis.get(0)).getWorkItems().get(0));
 		}
 
 		@Override

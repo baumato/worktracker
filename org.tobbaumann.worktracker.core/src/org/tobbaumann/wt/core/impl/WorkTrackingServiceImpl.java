@@ -12,7 +12,9 @@ package org.tobbaumann.wt.core.impl;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Maps.newHashMap;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -23,6 +25,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.databinding.observable.list.IListChangeListener;
 import org.eclipse.core.databinding.observable.list.IObservableList;
@@ -35,10 +38,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.emf.ecore.xmi.XMIResource;
+import org.eclipse.emf.ecore.xmi.XMLParserPool;
+import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tobbaumann.wt.core.WorkTrackingService;
@@ -216,6 +223,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 
 	Activity createActivityInternal(String activityName) {
 		Activity activity = DomainFactory.eINSTANCE.createActivity();
+		activity.setId(EcoreUtil.generateUUID());
 		activity.setName(activityName);
 		activity.setOccurrenceFrequency(0);
 		return activity;
@@ -333,11 +341,19 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	 * @author tobbaumann
 	 *
 	 */
-	private final class WorkItemsPersister implements IListChangeListener {
+	private final class WorkItemsPersister extends ResourceFactoryImpl implements IListChangeListener {
 
 		private static final String WORKTRACKER_STORAGE_URI = "storage/worktracker.storage";
 
+		private final List<?> lookupTable = newArrayList();
+		private final XMLParserPool parserPool = new XMLParserPoolImpl();
+		private Map<?, ?> nameToFeatureMap = newHashMap();
+
+
 		public WorkItemsPersister() {
+			Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
+		    Map<String, Object> m = reg.getExtensionToFactoryMap();
+		    m.put("storage", new XMIResourceFactoryImpl());
 		}
 
 		@Override
@@ -354,15 +370,11 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		}
 
 		private void commitUnchecked() throws IOException {
-			ResourceSet resourceSet = new ResourceSetImpl();
-			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-					.put("storage", new XMIResourceFactoryImpl());
-
 			URI uri = URI.createURI(WORKTRACKER_STORAGE_URI);
-			Resource resource = resourceSet.createResource(uri);
+			XMIResource resource = createResource(uri);
 			resource.getContents().addAll(activities);
 			resource.getContents().addAll(workItems);
-			resource.save(Collections.emptyMap());
+			resource.save(resource.getDefaultSaveOptions());
 		}
 
 		public void load() {
@@ -375,13 +387,14 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 
 		private void loadUnchecked() throws IOException {
 			DomainPackage.eINSTANCE.eClass();
-		    ResourceSet resourceSet = new ResourceSetImpl();
-			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
-					.put("storage", new XMIResourceFactoryImpl());
-		    Resource resource = resourceSet.createResource(URI.createURI(WORKTRACKER_STORAGE_URI));
+		    URI uri = URI.createFileURI(WORKTRACKER_STORAGE_URI);
+		    if (!new File(uri.toFileString()).exists()) {
+		    	return;
+		    }
+			XMIResource resource = createResource(uri);
 		    List<Activity> activities = newArrayList();
 		    List<WorkItem> workItems = newArrayList();
-		    resource.load(Collections.emptyMap());
+		    resource.load(resource.getDefaultLoadOptions());
 		    for (EObject e : resource.getContents()) {
 		    	if (isWorkItem(e)) {
 		    		workItems.add((WorkItem) e);
@@ -393,6 +406,25 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		    }
 		    addActivities(activities);
 		    addWorkItems(workItems);
+		}
+
+		@Override
+		public XMIResource createResource(URI uri) {
+			XMIResource resource = new XMIResourceImpl(uri);
+
+			Map<Object, Object> saveOptions = resource.getDefaultSaveOptions();
+			saveOptions.put(XMLResource.OPTION_DECLARE_XML, Boolean.TRUE);
+			saveOptions.put(XMLResource.OPTION_CONFIGURATION_CACHE, Boolean.TRUE);
+			saveOptions.put(XMLResource.OPTION_USE_CACHED_LOOKUP_TABLE, lookupTable);
+
+			Map<Object, Object> loadOptions = resource.getDefaultSaveOptions();
+			loadOptions.put(XMLResource.OPTION_DEFER_ATTACHMENT, Boolean.TRUE);
+			loadOptions.put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, Boolean.TRUE);
+			loadOptions.put(XMLResource.OPTION_USE_DEPRECATED_METHODS, Boolean.FALSE);
+			loadOptions.put(XMLResource.OPTION_USE_PARSER_POOL, parserPool);
+			loadOptions.put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, nameToFeatureMap);
+
+			return resource;
 		}
 
 		private boolean isWorkItem(EObject e) {

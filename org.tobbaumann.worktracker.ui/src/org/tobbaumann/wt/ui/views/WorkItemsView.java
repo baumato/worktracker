@@ -178,7 +178,7 @@ public class WorkItemsView {
 		@Override
 		Date getCurrentlySelectedDate() {
 			List<?> items = (List<?>) tableViewer.getInput();
-			return getDateFromElement(items.get(0));
+			return items == null || items.isEmpty() ? new Date() : getDateFromElement(items.get(0));
 		}
 
 		@Override
