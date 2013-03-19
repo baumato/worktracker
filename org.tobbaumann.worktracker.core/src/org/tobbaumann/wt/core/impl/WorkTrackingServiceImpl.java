@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.databinding.observable.list.IListChangeListener;
 import org.eclipse.core.databinding.observable.list.IObservableList;
@@ -78,7 +77,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		this.workItems.addListChangeListener(persister);
 		this.workItems.addListChangeListener(new WorkItemDatesUpdater());
 		//WorkTrackingServiceInitializer.initialize(this);
-		//persister.load();
+		persister.load();
 	}
 
 	public void activate() {
@@ -339,10 +338,6 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		private static final String WORKTRACKER_STORAGE_URI = "storage/worktracker.storage";
 
 		public WorkItemsPersister() {
-			DomainPackage.eINSTANCE.eClass();
-			Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
-		    Map<String, Object> m = reg.getExtensionToFactoryMap();
-		    m.put("storage", new XMIResourceFactoryImpl());
 		}
 
 		@Override
@@ -360,19 +355,33 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 
 		private void commitUnchecked() throws IOException {
 			ResourceSet resourceSet = new ResourceSetImpl();
-			Resource all = resourceSet.createResource(URI.createURI(WORKTRACKER_STORAGE_URI));
-			all.getContents().addAll(activities);
-			all.getContents().addAll(workItems);
-			for (Resource resource : resourceSet.getResources()) {
-				resource.save(Collections.emptyMap());
-			}
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
+					.put("storage", new XMIResourceFactoryImpl());
+
+			URI uri = URI.createURI(WORKTRACKER_STORAGE_URI);
+			Resource resource = resourceSet.createResource(uri);
+			resource.getContents().addAll(activities);
+			resource.getContents().addAll(workItems);
+			resource.save(Collections.emptyMap());
 		}
 
 		public void load() {
-		    ResourceSet resSet = new ResourceSetImpl();
-		    Resource resource = resSet.getResource(URI.createURI(WORKTRACKER_STORAGE_URI), true);
+			try {
+				loadUnchecked();
+			} catch (IOException e) {
+				Throwables.propagate(e);
+			}
+		}
+
+		private void loadUnchecked() throws IOException {
+			DomainPackage.eINSTANCE.eClass();
+		    ResourceSet resourceSet = new ResourceSetImpl();
+			resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap()
+					.put("storage", new XMIResourceFactoryImpl());
+		    Resource resource = resourceSet.createResource(URI.createURI(WORKTRACKER_STORAGE_URI));
 		    List<Activity> activities = newArrayList();
 		    List<WorkItem> workItems = newArrayList();
+		    resource.load(Collections.emptyMap());
 		    for (EObject e : resource.getContents()) {
 		    	if (isWorkItem(e)) {
 		    		workItems.add((WorkItem) e);
