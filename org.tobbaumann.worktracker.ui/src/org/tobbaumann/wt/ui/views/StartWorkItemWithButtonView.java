@@ -84,7 +84,9 @@ public class StartWorkItemWithButtonView {
 		dt.addDropListener(new DropTargetAdapter() {
 			@Override
 			public void drop(DropTargetEvent event) {
-				btn.setText((String) event.data);
+				if (service.getActivity((String)event.data).isPresent()) {
+					btn.setText((String) event.data);
+				}
 			}
 		});
 	}
