@@ -21,7 +21,9 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.core.databinding.observable.list.IObservableList;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.preference.JFacePreferences;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -38,6 +40,12 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DragSource;
+import org.eclipse.swt.dnd.DragSourceAdapter;
+import org.eclipse.swt.dnd.DragSourceEvent;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
@@ -55,6 +63,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
+import org.tobbaumann.worktracker.ui.event.Events;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.Activity;
 
@@ -168,7 +177,7 @@ public class StartWorkItemView {
 
 	private void createAndConfigureActivitiesTable(Composite parent) {
 		activitiesTable = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION);
-		activitiesTable.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		activitiesTable.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		activitiesTable.setLabelProvider(new ChangeActivitiesViewLabelProvider());
 		activitiesTable.setContentProvider(new ObservableListContentProvider());
 		activitiesTable.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -180,10 +189,36 @@ public class StartWorkItemView {
 		});
 		sortActivitiesByName();
 		ViewerUtils.requestFocusOnMouseEnter(activitiesTable);
+		makeActivitiesTableDragSource();
 	}
 
 	void sortActivitiesByName() {
 		activitiesTable.setComparator(new ViewerComparator(Ordering.natural()));
+	}
+
+	private void makeActivitiesTableDragSource() {
+		DragSource ds = new DragSource(activitiesTable.getTable(), DND.DROP_MOVE);
+		ds.setTransfer(new Transfer[] { TextTransfer.getInstance() });
+		ds.addDragListener(new DragSourceAdapter() {
+			@Override
+			public void dragSetData(DragSourceEvent event) {
+				System.out.println("dragSetData");
+				IStructuredSelection selection = (IStructuredSelection) activitiesTable.getSelection();
+				event.data = ((Activity)selection.getFirstElement()).getName();
+			}
+		});
+	}
+
+	private void startWorkItem() {
+		service.startWorkItem(txtActivity.getText(), startedSpinner.getSelection());
+		startWorkItemPostProcessing(Events.START_WORK_ITEM);
+	}
+
+	@Inject @Optional
+	void startWorkItemPostProcessing(@UIEventTopic(Events.START_WORK_ITEM) String s) {
+		txtActivity.setText("");
+		startedSpinner.setSelection(0);
+		updateActivitiesTable();
 	}
 
 	private void updateActivitiesTable() {
@@ -198,13 +233,6 @@ public class StartWorkItemView {
 	private boolean altAPressed(KeyEvent e) {
 		return ((e.stateMask & SWT.ALT) != 0)
 				&& (e.character == 'a');
-	}
-
-	private void startWorkItem() {
-		service.startWorkItem(txtActivity.getText(), startedSpinner.getSelection());
-		txtActivity.setText("");
-		startedSpinner.setSelection(0);
-		updateActivitiesTable();
 	}
 
 	private final class StartWorkItemOnKeyShortcutListener extends KeyAdapter {
