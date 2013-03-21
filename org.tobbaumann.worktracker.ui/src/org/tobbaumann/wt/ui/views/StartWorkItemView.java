@@ -177,7 +177,7 @@ public class StartWorkItemView {
 
 	private void createAndConfigureActivitiesTable(Composite parent) {
 		activitiesTable = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION);
-		activitiesTable.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		activitiesTable.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		activitiesTable.setLabelProvider(new ChangeActivitiesViewLabelProvider());
 		activitiesTable.setContentProvider(new ObservableListContentProvider());
 		activitiesTable.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -211,12 +211,13 @@ public class StartWorkItemView {
 
 	private void startWorkItem() {
 		service.startWorkItem(txtActivity.getText(), startedSpinner.getSelection());
-		startWorkItemPostProcessing(Events.START_WORK_ITEM);
+		startWorkItemPostProcessing(txtActivity.getText());
 	}
 
 	@Inject @Optional
-	void startWorkItemPostProcessing(@UIEventTopic(Events.START_WORK_ITEM) String s) {
+	void startWorkItemPostProcessing(@UIEventTopic(Events.START_WORK_ITEM) String activityName) {
 		txtActivity.setText("");
+		txtActivity.setMessage("Currently working on '" + activityName + "'.");
 		startedSpinner.setSelection(0);
 		updateActivitiesTable();
 	}

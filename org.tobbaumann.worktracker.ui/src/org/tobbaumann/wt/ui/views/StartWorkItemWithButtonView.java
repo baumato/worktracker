@@ -72,7 +72,7 @@ public class StartWorkItemWithButtonView {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				service.startWorkItem(btn.getText(), 0);
-				eventBroker.send(Events.START_WORK_ITEM, Events.START_WORK_ITEM);
+				eventBroker.send(Events.START_WORK_ITEM, btn.getText());
 			}
 		});
 
