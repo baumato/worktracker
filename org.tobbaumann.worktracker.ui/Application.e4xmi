@@ -8,7 +8,11 @@
       <children xsi:type="basic:PartSashContainer" xmi:id="_1JeiEDY1EeKiNZbXiGFecg" elementId="worktracker.ui.partsashcontainer.0" containerData="85">
         <children xsi:type="basic:PartSashContainer" xmi:id="_w9c1EIkMEeKX0dm4WNPgyQ" elementId="org.tobbaumann.worktracker.ui.partsashcontainer.0" containerData="44" horizontal="true">
           <children xsi:type="basic:PartStack" xmi:id="_1nAaIIkMEeKX0dm4WNPgyQ" elementId="org.tobbaumann.worktracker.ui.partstack.0" containerData="50">
-            <children xsi:type="basic:Part" xmi:id="_9orKgIkMEeKX0dm4WNPgyQ" elementId="worktracker.ui.part.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.StartWorkItemWithButtonView" label="Start Work Item" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/current-work.png"/>
+            <children xsi:type="basic:Part" xmi:id="_9orKgIkMEeKX0dm4WNPgyQ" elementId="worktracker.ui.part.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.StartWorkItemWithButtonView" label="Start Work Item" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/current-work.png">
+              <toolbar xmi:id="_1FOL4JJFEeKwNNMjl4I5UA" elementId="org.tobbaumann.worktracker.ui.toolbar.1">
+                <children xsi:type="menu:DirectToolItem" xmi:id="_1ojicJJFEeKwNNMjl4I5UA" elementId="org.tobbaumann.worktracker.ui.directtoolitem.2" label="Create buttons from most used activities" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/arrow_down.png" tooltip="Create buttons from most used activities" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.FillButtonsWithMostUsedActivitiesHandler"/>
+              </toolbar>
+            </children>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_2Fal4DY1EeKiNZbXiGFecg" elementId="worktracker.ui.partstack.0" containerData="50">
             <children xsi:type="basic:Part" xmi:id="_26J1gDY1EeKiNZbXiGFecg" elementId="worktracker.ui.part.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.StartWorkItemView" label="Start Work Item" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/current-work.png">

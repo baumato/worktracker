@@ -27,7 +27,7 @@ import org.tobbaumann.wt.domain.Activity;
 public class StartWorkItemWithButtonView {
 
 	private final WorkTrackingService service;
-	private Composite parent;
+	private Composite buttonPanel;
 
 	@Inject
 	public StartWorkItemWithButtonView(WorkTrackingService service) {
@@ -37,26 +37,34 @@ public class StartWorkItemWithButtonView {
 	@PostConstruct
 	public void createControls(Composite parent) {
 		parent.setLayout(new FillLayout());
-		this.parent = new Composite(parent, SWT.NONE);
+		this.buttonPanel = new Composite(parent, SWT.NONE);
 		createMostUsedActivitiesButtons();
 	}
 
 	private void createMostUsedActivitiesButtons() {
 		GridLayout layout = new GridLayout(1, true);
-		parent.setLayout(layout);
+		buttonPanel.setLayout(layout);
 		IObservableList mua = service.getMostUsedActivities(6);
 		for (Object o : mua) {
 			Activity a = (Activity) o;
-			Button btn = new Button(parent, SWT.PUSH);
+			Button btn = new Button(buttonPanel, SWT.PUSH);
 			btn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 			btn.setText(a.getName());
 		}
 	}
 
+	void fillButtonsWithMostUsedActivities() {
+		Composite superParent = this.buttonPanel.getParent();
+		this.buttonPanel.dispose();
+		this.buttonPanel = new Composite(superParent, SWT.NONE);
+		createMostUsedActivitiesButtons();
+		superParent.layout(true, true);
+	}
+
 	@Focus
 	public void requestFocus() {
-		if (parent != null && !parent.isDisposed()) {
-			parent.setFocus();
+		if (buttonPanel != null && !buttonPanel.isDisposed()) {
+			buttonPanel.setFocus();
 		}
 	}
 }
