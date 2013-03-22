@@ -11,20 +11,27 @@
 package org.tobbaumann.wt.ui.views;
 
 import static com.google.common.base.Strings.nullToEmpty;
+import static com.google.common.collect.Lists.newArrayList;
 
 import java.net.URI;
 import java.net.URL;
+import java.util.Collection;
 import java.util.Comparator;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.core.databinding.observable.list.IListChangeListener;
 import org.eclipse.core.databinding.observable.list.IObservableList;
+import org.eclipse.core.databinding.observable.list.ListChangeEvent;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
+import org.eclipse.jface.fieldassist.ContentProposalAdapter;
+import org.eclipse.jface.fieldassist.SimpleContentProposalProvider;
+import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.preference.JFacePreferences;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -75,6 +82,7 @@ public class StartWorkItemView {
 	private WorkTrackingService service;
 
 	private Text txtActivity;
+	private ContentProposalAdapter activiyContentProposalAdapter;
 	private Spinner startedSpinner;
 	private Button btnAdd;
 	private TableViewer activitiesTable;
@@ -120,7 +128,44 @@ public class StartWorkItemView {
 		txtActivity.setMessage("Enter activity here...");
 		txtActivity.setToolTipText("Enter the name of your activity you want to start.");
 		txtActivity.addKeyListener(new StartWorkItemOnKeyShortcutListener());
+		applyConentAssist(txtActivity);
 		updateAddButtonEnabling();
+	}
+
+	private void applyConentAssist(Text txtActivity) {
+		SimpleContentProposalProvider proposalProvider = new SimpleContentProposalProvider(
+				createProposalsFromActivities(service.getActivities()));
+		activiyContentProposalAdapter = new ContentProposalAdapter(
+			txtActivity,
+			new TextContentAdapter(),
+			proposalProvider,
+			null,
+			null);
+		proposalProvider.setFiltering(true);
+		activiyContentProposalAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
+		updateProposalsOnActivityListChange(proposalProvider);
+	}
+
+	private String[] createProposalsFromActivities(IObservableList activities) {
+		Collection<String> activityNames = newArrayList();
+		for (Object o : activities) {
+			Activity a = (Activity) o;
+			activityNames.add(a.getName());
+		}
+		String[] arrActivityNames = activityNames.toArray(new String[0]);
+		return arrActivityNames;
+	}
+
+	private void updateProposalsOnActivityListChange(final SimpleContentProposalProvider proposalProvider) {
+		service.getActivities().addListChangeListener(new IListChangeListener() {
+			@Override
+			public void handleListChange(ListChangeEvent event) {
+				System.out.println("update proposal provider");
+				IObservableList activities = event.getObservableList();
+				String[] arrActivityNames = createProposalsFromActivities(activities);
+				proposalProvider.setProposals(arrActivityNames);
+			}
+		});
 	}
 
 	private void updateAddButtonEnabling() {
@@ -227,21 +272,31 @@ public class StartWorkItemView {
 		activitiesTable.setInput(activities);
 	}
 
-	private boolean enterPressed(KeyEvent e) {
-		return e.character == SWT.CR;
-	}
-
-	private boolean altAPressed(KeyEvent e) {
-		return ((e.stateMask & SWT.ALT) != 0)
-				&& (e.character == 'a');
-	}
-
+	/**
+	 *
+	 * @author tobbaumann
+	 *
+	 */
 	private final class StartWorkItemOnKeyShortcutListener extends KeyAdapter {
+
 		@Override
 		public void keyPressed(KeyEvent e) {
-			if (enterPressed(e) || altAPressed(e)) {
+			if ((enterPressed(e) || altAPressed(e)) && !isProposalPopupOpen()) {
 				startWorkItem();
 			}
+		}
+
+		private boolean enterPressed(KeyEvent e) {
+			return e.character == SWT.CR;
+		}
+
+		private boolean altAPressed(KeyEvent e) {
+			return ((e.stateMask & SWT.ALT) != 0)
+					&& (e.character == 'a');
+		}
+
+		private boolean isProposalPopupOpen() {
+			return activiyContentProposalAdapter != null && activiyContentProposalAdapter.isProposalPopupOpen();
 		}
 	}
 
