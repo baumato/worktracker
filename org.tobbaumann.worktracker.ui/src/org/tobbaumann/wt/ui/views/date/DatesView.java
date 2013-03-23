@@ -38,9 +38,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.tobbaumann.worktracker.ui.event.Events;
 import org.tobbaumann.wt.core.UserProfile;
 import org.tobbaumann.wt.core.WorkTrackingService;
+import org.tobbaumann.wt.ui.event.Events;
 import org.tobbaumann.wt.ui.views.ViewerUtils;
 
 import com.google.common.collect.Iterables;

@@ -1,4 +1,4 @@
-package org.tobbaumann.worktracker.ui.event;
+package org.tobbaumann.wt.ui.event;
 
 public class Events {
 	public static final String START_IMPORT = "start_import";

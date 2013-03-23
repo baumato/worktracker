@@ -18,10 +18,10 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Shell;
-import org.tobbaumann.worktracker.ui.event.Events;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.core.WorkTrackingService.ImportResult;
 import org.tobbaumann.wt.core.WorkTrackingService.OperationCanceledException;
+import org.tobbaumann.wt.ui.event.Events;
 
 import com.google.common.base.Throwables;
 

@@ -46,9 +46,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
-import org.tobbaumann.worktracker.ui.event.Events;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.Activity;
+import org.tobbaumann.wt.ui.event.Events;
 
 public class StartWorkItemWithButtonView {
 
