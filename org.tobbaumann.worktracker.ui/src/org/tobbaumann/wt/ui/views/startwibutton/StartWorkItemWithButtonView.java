@@ -198,6 +198,13 @@ public class StartWorkItemWithButtonView {
 		makeButtonDropTarget(btn);
 	}
 
+	private void handleButtonDrop(final Button btn, DropTargetEvent event) {
+		if (service.getActivity((String) event.data).isPresent()) {
+			btn.setText(createButtonText(event.data.toString(), getButtonIndex(btn)+1));
+			saveButtonTextsToPreferences(btn.getParent());
+		}
+	}
+
 	private String createButtonText(String activityName, int buttonNumber) {
 		String buttonText = activityName.isEmpty()
 				? ""
@@ -239,22 +246,20 @@ public class StartWorkItemWithButtonView {
 				: buttonPanel;
 	}
 
-	@Focus
-	public void requestFocus() {
-		if (switchComposite != null && !switchComposite.isDisposed()) {
-			switchComposite.setFocus();
+	public void startWorkItem(int buttonIndex) {
+		if (buttonIndex < buttonPanelContent.getChildren().length) {
+			Control c = buttonPanelContent.getChildren()[buttonIndex];
+			if (c instanceof Button) {
+				startWorkItem(getActivityNameFromButton((Button) c));
+			}
 		}
 	}
 
-	private void handleButtonDrop(final Button btn, DropTargetEvent event) {
-		if (service.getActivity((String) event.data).isPresent()) {
-			btn.setText(createButtonText(event.data.toString(), getButtonIndex(btn)+1));
-			saveButtonTextsToPreferences(btn.getParent());
+	private void startWorkItem(String activityName) {
+		if (activityName != null && !activityName.trim().isEmpty()) {
+			service.startWorkItem(activityName, 0);
+			eventBroker.send(Events.START_WORK_ITEM, activityName);
 		}
-	}
-
-	private int getButtonIndex(Button btn) {
-		return Arrays.asList(btn.getParent().getChildren()).indexOf(btn);
 	}
 
 	private void saveButtonTextsToPreferences(Composite btnParent) {
@@ -273,20 +278,15 @@ public class StartWorkItemWithButtonView {
 		return btn.getData(BTN_DATA_KEY_ACTIVITY_NAME).toString();
 	}
 
-	public void startWorkItem(int buttonIndex) {
-		if (buttonIndex < buttonPanelContent.getChildren().length) {
-			Control c = buttonPanelContent.getChildren()[buttonIndex];
-			if (c instanceof Button) {
-				startWorkItem(getActivityNameFromButton((Button) c));
-			}
+	@Focus
+	public void requestFocus() {
+		if (switchComposite != null && !switchComposite.isDisposed()) {
+			switchComposite.setFocus();
 		}
 	}
 
-	private void startWorkItem(String activityName) {
-		if (activityName != null && !activityName.trim().isEmpty()) {
-			service.startWorkItem(activityName, 0);
-			eventBroker.send(Events.START_WORK_ITEM, activityName);
-		}
+	private int getButtonIndex(Button btn) {
+		return Arrays.asList(btn.getParent().getChildren()).indexOf(btn);
 	}
 
 	/**

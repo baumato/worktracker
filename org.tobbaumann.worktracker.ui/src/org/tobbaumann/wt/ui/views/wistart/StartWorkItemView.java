@@ -103,10 +103,6 @@ public class StartWorkItemView {
 		}
 	}
 
-	void sortActivitiesByUsage() {
-		activitiesTable.setComparator(new ViewerComparator(new UsageComparator()));
-	}
-
 	/**
 	 * Create contents of the view part.
 	 */
@@ -250,6 +246,10 @@ public class StartWorkItemView {
 		} else {
 			sortActivitiesByName();
 		}
+	}
+
+	void sortActivitiesByUsage() {
+		activitiesTable.setComparator(new ViewerComparator(new UsageComparator()));
 	}
 
 	void sortActivitiesByName() {
