@@ -8,7 +8,7 @@
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
-package org.tobbaumann.wt.ui.views;
+package org.tobbaumann.wt.ui.views.startwibutton;
 
 import static com.google.common.collect.Lists.newArrayList;
 

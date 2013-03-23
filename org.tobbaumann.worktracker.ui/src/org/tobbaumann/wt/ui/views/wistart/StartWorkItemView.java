@@ -8,7 +8,7 @@
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
-package org.tobbaumann.wt.ui.views;
+package org.tobbaumann.wt.ui.views.wistart;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.base.Strings.nullToEmpty;
@@ -74,6 +74,7 @@ import org.eclipse.swt.widgets.Text;
 import org.tobbaumann.worktracker.ui.event.Events;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.Activity;
+import org.tobbaumann.wt.ui.views.ViewerUtils;
 
 import com.google.common.collect.Ordering;
 

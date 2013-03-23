@@ -19,7 +19,7 @@ public class ViewerUtils {
 	private ViewerUtils() {
 	}
 
-	static void refreshViewerPeriodically(final StructuredViewer viewer) {
+	public static void refreshViewerPeriodically(final StructuredViewer viewer) {
 		refreshViewerPeriodically(viewer, 30, TimeUnit.SECONDS);
 	}
 
@@ -36,7 +36,7 @@ public class ViewerUtils {
 		});
 	}
 
-	static void requestFocusOnMouseEnter(final StructuredViewer viewer) {
+	public static void requestFocusOnMouseEnter(final StructuredViewer viewer) {
 //		viewer.getControl().addMouseTrackListener(new MouseTrackAdapter() {
 //			@Override
 //			public void mouseEnter(MouseEvent e) {

@@ -41,12 +41,12 @@ public abstract class OnWorkItemListChangeUpdater extends ListDiffVisitor implem
 		return new SimpleDateFormat("yyyy-MM-dd");
 	}
 
-	Date getDateFromElement(Object element) {
+	protected Date getDateFromElement(Object element) {
 		WorkItem wi = (WorkItem) element;
 		return wi.getStart();
 	}
 
-	abstract Date getCurrentlySelectedDate();
+	protected abstract Date getCurrentlySelectedDate();
 
-	abstract void update(Date date);
+	protected abstract void update(Date date);
 }

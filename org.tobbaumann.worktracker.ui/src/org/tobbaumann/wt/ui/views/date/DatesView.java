@@ -8,7 +8,7 @@
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
-package org.tobbaumann.wt.ui.views;
+package org.tobbaumann.wt.ui.views.date;
 
 import java.util.Date;
 import java.util.Set;
@@ -41,6 +41,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.tobbaumann.worktracker.ui.event.Events;
 import org.tobbaumann.wt.core.UserProfile;
 import org.tobbaumann.wt.core.WorkTrackingService;
+import org.tobbaumann.wt.ui.views.ViewerUtils;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;

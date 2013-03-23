@@ -8,7 +8,7 @@
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
-package org.tobbaumann.wt.ui.views;
+package org.tobbaumann.wt.ui.views.description;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;

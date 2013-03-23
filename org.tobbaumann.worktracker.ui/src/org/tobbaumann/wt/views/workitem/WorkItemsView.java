@@ -8,7 +8,7 @@
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
-package org.tobbaumann.wt.ui.views;
+package org.tobbaumann.wt.views.workitem;
 
 import static com.google.common.base.Objects.firstNonNull;
 
@@ -43,6 +43,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.tobbaumann.wt.core.UserProfile;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.WorkItem;
+import org.tobbaumann.wt.ui.views.OnWorkItemListChangeUpdater;
+import org.tobbaumann.wt.ui.views.ViewerUtils;
 
 import com.google.common.collect.Ordering;
 
@@ -176,13 +178,13 @@ public class WorkItemsView {
 	private final class WorkItemsUpdater extends OnWorkItemListChangeUpdater {
 
 		@Override
-		Date getCurrentlySelectedDate() {
+		protected Date getCurrentlySelectedDate() {
 			List<?> items = (List<?>) tableViewer.getInput();
 			return items == null || items.isEmpty() ? new Date() : getDateFromElement(items.get(0));
 		}
 
 		@Override
-		void update(Date date) {
+		protected void update(Date date) {
 			updateDate(date);
 		}
 	}

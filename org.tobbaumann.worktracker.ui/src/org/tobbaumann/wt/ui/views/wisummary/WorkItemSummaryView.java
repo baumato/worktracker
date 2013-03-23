@@ -8,7 +8,7 @@
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
-package org.tobbaumann.wt.ui.views;
+package org.tobbaumann.wt.ui.views.wisummary;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -37,6 +37,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.WorkItemSummary;
+import org.tobbaumann.wt.ui.views.OnWorkItemListChangeUpdater;
+import org.tobbaumann.wt.ui.views.ViewerUtils;
 
 public class WorkItemSummaryView {
 
@@ -143,13 +145,13 @@ public class WorkItemSummaryView {
 	private final class WorkItemSummariesUpdater extends OnWorkItemListChangeUpdater {
 
 		@Override
-		Date getCurrentlySelectedDate() {
+		protected Date getCurrentlySelectedDate() {
 			List<?> wis = (List<?>) tableViewer.getInput();
 			return (wis == null || wis.isEmpty()) ? new Date() : getDateFromElement(((WorkItemSummary)wis.get(0)).getWorkItems().get(0));
 		}
 
 		@Override
-		void update(Date date) {
+		protected void update(Date date) {
 			updateDate(date);
 		}
 	}
