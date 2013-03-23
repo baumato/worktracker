@@ -13,12 +13,12 @@ package org.tobbaumann.wt.ui.views;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 
-public class FillButtonsWithMostUsedActivitiesHandler {
+public class StartWorkItemWithButtonsPanelSwitchHandler {
 
 	@Execute
-	public void fillButtons(MPart part) {
+	public void switchPanel(MPart part) {
 		StartWorkItemWithButtonView view = (StartWorkItemWithButtonView) part.getObject();
-		view.fillButtonsWithMostUsedActivities();
+		view.switchPanel();
 	}
 
 }

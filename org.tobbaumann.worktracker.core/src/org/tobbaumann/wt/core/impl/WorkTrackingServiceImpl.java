@@ -122,7 +122,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	}
 
 	@Override
-	public IObservableList getMostUsedActivities(int numberOfActivities) {
+	public List<Activity> getMostUsedActivities(int numberOfActivities) {
 		LOGGER.trace("enter getMostUsedActivities - {}", numberOfActivities);
 		@SuppressWarnings("unchecked")
 		List<Activity> sorted = newArrayList(activities);
@@ -135,9 +135,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 			}
 		};
 		Collections.sort(sorted, Ordering.from(order).reverse());
-		WritableList res = new WritableList(sorted.subList(0, Math.min(numberOfActivities, sorted.size())), Activity.class);
-		res.addListChangeListener(new ActivityListChangeListener());
-		return res;
+		return sorted.subList(0, Math.min(numberOfActivities, sorted.size()));
 	}
 
 	@Override

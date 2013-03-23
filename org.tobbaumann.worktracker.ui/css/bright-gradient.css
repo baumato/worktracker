@@ -15,6 +15,11 @@ Label {
 }
 
 Button {
+	font: Verdana 8px;
+	color: black;
+}
+
+#QuickAccessButton {
 	font: Verdana 10px;
 	color: black;
 }

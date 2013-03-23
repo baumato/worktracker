@@ -37,7 +37,7 @@ public interface WorkTrackingService {
 
 	Optional<Activity> getActivity(String activityName);
 	IObservableList getActivities();
-	IObservableList getMostUsedActivities(int numberOfActivities);
+	List<Activity> getMostUsedActivities(int numberOfActivities);
 
 	/**
 	 * @param activityName the name of the activity

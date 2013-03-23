@@ -15,6 +15,12 @@ Label {
 }
 
 Button {
+	font: Verdana 8px;
+	background-color: #575757;
+	color: rgb(240, 240, 240);
+}
+
+#QuickAccessButton {
 	font: Verdana 10px;
 	background-color: #575757;
 	color: rgb(240, 240, 240);

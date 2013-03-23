@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.tobbaumann.wt.ui.views;
 
+import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.base.Strings.nullToEmpty;
 import static com.google.common.collect.Lists.newArrayList;
 
@@ -255,6 +256,9 @@ public class StartWorkItemView {
 	}
 
 	private void startWorkItem() {
+		if (isNullOrEmpty(txtActivity.getText())) {
+			return;
+		}
 		service.startWorkItem(txtActivity.getText(), startedSpinner.getSelection());
 		startWorkItemPostProcessing(txtActivity.getText());
 	}

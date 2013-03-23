@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_zmOyMDYrEeKvpYoU2mBS0w" elementId="worktracker.ui.application">
+<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_zmOyMDYrEeKvpYoU2mBS0w" elementId="" bindingContexts="_0dfGEJO8EeKwNNMjl4I5UA">
   <children xsi:type="basic:TrimmedWindow" xmi:id="_MZMgEDYtEeKvpYoU2mBS0w" elementId="worktracker.ui.trimmedwindow.0" label="WorkTracker" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/clocks/clock_16x16.png" x="0" y="0" width="1024" height="768">
     <children xsi:type="basic:PartSashContainer" xmi:id="_xw1AsDY0EeKiNZbXiGFecg" elementId="partsashcontainer" containerData="" horizontal="true">
       <children xsi:type="basic:PartStack" xmi:id="_ezqTQIkOEeKX0dm4WNPgyQ" elementId="org.tobbaumann.worktracker.ui.partstack.1" containerData="15">
@@ -8,14 +8,14 @@
       <children xsi:type="basic:PartSashContainer" xmi:id="_1JeiEDY1EeKiNZbXiGFecg" elementId="worktracker.ui.partsashcontainer.0" containerData="85">
         <children xsi:type="basic:PartSashContainer" xmi:id="_w9c1EIkMEeKX0dm4WNPgyQ" elementId="org.tobbaumann.worktracker.ui.partsashcontainer.0" containerData="44" horizontal="true">
           <children xsi:type="basic:PartStack" xmi:id="_1nAaIIkMEeKX0dm4WNPgyQ" elementId="org.tobbaumann.worktracker.ui.partstack.0" containerData="50">
-            <children xsi:type="basic:Part" xmi:id="_9orKgIkMEeKX0dm4WNPgyQ" elementId="worktracker.ui.part.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.StartWorkItemWithButtonView" label="Start Work Item" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/current-work.png">
-              <toolbar xmi:id="_1FOL4JJFEeKwNNMjl4I5UA" elementId="org.tobbaumann.worktracker.ui.toolbar.1">
-                <children xsi:type="menu:DirectToolItem" xmi:id="_1ojicJJFEeKwNNMjl4I5UA" elementId="org.tobbaumann.worktracker.ui.directtoolitem.2" label="Create buttons from most used activities" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/arrow_down.png" tooltip="Create buttons from most used activities" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.FillButtonsWithMostUsedActivitiesHandler"/>
+            <children xsi:type="basic:Part" xmi:id="_9orKgIkMEeKX0dm4WNPgyQ" elementId="startworkitemwithbuttonsview" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.StartWorkItemWithButtonView" label="Start Work Item" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/current-work.png">
+              <toolbar xmi:id="_1FOL4JJFEeKwNNMjl4I5UA" elementId="startworkitemswithbuttons.toolbar">
+                <children xsi:type="menu:DirectToolItem" xmi:id="_1ojicJJFEeKwNNMjl4I5UA" elementId="startworkitemswithbuttons.toolbar.item1" label="Start work items with buttons settings" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/settings.png" tooltip="Show/Hide Settings" type="Check" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.StartWorkItemWithButtonsPanelSwitchHandler"/>
               </toolbar>
             </children>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_2Fal4DY1EeKiNZbXiGFecg" elementId="worktracker.ui.partstack.0" containerData="50">
-            <children xsi:type="basic:Part" xmi:id="_26J1gDY1EeKiNZbXiGFecg" elementId="worktracker.ui.part.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.StartWorkItemView" label="Start Work Item" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/current-work.png">
+            <children xsi:type="basic:Part" xmi:id="_26J1gDY1EeKiNZbXiGFecg" elementId="startworkitemsview" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.StartWorkItemView" label="Start Work Item" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/current-work.png">
               <toolbar xmi:id="_cKLnMIkcEeK0HcWX2dKTKA" elementId="org.tobbaumann.worktracker.ui.toolbar.0">
                 <children xsi:type="menu:DirectToolItem" xmi:id="_vs3uQIkdEeK0HcWX2dKTKA" elementId="org.tobbaumann.worktracker.ui.directtoolitem.0" label="Sort by usage" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/arrow_down.png" tooltip="Sort by usage" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.SortByUsageHandler"/>
                 <children xsi:type="menu:DirectToolItem" xmi:id="_lrx5QIkcEeK0HcWX2dKTKA" elementId="org.tobbaumann.worktracker.ui.directtoolitem.1" label="Sort by name" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/arrow_down.png" tooltip="Sorty by name" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.SortByNameHandler"/>
@@ -25,14 +25,14 @@
         </children>
         <children xsi:type="basic:PartSashContainer" xmi:id="_FSfNADY2EeKiNZbXiGFecg" elementId="worktracker.ui.partsashcontainer.0" containerData="44" horizontal="true">
           <children xsi:type="basic:PartStack" xmi:id="_eg4vIDY2EeKiNZbXiGFecg" elementId="worktracker.ui.partstack.0">
-            <children xsi:type="basic:Part" xmi:id="_HAVO4DY2EeKiNZbXiGFecg" elementId="worktracker.ui.part.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.WorkItemsView" label="Work Items" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/finished-work.png"/>
+            <children xsi:type="basic:Part" xmi:id="_HAVO4DY2EeKiNZbXiGFecg" elementId="workitemsview" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.WorkItemsView" label="Work Items" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/finished-work.png"/>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_hmhqYDY2EeKiNZbXiGFecg" elementId="worktracker.ui.partstack.0">
-            <children xsi:type="basic:Part" xmi:id="_U-Wo8DY2EeKiNZbXiGFecg" elementId="worktracker.ui.part.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.WorkItemSummaryView" label="Work Items Summary" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/finished-work.png"/>
+            <children xsi:type="basic:Part" xmi:id="_U-Wo8DY2EeKiNZbXiGFecg" elementId="workitemssummaryview" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.WorkItemSummaryView" label="Work Items Summary" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/finished-work.png"/>
           </children>
         </children>
         <children xsi:type="basic:PartStack" xmi:id="_fGFG4DY2EeKiNZbXiGFecg" elementId="worktracker.ui.partstack.0" containerData="12">
-          <children xsi:type="basic:Part" xmi:id="_N1vAcDY2EeKiNZbXiGFecg" elementId="worktracker.ui.part.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.DescriptionsView" label="Description" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/project.png"/>
+          <children xsi:type="basic:Part" xmi:id="_N1vAcDY2EeKiNZbXiGFecg" elementId="descriptionview" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.DescriptionsView" label="Description" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/project.png"/>
         </children>
       </children>
     </children>
@@ -46,9 +46,92 @@
   </children>
   <handlers xmi:id="_Zo-LsDY7EeKHouPeRF3fXg" elementId="worktracker.ui.handler.preferences" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.handlers.OpenPreferencesHandler" command="_-hJtADY-EeKHouPeRF3fXg"/>
   <handlers xmi:id="_OYyi0I4dEeK-pKqvz6n4Lw" elementId="handler.themeswitch" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.handlers.ThemeSwitchHandler" command="_jIezEI4fEeK-pKqvz6n4Lw"/>
+  <handlers xmi:id="_6g6k8JO4EeKwNNMjl4I5UA" elementId="handler.shortcut" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.handlers.StartWorkItemWithShortcutHandler" command="_sRCl4JO4EeKwNNMjl4I5UA"/>
+  <bindingTables xmi:id="_K1bN4JO8EeKwNNMjl4I5UA" elementId="worktracker.bindingtable" bindingContext="_0dfGEJO8EeKwNNMjl4I5UA">
+    <bindings xmi:id="_gAfWEJO_EeKwNNMjl4I5UA" elementId="worktracker.keybinding.1" keySequence="CTRL+P" command="_-hJtADY-EeKHouPeRF3fXg"/>
+    <bindings xmi:id="_NHCEIJO8EeKwNNMjl4I5UA" elementId="worktracker.keybinding.0" keySequence="F1" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_5QCFsJPVEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="1"/>
+    </bindings>
+    <bindings xmi:id="_3y7joJPXEeKbjMpGHgZ80g" elementId="worktracker.keybinding.0" keySequence="F2" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_3y7joZPXEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="2"/>
+    </bindings>
+    <bindings xmi:id="_4K27cJPXEeKbjMpGHgZ80g" elementId="worktracker.keybinding.0" keySequence="F3" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_4K27cZPXEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="3"/>
+    </bindings>
+    <bindings xmi:id="_4OT4EJPXEeKbjMpGHgZ80g" elementId="worktracker.keybinding.0" keySequence="F4" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_4OT4EZPXEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="4"/>
+    </bindings>
+    <bindings xmi:id="_4RNbEJPXEeKbjMpGHgZ80g" elementId="worktracker.keybinding.0" keySequence="F5" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_4RNbEZPXEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="5"/>
+    </bindings>
+    <bindings xmi:id="_4T9NEJPXEeKbjMpGHgZ80g" elementId="worktracker.keybinding.0" keySequence="F6" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_4T9NEZPXEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="6"/>
+    </bindings>
+    <bindings xmi:id="_4WjOEJPXEeKbjMpGHgZ80g" elementId="worktracker.keybinding.0" keySequence="F7" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_4WjOEZPXEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="7"/>
+    </bindings>
+    <bindings xmi:id="_4a0qEJPXEeKbjMpGHgZ80g" elementId="worktracker.keybinding.0" keySequence="F8" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_4a0qEZPXEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="8"/>
+    </bindings>
+    <bindings xmi:id="_4c9YEJPXEeKbjMpGHgZ80g" elementId="worktracker.keybinding.0" keySequence="F9" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_4c9YEZPXEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="9"/>
+    </bindings>
+    <bindings xmi:id="_4etrkJPXEeKbjMpGHgZ80g" elementId="worktracker.keybinding.0" keySequence="F10" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_4etrkZPXEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="10"/>
+    </bindings>
+    <bindings xmi:id="_4gwS8JPXEeKbjMpGHgZ80g" elementId="worktracker.keybinding.0" keySequence="F11" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_4gwS8ZPXEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="11"/>
+    </bindings>
+    <bindings xmi:id="_4ivP8JPXEeKbjMpGHgZ80g" elementId="worktracker.keybinding.0" keySequence="F12" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_4ivP8ZPXEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="12"/>
+    </bindings>
+    <bindings xmi:id="_4pDhEJPcEeKbjMpGHgZ80g" elementId="worktracker.keybinding.0" keySequence="SHIFT+F1" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_4pDhEZPcEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="13"/>
+    </bindings>
+    <bindings xmi:id="_5AtMEJPcEeKbjMpGHgZ80g" elementId="worktracker.keybinding.0" keySequence="SHIFT+F2" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_5AtMEZPcEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="14"/>
+    </bindings>
+    <bindings xmi:id="_5EhVEJPcEeKbjMpGHgZ80g" elementId="worktracker.keybinding.0" keySequence="SHIFT+F3" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_5EhVEZPcEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="15"/>
+    </bindings>
+    <bindings xmi:id="_5IaWkJPcEeKbjMpGHgZ80g" elementId="worktracker.keybinding.0" keySequence="SHIFT+F4" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_5IaWkZPcEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="16"/>
+    </bindings>
+    <bindings xmi:id="_5MdJEJPcEeKbjMpGHgZ80g" elementId="worktracker.keybinding.0" keySequence="SHIFT+F5" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_5MdJEZPcEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="17"/>
+    </bindings>
+    <bindings xmi:id="_5VE5kJPcEeKbjMpGHgZ80g" elementId="worktracker.keybinding.0" keySequence="SHIFT+F6" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_5VE5kZPcEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="18"/>
+    </bindings>
+    <bindings xmi:id="_5Z9ZkJPcEeKbjMpGHgZ80g" elementId="worktracker.keybinding.0" keySequence="SHIFT+F7" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_5Z9ZkZPcEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="19"/>
+    </bindings>
+    <bindings xmi:id="_Qh6zoJPdEeKbjMpGHgZ80g" elementId="worktracker.keybinding.0" keySequence="SHIFT+F8" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_Qh6zoZPdEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="20"/>
+    </bindings>
+    <bindings xmi:id="_Q8sEEJPdEeKbjMpGHgZ80g" elementId="worktracker.keybinding.0" keySequence="SHIFT+F9" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_Q8sEEZPdEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="21"/>
+    </bindings>
+    <bindings xmi:id="_RAQVcJPdEeKbjMpGHgZ80g" elementId="worktracker.keybinding.0" keySequence="SHIFT+F10" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_RAQVcZPdEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="22"/>
+    </bindings>
+    <bindings xmi:id="_REKlEJPdEeKbjMpGHgZ80g" elementId="worktracker.keybinding.0" keySequence="SHIFT+F11" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_RELMIJPdEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="23"/>
+    </bindings>
+    <bindings xmi:id="_RINXkJPdEeKbjMpGHgZ80g" elementId="worktracker.keybinding.0" keySequence="SHIFT+F12" command="_sRCl4JO4EeKwNNMjl4I5UA">
+      <parameters xmi:id="_RIN-oJPdEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="24"/>
+    </bindings>
+  </bindingTables>
+  <rootContext xmi:id="_0dfGEJO8EeKwNNMjl4I5UA" elementId="org.eclipse.ui.contexts.dialogAndWindow" name="In Dialog And Windows">
+    <children xmi:id="_4E9L8JPQEeKwNNMjl4I5UA" elementId="org.eclipse.ui.contexts.window" name="In Windows"/>
+    <children xmi:id="_76LxEJPQEeKwNNMjl4I5UA" elementId="org.eclipse.ui.contexts.dialog" name="In Dialogs"/>
+  </rootContext>
   <commands xmi:id="_-hJtADY-EeKHouPeRF3fXg" elementId="worktracker.commands.openpreferences" commandName="Open Preferences"/>
   <commands xmi:id="_jIezEI4fEeK-pKqvz6n4Lw" elementId="command.switchtheme" commandName="SwitchTheme">
     <parameters xmi:id="_DXyMII4gEeK-pKqvz6n4Lw" elementId="commandparameter.themeid" name="ThemeId" optional="false"/>
+  </commands>
+  <commands xmi:id="_sRCl4JO4EeKwNNMjl4I5UA" elementId="worktracker.commands.startwithshortcut" commandName="StartWorkItemWithShortcut">
+    <parameters xmi:id="_zTmCoJO4EeKwNNMjl4I5UA" elementId="commandparameter.keystroke" name="KeyStroke" optional="false"/>
   </commands>
   <addons xmi:id="_zmOyMTYrEeKvpYoU2mBS0w" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_zmOyMjYrEeKvpYoU2mBS0w" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
