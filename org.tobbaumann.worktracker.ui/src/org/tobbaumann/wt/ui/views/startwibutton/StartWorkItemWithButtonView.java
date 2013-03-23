@@ -159,6 +159,7 @@ public class StartWorkItemWithButtonView {
 						logger.error(e, "Error during removing node: " + prefs.name());
 					}
 				}
+				getSettingsToolItem().setSelected(!getSettingsToolItem().isSelected());
 				switchPanel();
 			}
 		});
@@ -239,11 +240,15 @@ public class StartWorkItemWithButtonView {
 	}
 
 	private Composite determineTopControlFromToolItemState() {
-		// TODO how get the MToolItem in a more robust way?
-		MToolItem item = (MToolItem) part.getToolbar().getChildren().get(0);
+		MToolItem item = getSettingsToolItem();
 		return item.isSelected()
 				? settingsPanel
 				: buttonPanel;
+	}
+
+	// TODO how get the MToolItem in a better and more robust way?
+	private MToolItem getSettingsToolItem() {
+		return (MToolItem) part.getToolbar().getChildren().get(0);
 	}
 
 	public void startWorkItem(int buttonIndex) {
