@@ -19,10 +19,8 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
-import org.eclipse.e4.core.commands.ECommandService;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.core.services.log.Logger;
-import org.eclipse.e4.ui.bindings.EBindingService;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.menu.MToolItem;
@@ -63,9 +61,6 @@ public class StartWorkItemWithButtonView {
 	private Composite settingsPanel;
 	private Composite buttonPanel;
 	private Composite buttonPanelContent;
-
-	private @Inject ECommandService commandService;
-	private @Inject EBindingService bindingService;
 
 	@Inject
 	public StartWorkItemWithButtonView(WorkTrackingService service, IEventBroker eventBroker,

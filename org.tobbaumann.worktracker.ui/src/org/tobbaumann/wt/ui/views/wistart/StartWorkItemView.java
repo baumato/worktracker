@@ -29,6 +29,8 @@ import org.eclipse.core.databinding.observable.list.ListChangeEvent;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UIEventTopic;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.model.application.ui.menu.MToolItem;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
 import org.eclipse.jface.fieldassist.SimpleContentProposalProvider;
@@ -83,6 +85,7 @@ public class StartWorkItemView {
 	@Inject
 	private WorkTrackingService service;
 
+	private @Inject MPart part;
 	private Text txtActivity;
 	private ContentProposalAdapter activiyContentProposalAdapter;
 	private Spinner startedSpinner;
@@ -234,9 +237,19 @@ public class StartWorkItemView {
 				txtActivity.setText(selectedActivity.getName());
 			}
 		});
-		sortActivitiesByName();
+		sortActivities();
 		ViewerUtils.requestFocusOnMouseEnter(activitiesTable);
 		makeActivitiesTableDragSource();
+	}
+
+	private void sortActivities() {
+		// TODO how get the MToolItem in a more robust way?
+		MToolItem item = (MToolItem) part.getToolbar().getChildren().get(0);
+		if (item.isSelected()) {
+			sortActivitiesByUsage();
+		} else {
+			sortActivitiesByName();
+		}
 	}
 
 	void sortActivitiesByName() {

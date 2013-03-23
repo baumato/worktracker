@@ -13,7 +13,7 @@ package org.tobbaumann.wt.ui.views.startwibutton;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 
-public class StartWorkItemWithButtonsPanelSwitchHandler {
+public class SwitchButtonPanelHandler {
 
 	@Execute
 	public void switchPanel(MPart part) {
