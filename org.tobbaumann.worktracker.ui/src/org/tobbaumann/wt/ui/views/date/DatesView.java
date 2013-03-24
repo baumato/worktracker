@@ -25,17 +25,13 @@ import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.databinding.viewers.ObservableSetContentProvider;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.tobbaumann.wt.core.UserProfile;
@@ -72,7 +68,7 @@ public class DatesView {
 		viewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		viewer.setUseHashlookup(true);
 		viewer.setContentProvider(new ObservableSetContentProvider());
-		viewer.setLabelProvider(new DatesViewLabelProvider());
+		viewer.setLabelProvider(new DatesViewLabelProvider(userProfile));
 		viewer.setComparator(new ViewerComparator(Ordering.natural().reverse()));
 		viewer.setInput(service.readDates());
 		updateSelectionServiceIfViewerSelectionChanges();
@@ -147,29 +143,6 @@ public class DatesView {
 
 		void stopUdating() {
 			performUpdate = false;
-		}
-	}
-
-
-	private final class DatesViewLabelProvider extends StyledCellLabelProvider implements ILabelProvider {
-
-		@Override
-		public void update(ViewerCell cell) {
-			Date date = (Date) cell.getElement();
-			cell.setText(userProfile.getDateFormat().format(date));
-			super.update(cell);
-		}
-
-		@Override
-		public Image getImage(Object element) {
-			return null;
-		}
-
-		@Override
-		// ILabelProvider#getText used during sorting the viewer
-		public String getText(Object element) {
-			Date date = (Date) element;
-			return String.valueOf(date.getTime());
 		}
 	}
 }
