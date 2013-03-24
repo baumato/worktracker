@@ -51,7 +51,7 @@
   <handlers xmi:id="_GZfssJSOEeKbjMpGHgZ80g" elementId="handler.exit" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.handlers.ExitHandler" command="_HL8dUJSOEeKbjMpGHgZ80g"/>
   <bindingTables xmi:id="_K1bN4JO8EeKwNNMjl4I5UA" elementId="worktracker.bindingtable" bindingContext="_0dfGEJO8EeKwNNMjl4I5UA">
     <bindings xmi:id="_gAfWEJO_EeKwNNMjl4I5UA" elementId="worktracker.keybinding.1" keySequence="CTRL+P" command="_-hJtADY-EeKHouPeRF3fXg"/>
-    <bindings xmi:id="_azu8QJSOEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.keybinding.0" keySequence="ALT+Q"/>
+    <bindings xmi:id="_azu8QJSOEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.keybinding.0" keySequence="ALT+Q" command="_HL8dUJSOEeKbjMpGHgZ80g"/>
     <bindings xmi:id="_NHCEIJO8EeKwNNMjl4I5UA" elementId="worktracker.keybinding.0" keySequence="F1" command="_sRCl4JO4EeKwNNMjl4I5UA">
       <parameters xmi:id="_5QCFsJPVEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="1"/>
     </bindings>
@@ -136,7 +136,7 @@
   <commands xmi:id="_sRCl4JO4EeKwNNMjl4I5UA" elementId="worktracker.commands.startwithshortcut" commandName="StartWorkItemWithShortcut">
     <parameters xmi:id="_zTmCoJO4EeKwNNMjl4I5UA" elementId="commandparameter.keystroke" name="KeyStroke" optional="false"/>
   </commands>
-  <commands xmi:id="_HL8dUJSOEeKbjMpGHgZ80g" elementId="worktracker.commands.openpreferences" commandName="Exit"/>
+  <commands xmi:id="_HL8dUJSOEeKbjMpGHgZ80g" elementId="worktracker.commands.exit" commandName="Exit"/>
   <addons xmi:id="_zmOyMTYrEeKvpYoU2mBS0w" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_zmOyMjYrEeKvpYoU2mBS0w" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_zmOyMzYrEeKvpYoU2mBS0w" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
