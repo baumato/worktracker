@@ -17,6 +17,7 @@ import java.net.URL;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -104,9 +105,16 @@ class FakeDataCreator {
 		List<String> lines = ImmutableList.of();
 		try {
 			URL resource = Resources.getResource(FakeDataCreator.class, fileName);
-			lines = Resources.readLines(resource, Charsets.UTF_8);
+			lines = newArrayList(Resources.readLines(resource, Charsets.UTF_8));
 		} catch (IOException e) {
 			Throwables.propagate(e);
+		}
+		Iterator<String> linesIter = lines.iterator();
+		while (linesIter.hasNext()) {
+			String line = linesIter.next();
+			if (line.startsWith("#")) {
+				linesIter.remove();
+			}
 		}
 		return lines;
 	}

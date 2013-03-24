@@ -27,9 +27,8 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -67,7 +66,7 @@ public class WorkItemSummaryView {
 	private void createAndConfigureTableViewer(Composite parent) {
 		tableViewer = new TableViewer(parent, SWT.FULL_SELECTION);
 		tableViewer.setContentProvider(new ArrayContentProvider());
-		tableViewer.setLabelProvider(new LabelProvider());
+		tableViewer.setLabelProvider(new WorkItemSummaryViewLabelProvider());
 		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -76,6 +75,7 @@ public class WorkItemSummaryView {
 			}
 		});
 		service.getWorkItems().addListChangeListener(new WorkItemSummariesUpdater());
+		tableViewer.setComparator(new ViewerComparator());
 		ViewerUtils.requestFocusOnMouseEnter(tableViewer);
 		ViewerUtils.refreshViewerPeriodically(tableViewer);
 	}
@@ -122,25 +122,6 @@ public class WorkItemSummaryView {
 			tableViewer.getTable().setFocus();
 		}
 	}
-
-	private static final class LabelProvider extends StyledCellLabelProvider {
-		@Override
-		public void update(ViewerCell cell) {
-			WorkItemSummary s = (WorkItemSummary) cell.getElement();
-			switch (cell.getColumnIndex()) {
-			case 0:
-				cell.setText(s.getActivityName());
-				break;
-			case 1:
-				cell.setText(s.getSumOfDurations().toString());
-				break;
-			default:
-				break;
-			}
-			super.update(cell);
-		}
-	}
-
 
 	private final class WorkItemSummariesUpdater extends OnWorkItemListChangeUpdater {
 

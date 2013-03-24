@@ -8,41 +8,29 @@
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
-package org.tobbaumann.wt.ui.views.date;
-
-import java.text.DateFormatSymbols;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+package org.tobbaumann.wt.ui.views.wisummary;
 
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Image;
-import org.tobbaumann.wt.core.UserProfile;
+import org.tobbaumann.wt.domain.WorkItemSummary;
 
-/**
- *
- * @author tobbaumann
- *
- */
-public class DatesViewLabelProvider extends StyledCellLabelProvider implements ILabelProvider {
-
-	private final UserProfile userProfile;
-
-	// TODO weekDayFormat should be in preferences
-	private final SimpleDateFormat weekDayFormat;
-
-	DatesViewLabelProvider(UserProfile userProfile) {
-		this.userProfile = userProfile;
-		this.weekDayFormat = new SimpleDateFormat("EE", DateFormatSymbols.getInstance(userProfile
-				.getLocale()));
-	}
+final class WorkItemSummaryViewLabelProvider extends StyledCellLabelProvider implements ILabelProvider {
 
 	@Override
 	public void update(ViewerCell cell) {
-		Date date = (Date) cell.getElement();
-		cell.setText(userProfile.getDateFormat().format(date) + " (" + weekDayFormat.format(date)
-				+ ")");
+		WorkItemSummary s = (WorkItemSummary) cell.getElement();
+		switch (cell.getColumnIndex()) {
+		case 0:
+			cell.setText(s.getActivityName());
+			break;
+		case 1:
+			cell.setText(s.getSumOfDurations().toString());
+			break;
+		default:
+			break;
+		}
 		super.update(cell);
 	}
 
@@ -54,7 +42,7 @@ public class DatesViewLabelProvider extends StyledCellLabelProvider implements I
 	@Override
 	// ILabelProvider#getText used during sorting the viewer
 	public String getText(Object element) {
-		Date date = (Date) element;
-		return String.valueOf(date.getTime());
+		WorkItemSummary s = (WorkItemSummary) element;
+		return s.getActivityName();
 	}
 }
