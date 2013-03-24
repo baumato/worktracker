@@ -40,15 +40,18 @@
       <children xsi:type="menu:Menu" xmi:id="_m8-GcDY9EeKHouPeRF3fXg" elementId="worktracker.ui.menu.0" label="&amp;WorkTracker">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_EtDOkDY_EeKHouPeRF3fXg" elementId="worktracker.ui.handledmenuitem.0" label="&amp;Preferences" tooltip="Opens the preferences" command="_-hJtADY-EeKHouPeRF3fXg"/>
         <children xsi:type="menu:DirectMenuItem" xmi:id="_APzZ0I5oEeKzvsrGpQnnXQ" elementId="org.tobbaumann.worktracker.ui.directmenuitem.0" label="&amp;Import WorkTracker Data" tooltip="Imports the data from previous version of WorkTracker" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.handlers.ImportOldWorkTrackerDataHandler"/>
-        <children xsi:type="menu:DirectMenuItem" xmi:id="_rFW4IDY9EeKHouPeRF3fXg" elementId="worktracker.ui.directmenuitem.0" label="E&amp;xit" tooltip="Leaves this application" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.handlers.ExitHandler"/>
+        <children xsi:type="menu:DirectMenuItem" xmi:id="_Ao3FcJR7EeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.directmenuitem.1" label="Create &amp;fake data" tooltip="Create fake data for demonstration purposes" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.handlers.CreateFakeDataHandler"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_R19I8JSOEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.handledmenuitem.0" label="Exit" tooltip="Quits the application." command="_HL8dUJSOEeKbjMpGHgZ80g"/>
       </children>
     </mainMenu>
   </children>
   <handlers xmi:id="_Zo-LsDY7EeKHouPeRF3fXg" elementId="worktracker.ui.handler.preferences" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.handlers.OpenPreferencesHandler" command="_-hJtADY-EeKHouPeRF3fXg"/>
   <handlers xmi:id="_OYyi0I4dEeK-pKqvz6n4Lw" elementId="handler.themeswitch" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.handlers.ThemeSwitchHandler" command="_jIezEI4fEeK-pKqvz6n4Lw"/>
   <handlers xmi:id="_6g6k8JO4EeKwNNMjl4I5UA" elementId="handler.shortcut" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.startwibutton.StartWorkItemWithShortcutHandler" command="_sRCl4JO4EeKwNNMjl4I5UA"/>
+  <handlers xmi:id="_GZfssJSOEeKbjMpGHgZ80g" elementId="handler.exit" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.handlers.ExitHandler" command="_HL8dUJSOEeKbjMpGHgZ80g"/>
   <bindingTables xmi:id="_K1bN4JO8EeKwNNMjl4I5UA" elementId="worktracker.bindingtable" bindingContext="_0dfGEJO8EeKwNNMjl4I5UA">
     <bindings xmi:id="_gAfWEJO_EeKwNNMjl4I5UA" elementId="worktracker.keybinding.1" keySequence="CTRL+P" command="_-hJtADY-EeKHouPeRF3fXg"/>
+    <bindings xmi:id="_azu8QJSOEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.keybinding.0" keySequence="ALT+Q"/>
     <bindings xmi:id="_NHCEIJO8EeKwNNMjl4I5UA" elementId="worktracker.keybinding.0" keySequence="F1" command="_sRCl4JO4EeKwNNMjl4I5UA">
       <parameters xmi:id="_5QCFsJPVEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.parameter.0" name="commandparameter.keystroke" value="1"/>
     </bindings>
@@ -133,6 +136,7 @@
   <commands xmi:id="_sRCl4JO4EeKwNNMjl4I5UA" elementId="worktracker.commands.startwithshortcut" commandName="StartWorkItemWithShortcut">
     <parameters xmi:id="_zTmCoJO4EeKwNNMjl4I5UA" elementId="commandparameter.keystroke" name="KeyStroke" optional="false"/>
   </commands>
+  <commands xmi:id="_HL8dUJSOEeKbjMpGHgZ80g" elementId="worktracker.commands.openpreferences" commandName="Exit"/>
   <addons xmi:id="_zmOyMTYrEeKvpYoU2mBS0w" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_zmOyMjYrEeKvpYoU2mBS0w" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_zmOyMzYrEeKvpYoU2mBS0w" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>

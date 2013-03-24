@@ -114,7 +114,11 @@ public class DatesView {
 		}
 	}
 
-
+	/**
+	 *
+	 * @author tobbaumann
+	 *
+	 */
 	private final class ViewerSelectionOnNewDateUpdater implements ISetChangeListener {
 
 		private boolean performUpdate = true;
@@ -138,7 +142,6 @@ public class DatesView {
 
 		void startUpdating() {
 			performUpdate = true;
-			//update(ImmutableSet.of(element));
 		}
 
 		void stopUdating() {

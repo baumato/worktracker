@@ -62,6 +62,15 @@ public interface WorkTrackingService {
 	 */
 	ImportResult importData(String path, IProgressMonitor monitor);
 
+	/**
+	 * Creates fake data for given number of days
+	 * @param numberOfDays the number of days
+	 * @param monitor the progress monitor
+	 * @return the description of the creation done
+	 * @throws OperationCanceledException
+	 */
+	ImportResult createFakeData(int numberOfDays, IProgressMonitor monitor);
+
 
 	/**
 	 *

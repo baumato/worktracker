@@ -272,6 +272,10 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		return new WorkTrackerDataImporter(this).importData(strPath, monitor);
 	}
 
+	@Override
+	public ImportResult createFakeData(int numberOfDays, IProgressMonitor monitor) {
+		return new FakeDataCreator(this).createFakeData(numberOfDays, monitor);
+	}
 
 
 	/**
@@ -307,30 +311,6 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 			} catch (ParseException e) {
 				throw new RuntimeException(e);
 			}
-		}
-	}
-
-	/**
-	 *
-	 * @author tobbaumann
-	 *
-	 */
-	private final class ActivityListChangeListener implements IListChangeListener {
-		@Override
-		public void handleListChange(ListChangeEvent event) {
-			event.diff.accept(new ListDiffVisitor() {
-				@Override
-				public void handleRemove(int index, Object element) {
-					Activity a = (Activity) element;
-					activities.remove(a.getName());
-				}
-
-				@Override
-				public void handleAdd(int index, Object element) {
-					Activity a = (Activity) element;
-					activities.add(a);
-				}
-			});
 		}
 	}
 
