@@ -8,17 +8,23 @@
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
-package org.tobbaumann.wt.ui.views.startwibutton;
+package org.tobbaumann.wt.ui.handlers;
+
+import javax.inject.Named;
 
 import org.eclipse.e4.core.di.annotations.Execute;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.tobbaumann.wt.ui.views.Switchable;
 
 public class SwitchButtonPanelHandler {
 
 	@Execute
-	public void switchPanel(MPart part) {
-		StartWorkItemWithButtonView view = (StartWorkItemWithButtonView) part.getObject();
+	public void switchPanel(MPart part, @Optional @Named("commandparameter.keyboardstart") String strStartedByShortcut) {
+		Switchable view = (Switchable) part.getObject();
 		view.switchPanel();
+		if (Boolean.valueOf(strStartedByShortcut)) {
+			view.switchToolItemState();
+		}
 	}
-
 }

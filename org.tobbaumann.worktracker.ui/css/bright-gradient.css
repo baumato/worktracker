@@ -32,11 +32,11 @@ Composite Label {
 	color: #1d659f;
 }
 
-Text {
+Text, Spinner, Combo {
 	font: Verdana 8px;
 }
 
-Composite Text {
+Composite Text, Spinner, Combo {
 	background-color: white;
 	color: black;
 }

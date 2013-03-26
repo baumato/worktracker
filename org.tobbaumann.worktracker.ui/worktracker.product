@@ -20,7 +20,7 @@ All clock icons are from http://www.icons-land.com.
    </configIni>
 
    <launcherArgs>
-      <programArgs>-debug -consoleLog -clearPersistedState</programArgs>
+      <programArgs>-debug -consoleLog -clearPersistedState -nl en_US</programArgs>
       <vmArgs>-Dlogback.configurationFile=platform:/plugin/org.tobbaumann.worktracker.ui/logback.xml</vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>

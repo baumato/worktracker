@@ -25,7 +25,6 @@ import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.menu.MToolItem;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DropTarget;
 import org.eclipse.swt.dnd.DropTargetAdapter;
@@ -47,8 +46,10 @@ import org.osgi.service.prefs.Preferences;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.Activity;
 import org.tobbaumann.wt.ui.event.Events;
+import org.tobbaumann.wt.ui.views.SwitchComposite;
+import org.tobbaumann.wt.ui.views.Switchable;
 
-public class StartWorkItemWithButtonView {
+public class StartWorkItemWithButtonView implements Switchable {
 
 	private static final String BTN_DATA_KEY_ACTIVITY_NAME = "activityName";
 
@@ -81,7 +82,8 @@ public class StartWorkItemWithButtonView {
 		switchComposite.setTopControl(determineTopControlFromToolItemState());
 	}
 
-	void switchPanel() {
+	@Override
+	public void switchPanel() {
 		Preference.flushAllPreferences();
 		switchComposite.switchActiveControl();
 		if (switchComposite.getTopControl() == buttonPanel) {
@@ -89,6 +91,11 @@ public class StartWorkItemWithButtonView {
 			createButtonPanel();
 			switchComposite.layout(true, true);
 		}
+	}
+
+	@Override
+	public void switchToolItemState() {
+		getSettingsToolItem().setSelected(!getSettingsToolItem().isSelected());
 	}
 
 	private void createButtonPanel() {
@@ -159,7 +166,7 @@ public class StartWorkItemWithButtonView {
 						logger.error(e, "Error during removing node: " + prefs.name());
 					}
 				}
-				getSettingsToolItem().setSelected(!getSettingsToolItem().isSelected());
+				switchToolItemState();
 				switchPanel();
 			}
 		});
@@ -332,44 +339,6 @@ public class StartWorkItemWithButtonView {
 			} catch (BackingStoreException e) {
 				e.printStackTrace();
 			}
-		}
-	}
-
-	/**
-	 *
-	 * @author tobbaumann
-	 *
-	 */
-	private static final class SwitchComposite extends Composite {
-
-		private int topControlIndex = 0;
-		private final StackLayout layout;
-
-		SwitchComposite(Composite parent) {
-			super(parent, SWT.NONE);
-			layout = new StackLayout();
-			setLayout(layout);
-		}
-
-		public void switchActiveControl() {
-			topControlIndex = (topControlIndex +1) % getChildren().length;
-			setTopControl(getChildren()[topControlIndex]);
-		}
-
-		public Control getTopControl() {
-			return layout.topControl;
-		}
-
-		public void setTopControl(Control activeControl) {
-			for (int i = 0; i < getChildren().length; i++) {
-				Control c = getChildren()[i];
-				if (c == activeControl) {
-					topControlIndex = i;
-					break;
-				}
-			}
-			layout.topControl = activeControl;
-			layout();
 		}
 	}
 }

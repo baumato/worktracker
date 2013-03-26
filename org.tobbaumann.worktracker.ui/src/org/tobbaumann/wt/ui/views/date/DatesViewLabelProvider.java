@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
@@ -14,6 +14,10 @@ import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.inject.Inject;
+
+import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.core.di.extensions.Preference;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
@@ -28,9 +32,10 @@ import org.tobbaumann.wt.core.UserProfile;
 public class DatesViewLabelProvider extends StyledCellLabelProvider implements ILabelProvider {
 
 	private final UserProfile userProfile;
-
 	// TODO weekDayFormat should be in preferences
 	private final SimpleDateFormat weekDayFormat;
+
+	private boolean showWeekdays = Boolean.valueOf(org.tobbaumann.wt.ui.views.date.DatesView.Preference.SHOW_WEEKDAYS.defaultValue);
 
 	DatesViewLabelProvider(UserProfile userProfile) {
 		this.userProfile = userProfile;
@@ -38,11 +43,22 @@ public class DatesViewLabelProvider extends StyledCellLabelProvider implements I
 				.getLocale()));
 	}
 
+	@Inject
+	@Optional
+	public void setShowWeekdays(
+			@Preference(nodePath = "DatesView", value = "SHOW_WEEKDAYS") boolean showWeekdays) {
+		this.showWeekdays = showWeekdays;
+	}
+
 	@Override
 	public void update(ViewerCell cell) {
 		Date date = (Date) cell.getElement();
-		cell.setText(userProfile.getDateFormat().format(date) + " (" + weekDayFormat.format(date)
-				+ ")");
+		StringBuilder cellText = new StringBuilder();
+		cellText.append(userProfile.getDateFormat().format(date));
+		if (showWeekdays) {
+			cellText.append(" (").append(weekDayFormat.format(date)).append(")");
+		}
+		cell.setText(cellText.toString());
 		super.update(cell);
 	}
 
