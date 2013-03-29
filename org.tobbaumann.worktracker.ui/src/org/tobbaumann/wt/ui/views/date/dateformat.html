@@ -1,0 +1,76 @@
+<html>
+<head>
+<style type="text/css">
+body {
+	background-color:#e3efff;
+	color:black;
+	font-family:Verdana;
+	font-size:10px;
+}
+table {
+	width:100%;
+	font-family:Verdana;
+	font-size:10px;
+}
+</style>
+</head>
+<body>
+<p>
+Date and time formats are specified by date and time pattern strings. Within date and time pattern strings, unquoted letters from 'A' to 'Z' and from 'a' to 'z' are interpreted as pattern letters representing the components of a date or time string. Text can be quoted using single quotes (') to avoid interpretation. "''" represents a single quote. All other characters are not interpreted; they're simply copied into the output string during formatting or matched against the input string during parsing. 
+</p>
+The following pattern letters are defined (all other characters from 'A' to 'Z' and from 'a' to 'z' are reserved):
+<p>
+</p>
+<table summary="Chart shows pattern letters, date/time component, presentation, and examples." border="0" cellpadding="0" cellspacing="3">
+     <tbody><tr>
+         <th align="left">Letter
+         </th><th align="left">Date or Time Component
+         </th><th align="left">Examples
+     </th></tr><tr>
+         <td><code>G</code>
+         </td><td>Era designator
+         </td><td><code>AD</code>
+     </td></tr><tr>
+         <td><code>y</code>
+         </td><td>Year
+         </td><td><code>1996</code>; <code>96</code>
+     </td></tr><tr>
+         <td><code>Y</code>
+         </td><td>Week year
+         </td><td><code>2009</code>; <code>09</code>
+     </td></tr><tr>
+         <td><code>M</code>
+         </td><td>Month in year
+         </td><td><code>July</code>; <code>Jul</code>; <code>07</code>
+     </td></tr><tr>
+         <td><code>w</code>
+         </td><td>Week in year
+         </td><td><code>27</code>
+     </td></tr><tr>
+         <td><code>W</code>
+         </td><td>Week in month
+         </td><td><code>2</code>
+     </td></tr><tr>
+         <td><code>D</code>
+         </td><td>Day in year
+         </td><td><code>189</code>
+     </td></tr><tr>
+         <td><code>d</code>
+         </td><td>Day in month
+         </td><td><code>10</code>
+     </td></tr><tr>
+         <td><code>F</code>
+         </td><td>Day of week in month
+         </td><td><code>2</code>
+     </td></tr><tr>
+         <td><code>E</code>
+         </td><td>Day name in week
+         </td><td><code>Tuesday</code>; <code>Tue</code>
+     </td></tr><tr>
+         <td><code>u</code>
+         </td><td>Day number of week (1 = Monday, ..., 7 = Sunday)
+         </td><td><code>1</code>
+     </td></tr>
+ </tbody></table>
+ </body>
+</html>

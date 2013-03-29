@@ -49,7 +49,7 @@
       </children>
     </mainMenu>
   </children>
-  <handlers xmi:id="_Zo-LsDY7EeKHouPeRF3fXg" elementId="worktracker.ui.handler.preferences" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.handlers.OpenPreferencesHandler" command="_-hJtADY-EeKHouPeRF3fXg"/>
+  <handlers xmi:id="_Zo-LsDY7EeKHouPeRF3fXg" elementId="worktracker.ui.handler.preferences" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.preferences.OpenPreferencesHandler" command="_-hJtADY-EeKHouPeRF3fXg"/>
   <handlers xmi:id="_OYyi0I4dEeK-pKqvz6n4Lw" elementId="handler.themeswitch" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.handlers.ThemeSwitchHandler" command="_jIezEI4fEeK-pKqvz6n4Lw"/>
   <handlers xmi:id="_6g6k8JO4EeKwNNMjl4I5UA" elementId="handler.shortcut" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.startwibutton.StartWorkItemWithShortcutHandler" command="_sRCl4JO4EeKwNNMjl4I5UA"/>
   <handlers xmi:id="_GZfssJSOEeKbjMpGHgZ80g" elementId="handler.exit" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.handlers.ExitHandler" command="_HL8dUJSOEeKbjMpGHgZ80g"/>

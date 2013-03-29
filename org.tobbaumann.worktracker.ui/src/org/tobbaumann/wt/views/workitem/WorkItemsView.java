@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.tobbaumann.wt.views.workitem;
 
-import static com.google.common.base.Objects.firstNonNull;
 
 import java.util.Arrays;
 import java.util.Date;
@@ -26,28 +25,27 @@ import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.tobbaumann.wt.core.UserProfile;
 import org.tobbaumann.wt.core.WorkTrackingService;
-import org.tobbaumann.wt.domain.WorkItem;
 import org.tobbaumann.wt.ui.views.OnWorkItemListChangeUpdater;
 import org.tobbaumann.wt.ui.views.ViewerUtils;
 
 import com.google.common.collect.Ordering;
 
+/**
+ *
+ * @author tobbaumann
+ *
+ */
 public class WorkItemsView {
 
 	private TableViewer tableViewer;
@@ -55,9 +53,6 @@ public class WorkItemsView {
 
 	@Inject
 	private ESelectionService selectionService;
-
-	@Inject
-	private UserProfile userProfile;
 
 	@Inject
 	public WorkItemsView(WorkTrackingService service) {
@@ -136,45 +131,11 @@ public class WorkItemsView {
 	}
 
 
-	private final class LabelProvider extends StyledCellLabelProvider implements ILabelProvider {
-
-		@Override
-		public void update(ViewerCell cell) {
-			WorkItem wi = (WorkItem) cell.getElement();
-			switch (cell.getColumnIndex()) {
-			case 0:
-				cell.setText(wi.getActivityName());
-				break;
-			case 1:
-				cell.setText(userProfile.getTimeFormat().format(wi.getStart()));
-				break;
-			case 2:
-				final Date d = firstNonNull(wi.getEnd(), new Date());
-				cell.setText(userProfile.getTimeFormat().format(d));
-				break;
-			case 3:
-				cell.setText(wi.getDuration().toString());
-				break;
-			default:
-				break;
-			}
-			super.update(cell);
-		}
-
-		@Override
-		public Image getImage(Object element) {
-			return null;
-		}
-
-		@Override
-		// ILabelProvider#getText used during sorting the viewer
-		public String getText(Object element) {
-			WorkItem item = (WorkItem) element;
-			return String.valueOf(item.getStart().getTime());
-		}
-	}
-
-
+	/**
+	 *
+	 * @author tobbaumann
+	 *
+	 */
 	private final class WorkItemsUpdater extends OnWorkItemListChangeUpdater {
 
 		@Override

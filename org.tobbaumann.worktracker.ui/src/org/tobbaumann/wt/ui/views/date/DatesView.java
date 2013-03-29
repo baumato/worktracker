@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.tobbaumann.wt.ui.views.date;
 
-import java.text.DateFormatSymbols;
 import java.util.Date;
 import java.util.Set;
 
@@ -21,9 +20,7 @@ import javax.inject.Inject;
 import org.eclipse.core.databinding.observable.set.IObservableSet;
 import org.eclipse.core.databinding.observable.set.ISetChangeListener;
 import org.eclipse.core.databinding.observable.set.SetChangeEvent;
-import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.e4.core.di.annotations.Optional;
-import org.eclipse.e4.core.services.log.Logger;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -37,18 +34,9 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.osgi.service.prefs.BackingStoreException;
-import org.osgi.service.prefs.Preferences;
-import org.tobbaumann.wt.core.UserProfile;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.ui.event.Events;
 import org.tobbaumann.wt.ui.views.SwitchComposite;
@@ -61,11 +49,9 @@ import com.google.common.collect.Ordering;
 public class DatesView implements Switchable {
 
 	private WorkTrackingService service;
-	private UserProfile userProfile;
 	private ESelectionService selectionService;
 
 	private @Inject MPart part;
-	private @Inject Logger logger;
 	private SwitchComposite switchComposite;
 	private Composite datesPanel;
 	private Composite settingsPanel;
@@ -73,14 +59,10 @@ public class DatesView implements Switchable {
 
 	private final ViewerSelectionOnNewDateUpdater selectionUpdater;
 
-	static String WEEKDAY_FORMAT_SHORT = "short " + DateFormatSymbols.getInstance().getShortWeekdays()[0];
-
-	static String WEEKDAY_FORMAT_LONG = "long " + DateFormatSymbols.getInstance().getWeekdays()[0];
 
 	@Inject
-	public DatesView(WorkTrackingService service, UserProfile userProfile, ESelectionService selectionService) {
+	public DatesView(WorkTrackingService service, ESelectionService selectionService) {
 		this.service = service;
-		this.userProfile = userProfile;
 		this.selectionService = selectionService;
 		this.selectionUpdater = new ViewerSelectionOnNewDateUpdater();
 	}
@@ -104,7 +86,7 @@ public class DatesView implements Switchable {
 		viewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		viewer.setUseHashlookup(true);
 		viewer.setContentProvider(new ObservableSetContentProvider());
-		viewer.setLabelProvider(new DatesViewLabelProvider(userProfile));
+		viewer.setLabelProvider(new DatesViewLabelProvider());
 		viewer.setComparator(new ViewerComparator(Ordering.natural().reverse()));
 		viewer.setInput(service.readDates());
 		updateSelectionServiceIfViewerSelectionChanges();
@@ -130,41 +112,7 @@ public class DatesView implements Switchable {
 	}
 
 	private void createSettingsPanel() {
-		settingsPanel = new Composite(switchComposite, SWT.NONE);
-		settingsPanel.setLayout(new GridLayout(2, false));
-		Label label = new Label(settingsPanel, SWT.LEFT);
-		label.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
-		Preference pref = Preference.SHOW_WEEKDAYS;
-		label.setText(pref.name);
-		label.setToolTipText("Should the day of week shown next to date?");
-
-		Preferences prefs = pref.getPreferencesStore();
-		final Button btnShowWeekdays = new Button(settingsPanel, SWT.CHECK);
-		btnShowWeekdays.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
-		btnShowWeekdays.setSelection(prefs.getBoolean(pref.id, Boolean.valueOf(pref.defaultValue)));
-		btnShowWeekdays.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				handleShowWeekdaysSelection(btnShowWeekdays);
-			}
-		});
-
-		label = new Label(settingsPanel, SWT.LEFT);
-		label.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
-		label.setText(Preference.WEEKDAY_FORMAT.name);
-		label.setToolTipText("How should the weekday be shown?");
-
-		final Combo cmbWeekDayFormat = new Combo(settingsPanel, SWT.READ_ONLY);
-		cmbWeekDayFormat.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false));
-		cmbWeekDayFormat.setItems(new String[]{WEEKDAY_FORMAT_SHORT, WEEKDAY_FORMAT_LONG});
-		cmbWeekDayFormat.setText(Preference.WEEKDAY_FORMAT.getPreferencesStore().get(
-				Preference.WEEKDAY_FORMAT.id, Preference.WEEKDAY_FORMAT.defaultValue));
-		cmbWeekDayFormat.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				handleWeekdayFormatSelection(cmbWeekDayFormat);
-			}
-		});
+		settingsPanel = new DatesViewSettings(switchComposite);
 	}
 
 	private Composite determineTopControlFromToolItemState() {
@@ -198,6 +146,7 @@ public class DatesView implements Switchable {
 	@Override
 	public void switchPanel() {
 		switchComposite.switchActiveControl();
+		viewer.refresh(true);
 	}
 
 	@Inject @Optional
@@ -208,46 +157,6 @@ public class DatesView implements Switchable {
 	@Inject @Optional
 	void stopViewerSelectionUpdating(@UIEventTopic(Events.START_IMPORT) String s) {
 		this.selectionUpdater.stopUdating();
-	}
-
-	private void handleWeekdayFormatSelection(Combo cmbWeekDayFormat) {
-		try {
-			Preference pref = Preference.WEEKDAY_FORMAT;
-			Preferences prefs = pref.getPreferencesStore();
-			prefs.put(pref.id, cmbWeekDayFormat.getText());
-			prefs.flush();
-		} catch (BackingStoreException e) {
-			logger.error(e, "Error during handling preferences.");
-		}
-	}
-	private void handleShowWeekdaysSelection(Button btn) {
-		try {
-			Preference pref = Preference.SHOW_WEEKDAYS;
-			Preferences prefs = pref.getPreferencesStore();
-			prefs.putBoolean(pref.id, btn.getSelection());
-			prefs.flush();
-		} catch (BackingStoreException e) {
-			logger.error(e, "Error during handling preferences.");
-		}
-	}
-
-	enum Preference {
-		SHOW_WEEKDAYS("SHOW_WEEKDAYS", "Show weekdays", "true"),
-		WEEKDAY_FORMAT("WEEKDAY_FORMAT", "Weekday format", WEEKDAY_FORMAT_SHORT);
-
-		final String id;
-		final String name;
-		final String defaultValue;
-
-		private Preference(String id, String name, String defaultValue) {
-			this.id = id;
-			this.name = name;
-			this.defaultValue = defaultValue;
-		}
-
-		Preferences getPreferencesStore() {
-			return ConfigurationScope.INSTANCE.getNode(DatesView.class.getSimpleName());
-		}
 	}
 
 	/**

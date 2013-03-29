@@ -10,19 +10,13 @@
  ******************************************************************************/
 package org.tobbaumann.wt.ui.views.date;
 
-import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.inject.Inject;
-
-import org.eclipse.e4.core.di.annotations.Optional;
-import org.eclipse.e4.core.di.extensions.Preference;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Image;
-import org.tobbaumann.wt.core.UserProfile;
 
 /**
  *
@@ -31,35 +25,30 @@ import org.tobbaumann.wt.core.UserProfile;
  */
 public class DatesViewLabelProvider extends StyledCellLabelProvider implements ILabelProvider {
 
-	private final UserProfile userProfile;
-	// TODO weekDayFormat should be in preferences
 	private final SimpleDateFormat weekDayFormat;
 
-	private boolean showWeekdays = Boolean.valueOf(org.tobbaumann.wt.ui.views.date.DatesView.Preference.SHOW_WEEKDAYS.defaultValue);
-
-	DatesViewLabelProvider(UserProfile userProfile) {
-		this.userProfile = userProfile;
-		this.weekDayFormat = new SimpleDateFormat("EE", DateFormatSymbols.getInstance(userProfile
-				.getLocale()));
-	}
-
-	@Inject
-	@Optional
-	public void setShowWeekdays(
-			@Preference(nodePath = "DatesView", value = "SHOW_WEEKDAYS") boolean showWeekdays) {
-		this.showWeekdays = showWeekdays;
+	DatesViewLabelProvider() {
+		this.weekDayFormat = new SimpleDateFormat("EE");
 	}
 
 	@Override
 	public void update(ViewerCell cell) {
 		Date date = (Date) cell.getElement();
 		StringBuilder cellText = new StringBuilder();
-		cellText.append(userProfile.getDateFormat().format(date));
-		if (showWeekdays) {
+		cellText.append(format(date));
+		if (shouldShowWeekdays()) {
 			cellText.append(" (").append(weekDayFormat.format(date)).append(")");
 		}
 		cell.setText(cellText.toString());
 		super.update(cell);
+	}
+
+	private String format(Date date) {
+		return DatesViewPreference.getCurrentDateFormat().format(date);
+	}
+
+	private Boolean shouldShowWeekdays() {
+		return Boolean.valueOf(DatesViewPreference.SHOW_WEEKDAYS.getValue());
 	}
 
 	@Override
