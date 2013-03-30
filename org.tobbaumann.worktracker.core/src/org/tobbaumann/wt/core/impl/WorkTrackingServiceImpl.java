@@ -62,6 +62,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Ordering;
 
@@ -104,7 +105,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 
 	Optional<Activity> getActivity(List<Activity> activities, final String activityName) {
 		LOGGER.trace("enter getActivity - {}", activityName);
-		return Iterables.tryFind(activities, new Predicate<Activity>() {
+		Activity a = Iterables.find(activities, new Predicate<Activity>() {
 			@Override
 			public boolean apply(Activity a) {
 				if (a.getName().equalsIgnoreCase(activityName)) {
@@ -112,7 +113,8 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 				}
 				return false;
 			}
-		});
+		}, null);
+		return Optional.fromNullable(a);
 	}
 
 	@Override
