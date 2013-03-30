@@ -9,5 +9,8 @@
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
 CTabFolder {
-	swt-tab-height:30px;
+	/*swt-tab-height:30px;*/
+	show-close: false;
+	minimize-visible: false;
+	maximize-visible: false;
 }
