@@ -91,6 +91,10 @@ CTabFolder {
 	swt-tab-outline: #444444;
 	selected-tab-fill: #222222;
 	swt-shadow-visible: false;
+	/*swt-tab-height:30px;*/
+	show-close: false;
+	minimize-visible: false;
+	maximize-visible: false;
 }
 
 CTabFolder Tree {

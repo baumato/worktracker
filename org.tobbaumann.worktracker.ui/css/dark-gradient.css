@@ -68,7 +68,10 @@ CTabFolder {
 	background-color: #202020;
 	color: rgb(150, 150, 150);
 	swt-simple: true;
-	swt-tab-height:30px;
+	/*swt-tab-height:30px;*/
+	show-close: false;
+	minimize-visible: false;
+	maximize-visible: false;
 }
 
 CTabItem {
