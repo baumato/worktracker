@@ -25,6 +25,7 @@ import org.tobbaumann.wt.domain.DomainPackage;
  * <ul>
  *   <li>{@link org.tobbaumann.wt.domain.impl.ActivityImpl#getId <em>Id</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.impl.ActivityImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.tobbaumann.wt.domain.impl.ActivityImpl#isInUse <em>In Use</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.impl.ActivityImpl#getOccurrenceFrequency <em>Occurrence Frequency</em>}</li>
  * </ul>
  * </p>
@@ -72,6 +73,26 @@ public class ActivityImpl extends MinimalEObjectImpl.Container implements Activi
    * @ordered
    */
   protected String name = NAME_EDEFAULT;
+
+  /**
+   * The default value of the '{@link #isInUse() <em>In Use</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isInUse()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean IN_USE_EDEFAULT = false;
+
+  /**
+   * The cached value of the '{@link #isInUse() <em>In Use</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isInUse()
+   * @generated
+   * @ordered
+   */
+  protected boolean inUse = IN_USE_EDEFAULT;
 
   /**
    * The default value of the '{@link #getOccurrenceFrequency() <em>Occurrence Frequency</em>}' attribute.
@@ -165,6 +186,29 @@ public class ActivityImpl extends MinimalEObjectImpl.Container implements Activi
    * <!-- end-user-doc -->
    * @generated
    */
+  public boolean isInUse()
+  {
+    return inUse;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setInUse(boolean newInUse)
+  {
+    boolean oldInUse = inUse;
+    inUse = newInUse;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, DomainPackage.ACTIVITY__IN_USE, oldInUse, inUse));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public long getOccurrenceFrequency()
   {
     return occurrenceFrequency;
@@ -211,6 +255,8 @@ public class ActivityImpl extends MinimalEObjectImpl.Container implements Activi
         return getId();
       case DomainPackage.ACTIVITY__NAME:
         return getName();
+      case DomainPackage.ACTIVITY__IN_USE:
+        return isInUse();
       case DomainPackage.ACTIVITY__OCCURRENCE_FREQUENCY:
         return getOccurrenceFrequency();
     }
@@ -232,6 +278,9 @@ public class ActivityImpl extends MinimalEObjectImpl.Container implements Activi
         return;
       case DomainPackage.ACTIVITY__NAME:
         setName((String)newValue);
+        return;
+      case DomainPackage.ACTIVITY__IN_USE:
+        setInUse((Boolean)newValue);
         return;
       case DomainPackage.ACTIVITY__OCCURRENCE_FREQUENCY:
         setOccurrenceFrequency((Long)newValue);
@@ -256,6 +305,9 @@ public class ActivityImpl extends MinimalEObjectImpl.Container implements Activi
       case DomainPackage.ACTIVITY__NAME:
         setName(NAME_EDEFAULT);
         return;
+      case DomainPackage.ACTIVITY__IN_USE:
+        setInUse(IN_USE_EDEFAULT);
+        return;
       case DomainPackage.ACTIVITY__OCCURRENCE_FREQUENCY:
         setOccurrenceFrequency(OCCURRENCE_FREQUENCY_EDEFAULT);
         return;
@@ -277,6 +329,8 @@ public class ActivityImpl extends MinimalEObjectImpl.Container implements Activi
         return ID_EDEFAULT == null ? id != null : !ID_EDEFAULT.equals(id);
       case DomainPackage.ACTIVITY__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+      case DomainPackage.ACTIVITY__IN_USE:
+        return inUse != IN_USE_EDEFAULT;
       case DomainPackage.ACTIVITY__OCCURRENCE_FREQUENCY:
         return occurrenceFrequency != OCCURRENCE_FREQUENCY_EDEFAULT;
     }
@@ -315,6 +369,8 @@ public class ActivityImpl extends MinimalEObjectImpl.Container implements Activi
     result.append(id);
     result.append(", name: ");
     result.append(name);
+    result.append(", inUse: ");
+    result.append(inUse);
     result.append(", occurrenceFrequency: ");
     result.append(occurrenceFrequency);
     result.append(')');

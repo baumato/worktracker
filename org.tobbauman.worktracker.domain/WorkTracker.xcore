@@ -22,6 +22,7 @@ interface Comparable wraps java.lang.Comparable<WorkItem>{}
 class Activity {
 	id String ^id
 	String name
+	boolean inUse
 	long occurrenceFrequency
 	op void incrementOccurrenceFrequency() {
 		occurrenceFrequency = occurrenceFrequency + 1;

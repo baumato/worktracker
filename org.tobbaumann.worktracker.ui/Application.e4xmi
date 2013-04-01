@@ -23,6 +23,7 @@
               <toolbar xmi:id="_cKLnMIkcEeK0HcWX2dKTKA" elementId="org.tobbaumann.worktracker.ui.toolbar.0">
                 <children xsi:type="menu:DirectToolItem" xmi:id="_vs3uQIkdEeK0HcWX2dKTKA" elementId="org.tobbaumann.worktracker.ui.directtoolitem.0" label="Sort by usage" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/arrow_down.png" tooltip="Sort by usage" selected="true" type="Radio" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.wistart.SortByUsageHandler"/>
                 <children xsi:type="menu:DirectToolItem" xmi:id="_lrx5QIkcEeK0HcWX2dKTKA" elementId="org.tobbaumann.worktracker.ui.directtoolitem.1" label="Sort by name" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/arrow_down.png" tooltip="Sorty by name" type="Radio" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.wistart.SortByNameHandler"/>
+                <children xsi:type="menu:DirectToolItem" xmi:id="_dXfwAJsREeKGDpG5bMUWzA" elementId="org.tobbaumann.worktracker.ui.directtoolitem.2" label="Show/Hide Unused Activities" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/star.png" tooltip="Show/Hide Unused Activities" type="Check" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.wistart.ToggleUnusedActivitiesHandler"/>
               </toolbar>
             </children>
           </children>

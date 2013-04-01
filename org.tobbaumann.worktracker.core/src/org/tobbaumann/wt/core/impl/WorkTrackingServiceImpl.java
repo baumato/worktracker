@@ -12,10 +12,7 @@ package org.tobbaumann.wt.core.impl;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Maps.newHashMap;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,7 +22,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.databinding.observable.list.IListChangeListener;
 import org.eclipse.core.databinding.observable.list.IObservableList;
@@ -35,34 +31,21 @@ import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.databinding.observable.set.IObservableSet;
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.xmi.XMIResource;
-import org.eclipse.emf.ecore.xmi.XMLParserPool;
-import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
-import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.Activity;
 import org.tobbaumann.wt.domain.DomainFactory;
-import org.tobbaumann.wt.domain.DomainPackage;
 import org.tobbaumann.wt.domain.WorkItem;
 import org.tobbaumann.wt.domain.WorkItemSummary;
 
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
-import com.google.common.base.Throwables;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Ordering;
 
@@ -81,10 +64,9 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		this.activities = new WritableList(newArrayList(), Activity.class);
 		this.workItemDates = new WritableSet(newArrayList(), Date.class);
 		this.workItems = new WritableList(newArrayList(), WorkItem.class);
-		WorkItemsPersister persister = new WorkItemsPersister();
+		WorkItemsPersister persister = new WorkItemsPersister(this);
 		this.workItems.addListChangeListener(persister);
 		this.workItems.addListChangeListener(new WorkItemDatesUpdater());
-		//WorkTrackingServiceInitializer.initialize(this);
 		persister.load();
 	}
 
@@ -154,6 +136,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		} else {
 			activity = createActivity(activityName);
 		}
+		activity.setInUse(true);
 
 		// update currently active work item
 		Calendar nowCal = Calendar.getInstance();
@@ -210,8 +193,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		return res.build();
 	}
 
-	@Override
-	public Activity createActivity(String activityName) {
+	private Activity createActivity(String activityName) {
 		Optional<Activity> a = getActivity(activityName);
 		if (a.isPresent()) {
 			throw new ActivityAlreadyExistsException(a.get().getName());
@@ -225,6 +207,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		Activity activity = DomainFactory.eINSTANCE.createActivity();
 		activity.setId(EcoreUtil.generateUUID());
 		activity.setName(activityName);
+		activity.setInUse(true);
 		activity.setOccurrenceFrequency(0);
 		return activity;
 	}
@@ -238,8 +221,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		});
 	}
 
-	@Override
-	public WorkItem createWorkItem(Activity activity, Date start, Date end, String description) {
+	private WorkItem createWorkItem(Activity activity, Date start, Date end, String description) {
 		WorkItem wi = createWorkItemInternal(activity, start, end, description);
 		workItems.add(wi);
 		return wi;
@@ -270,12 +252,12 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	}
 
 	@Override
-	public ImportResult importData(String strPath, IProgressMonitor monitor) {
+	public CreationResult importData(String strPath, IProgressMonitor monitor) {
 		return new WorkTrackerDataImporter(this).importData(strPath, monitor);
 	}
 
 	@Override
-	public ImportResult createFakeData(int numberOfDays, IProgressMonitor monitor) {
+	public CreationResult createFakeData(int numberOfDays, IProgressMonitor monitor) {
 		return new FakeDataCreator(this).createFakeData(numberOfDays, monitor);
 	}
 
@@ -321,95 +303,9 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	 * @author tobbaumann
 	 *
 	 */
-	private final class WorkItemsPersister extends ResourceFactoryImpl implements IListChangeListener {
-
-		private static final String WORKTRACKER_STORAGE_URI = "storage/worktracker.storage";
-
-		private final List<?> lookupTable = newArrayList();
-		private final XMLParserPool parserPool = new XMLParserPoolImpl();
-		private Map<?, ?> nameToFeatureMap = newHashMap();
-
-
-		public WorkItemsPersister() {
-			Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
-		    Map<String, Object> m = reg.getExtensionToFactoryMap();
-		    m.put("storage", new XMIResourceFactoryImpl());
-		}
-
-		@Override
-		public void handleListChange(ListChangeEvent event) {
-			commit();
-		}
-
-		private void commit() {
-			try {
-				commitUnchecked();
-			} catch (Exception e) {
-				Throwables.propagate(e);
-			}
-		}
-
-		private void commitUnchecked() throws IOException {
-			URI uri = URI.createURI(WORKTRACKER_STORAGE_URI);
-			XMIResource resource = createResource(uri);
-			resource.getContents().addAll(activities);
-			resource.getContents().addAll(workItems);
-			resource.save(resource.getDefaultSaveOptions());
-		}
-
-		public void load() {
-			try {
-				loadUnchecked();
-			} catch (IOException e) {
-				Throwables.propagate(e);
-			}
-		}
-
-		private void loadUnchecked() throws IOException {
-			DomainPackage.eINSTANCE.eClass();
-		    URI uri = URI.createFileURI(WORKTRACKER_STORAGE_URI);
-		    if (!new File(uri.toFileString()).exists()) {
-		    	return;
-		    }
-			XMIResource resource = createResource(uri);
-		    List<Activity> activities = newArrayList();
-		    List<WorkItem> workItems = newArrayList();
-		    resource.load(resource.getDefaultLoadOptions());
-		    for (EObject e : resource.getContents()) {
-		    	if (isWorkItem(e)) {
-		    		workItems.add((WorkItem) e);
-		    	} else if (isActivity(e)) {
-		    		activities.add((Activity) e);
-		    	} else {
-		    		throw new RuntimeException("Unknown object: "+ e);
-		    	}
-		    }
-		    addActivities(activities);
-		    addWorkItems(workItems);
-		}
-
-		@Override
-		public XMIResource createResource(URI uri) {
-			XMIResource resource = new XMIResourceImpl(uri);
-			Map<Object, Object> saveOptions = resource.getDefaultSaveOptions();
-			saveOptions.put(XMLResource.OPTION_DECLARE_XML, Boolean.TRUE);
-			saveOptions.put(XMLResource.OPTION_CONFIGURATION_CACHE, Boolean.TRUE);
-			saveOptions.put(XMLResource.OPTION_USE_CACHED_LOOKUP_TABLE, lookupTable);
-			Map<Object, Object> loadOptions = resource.getDefaultSaveOptions();
-			loadOptions.put(XMLResource.OPTION_DEFER_ATTACHMENT, Boolean.TRUE);
-			loadOptions.put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, Boolean.TRUE);
-			loadOptions.put(XMLResource.OPTION_USE_DEPRECATED_METHODS, Boolean.FALSE);
-			loadOptions.put(XMLResource.OPTION_USE_PARSER_POOL, parserPool);
-			loadOptions.put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, nameToFeatureMap);
-			return resource;
-		}
-
-		private boolean isWorkItem(EObject e) {
-			return e.eClass().equals(DomainPackage.Literals.WORK_ITEM);
-		}
-
-		private boolean isActivity(EObject e) {
-			return e.eClass().equals(DomainPackage.Literals.ACTIVITY);
+	public static final class ActivityAlreadyExistsException extends RuntimeException {
+		public ActivityAlreadyExistsException(String activityName) {
+			super(activityName);
 		}
 	}
 }

@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link org.tobbaumann.wt.domain.Activity#getId <em>Id</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.Activity#getName <em>Name</em>}</li>
+ *   <li>{@link org.tobbaumann.wt.domain.Activity#isInUse <em>In Use</em>}</li>
  *   <li>{@link org.tobbaumann.wt.domain.Activity#getOccurrenceFrequency <em>Occurrence Frequency</em>}</li>
  * </ul>
  * </p>
@@ -75,6 +76,32 @@ public interface Activity extends EObject
    * @generated
    */
   void setName(String value);
+
+  /**
+   * Returns the value of the '<em><b>In Use</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>In Use</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>In Use</em>' attribute.
+   * @see #setInUse(boolean)
+   * @see org.tobbaumann.wt.domain.DomainPackage#getActivity_InUse()
+   * @model unique="false"
+   * @generated
+   */
+  boolean isInUse();
+
+  /**
+   * Sets the value of the '{@link org.tobbaumann.wt.domain.Activity#isInUse <em>In Use</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>In Use</em>' attribute.
+   * @see #isInUse()
+   * @generated
+   */
+  void setInUse(boolean value);
 
   /**
    * Returns the value of the '<em><b>Occurrence Frequency</b></em>' attribute.

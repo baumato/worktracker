@@ -193,9 +193,19 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getActivity_OccurrenceFrequency()
+  public EAttribute getActivity_InUse()
   {
     return (EAttribute)activityEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getActivity_OccurrenceFrequency()
+  {
+    return (EAttribute)activityEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -563,6 +573,7 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
     activityEClass = createEClass(ACTIVITY);
     createEAttribute(activityEClass, ACTIVITY__ID);
     createEAttribute(activityEClass, ACTIVITY__NAME);
+    createEAttribute(activityEClass, ACTIVITY__IN_USE);
     createEAttribute(activityEClass, ACTIVITY__OCCURRENCE_FREQUENCY);
     createEOperation(activityEClass, ACTIVITY___INCREMENT_OCCURRENCE_FREQUENCY);
 
@@ -644,6 +655,7 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
     initEClass(activityEClass, Activity.class, "Activity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getActivity_Id(), theEcorePackage.getEString(), "id", null, 0, 1, Activity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getActivity_Name(), theEcorePackage.getEString(), "name", null, 0, 1, Activity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getActivity_InUse(), theEcorePackage.getEBoolean(), "inUse", null, 0, 1, Activity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getActivity_OccurrenceFrequency(), theEcorePackage.getELong(), "occurrenceFrequency", null, 0, 1, Activity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEOperation(getActivity__IncrementOccurrenceFrequency(), null, "incrementOccurrenceFrequency", 0, 1, !IS_UNIQUE, IS_ORDERED);

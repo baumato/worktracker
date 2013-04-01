@@ -47,8 +47,10 @@ import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.DragSource;
@@ -58,6 +60,8 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.MenuDetectEvent;
+import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -71,6 +75,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.tobbaumann.wt.core.WorkTrackingService;
@@ -91,6 +97,7 @@ public class StartWorkItemView {
 	private Spinner startedSpinner;
 	private Button btnAdd;
 	private TableViewer activitiesTable;
+	private ActivitiesTableFilter activitiesTableFilter;
 
 	@PreDestroy
 	public void dispose() {
@@ -161,7 +168,6 @@ public class StartWorkItemView {
 		service.getActivities().addListChangeListener(new IListChangeListener() {
 			@Override
 			public void handleListChange(ListChangeEvent event) {
-				System.out.println("update proposal provider");
 				IObservableList activities = event.getObservableList();
 				String[] arrActivityNames = createProposalsFromActivities(activities);
 				proposalProvider.setProposals(arrActivityNames);
@@ -222,23 +228,26 @@ public class StartWorkItemView {
 	}
 
 	private void createAndConfigureActivitiesTable(Composite parent) {
-		activitiesTable = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION);
+		activitiesTable = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE);
 		activitiesTable.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		activitiesTable.setLabelProvider(new ChangeActivitiesViewLabelProvider());
 		activitiesTable.setContentProvider(new ObservableListContentProvider());
 		activitiesTable.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
+				if (event.getSelection().isEmpty()) return;
 				Activity selectedActivity = (Activity) ((IStructuredSelection)event.getSelection()).getFirstElement();
 				txtActivity.setText(selectedActivity.getName());
 			}
 		});
-		sortActivities();
+		applySorting();
+		applyFilter();
+		applyMenu();
 		ViewerUtils.requestFocusOnMouseEnter(activitiesTable);
 		makeActivitiesTableDragSource();
 	}
 
-	private void sortActivities() {
+	private void applySorting() {
 		// TODO how get the MToolItem in a more robust way?
 		MToolItem item = (MToolItem) part.getToolbar().getChildren().get(0);
 		if (item.isSelected()) {
@@ -256,6 +265,93 @@ public class StartWorkItemView {
 		activitiesTable.setComparator(new ViewerComparator(Ordering.natural()));
 	}
 
+	private void applyFilter() {
+		this.activitiesTableFilter = new ActivitiesTableFilter();
+		activitiesTable.addFilter(activitiesTableFilter);
+	}
+
+	private void applyMenu() {
+		activitiesTable.getTable().addMenuDetectListener(new MenuDetectListener() {
+			@Override
+			public void menuDetected(MenuDetectEvent e) {
+				createAndShowMenu();
+			}
+		});	
+	}
+	
+	private void createAndShowMenu() {
+		Menu menu = new Menu(activitiesTable.getTable().getShell(), SWT.POP_UP);
+		IStructuredSelection sel = (IStructuredSelection) activitiesTable.getSelection();
+		Activity a = (Activity) sel.getFirstElement();
+		if (a.isInUse()) {
+			addHideActions(menu, a);
+		} else {
+			addShowActions(menu, a);
+		}
+		if (menu.getItemCount() > 0) {
+			menu.setVisible(true);
+		}
+	}
+	
+	
+	private void addShowActions(Menu menu, final Activity a) {
+		if (!activitiesTable.getSelection().isEmpty()) {
+			MenuItem miShow = new MenuItem(menu, SWT.NONE);
+			miShow.setText("Mark in use");
+			miShow.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					a.setInUse(true);
+					activitiesTable.refresh();
+				}
+			});
+		}
+		
+		if (service.getActivities().size() > 1) {
+			MenuItem miShowAll = new MenuItem(menu, SWT.NONE);
+			miShowAll.setText("Mark all in use");
+			miShowAll.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					for (Object o : service.getActivities()) {
+						Activity a = (Activity) o;
+						a.setInUse(true);
+					}
+					activitiesTable.refresh();
+				}
+			});
+		}
+	}
+
+	private void addHideActions(Menu menu, final Activity a) {
+		if (!activitiesTable.getSelection().isEmpty()) {
+			MenuItem miHide = new MenuItem(menu, SWT.NONE);
+			miHide.setText("Mark unused");
+			miHide.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					a.setInUse(false);
+					activitiesTable.refresh();
+				}
+			});
+		}
+		
+		if (service.getActivities().size() > 1) {
+			MenuItem miHideAll = new MenuItem(menu, SWT.NONE);
+			miHideAll.setText("Mark all unused");
+			miHideAll.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					for (Object o : service.getActivities()) {
+						Activity a = (Activity) o;
+						a.setInUse(false);
+					}
+					activitiesTable.refresh();
+				}
+			});			
+		}
+	}
+	
 	private void makeActivitiesTableDragSource() {
 		DragSource ds = new DragSource(activitiesTable.getTable(), DND.DROP_MOVE);
 		ds.setTransfer(new Transfer[] { TextTransfer.getInstance() });
@@ -269,6 +365,11 @@ public class StartWorkItemView {
 		});
 	}
 
+	void toggleUnusedActivities() {
+		this.activitiesTableFilter.toggleFilterUsage();
+		this.activitiesTable.refresh();
+	}
+	
 	private void startWorkItem() {
 		if (isNullOrEmpty(txtActivity.getText())) {
 			return;
@@ -385,6 +486,30 @@ public class StartWorkItemView {
 				Color color = JFaceResources.getColorRegistry().get(JFacePreferences.COUNTER_COLOR);
 				textStyle.foreground = color;
 			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @author tobba_000
+	 *
+	 */
+	private static final class ActivitiesTableFilter extends ViewerFilter {
+
+		private boolean filterActive = true;
+		
+		@Override
+		public boolean select(Viewer viewer, Object parentElement,
+				Object element) {
+			if (!filterActive) {
+				return true;
+			}
+			Activity a = (Activity) element;
+			return a.isInUse();
+		}
+		
+		void toggleFilterUsage() {
+			filterActive = !filterActive;
 		}
 	}
 }

@@ -24,7 +24,8 @@ import java.util.Random;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.SubMonitor;
-import org.tobbaumann.wt.core.WorkTrackingService.ImportResult;
+import org.tobbaumann.wt.core.WorkTrackingService.CreationResult;
+import org.tobbaumann.wt.core.WorkTrackingService.OperationCanceledException;
 import org.tobbaumann.wt.domain.Activity;
 import org.tobbaumann.wt.domain.DomainFactory;
 import org.tobbaumann.wt.domain.WorkItem;
@@ -44,14 +45,14 @@ class FakeDataCreator {
 		this.service = service;
 	}
 
-	ImportResult createFakeData(int numberOfDays, IProgressMonitor monitor) {
+	CreationResult createFakeData(int numberOfDays, IProgressMonitor monitor) {
 		SubMonitor progress = SubMonitor.convert(monitor, "Creating fake data", 100);
 		List<Activity> activities = createActivities(progress.newChild(30));
 		ImmutableSet<WorkItem> workItems = createItems(numberOfDays, activities,
 				progress.newChild(70));
 		service.addActivities(activities);
 		service.addWorkItems(workItems);
-		return new ImportResult(activities.size(), workItems.size(),
+		return new CreationResult(activities.size(), workItems.size(),
 				Collections.<IStatus> emptyList());
 	}
 
@@ -60,8 +61,7 @@ class FakeDataCreator {
 		List<String> activities = createFakeActivities();
 		SubMonitor progress = SubMonitor.convert(monitor, "Creating activites", activities.size());
 		for (String name : activities) {
-			Activity activity = DomainFactory.eINSTANCE.createActivity();
-			activity.setName(name);
+			Activity activity = service.createActivityInternal(name);
 			activity.setOccurrenceFrequency(random.nextInt(30));
 			res.add(activity);
 			progress.worked(1);
@@ -70,7 +70,7 @@ class FakeDataCreator {
 	}
 
 	private List<String> createFakeActivities() {
-		return readLinesOfFile("Activities.txt");
+		return readLinesOfFile("FakeActivities.txt");
 	}
 
 	private ImmutableSet<WorkItem> createItems(int numberOfDays, List<Activity> activities, IProgressMonitor monitor) {
@@ -79,6 +79,9 @@ class FakeDataCreator {
 		List<String> descriptions = createFakeDescripitons();
 		Calendar cal = Calendar.getInstance();
 		for (int i = numberOfDays; i > 0; i--) {
+			if (progress.isCanceled()) {
+				throw new OperationCanceledException();
+			}
 			progress.subTask("Day " + (numberOfDays-i+1));
 			cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH) - 1);
 			omitWeekend(cal);
@@ -98,7 +101,7 @@ class FakeDataCreator {
 	}
 
 	private List<String> createFakeDescripitons() {
-		return readLinesOfFile("Descriptions.txt");
+		return readLinesOfFile("FakeDescriptions.txt");
 	}
 
 	private List<String> readLinesOfFile(String fileName) {

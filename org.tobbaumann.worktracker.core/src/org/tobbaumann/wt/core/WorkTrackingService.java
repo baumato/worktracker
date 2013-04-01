@@ -39,16 +39,8 @@ public interface WorkTrackingService {
 	IObservableList getActivities();
 	List<Activity> getMostUsedActivities(int numberOfActivities);
 
-	/**
-	 * @param activityName the name of the activity
-	 * @return the newly create activity
-	 * @throws ActivityAlreadyExistsException, see {@link #getActivity(String)}
-	 */
-	Activity createActivity(String activityName);
-
 	IObservableList getWorkItems();
 	List<WorkItem> getWorkItems(Date date);
-	WorkItem createWorkItem(Activity activity, Date start, Date end, String description);
 	void startWorkItem(String activityName, int numberOfMinutesBeforeNow);
 
 	List<WorkItemSummary> getWorkItemSummaries(Date date);
@@ -60,7 +52,7 @@ public interface WorkTrackingService {
 	 * @return the description of the done import
 	 * @throws OperationCanceledException
 	 */
-	ImportResult importData(String path, IProgressMonitor monitor);
+	CreationResult importData(String path, IProgressMonitor monitor);
 
 	/**
 	 * Creates fake data for given number of days
@@ -69,7 +61,7 @@ public interface WorkTrackingService {
 	 * @return the description of the creation done
 	 * @throws OperationCanceledException
 	 */
-	ImportResult createFakeData(int numberOfDays, IProgressMonitor monitor);
+	CreationResult createFakeData(int numberOfDays, IProgressMonitor monitor);
 
 
 	/**
@@ -77,12 +69,12 @@ public interface WorkTrackingService {
 	 * @author tobbaumann
 	 *
 	 */
-	public static final class ImportResult {
+	public static final class CreationResult {
 		public final int numberOfActivities;
 		public final int numberOfWorkItems;
 		public final ImmutableList<IStatus> errors;
 
-		public ImportResult(int numberOfActivities, int numberOfWorkItems, Iterable<IStatus> errors) {
+		public CreationResult(int numberOfActivities, int numberOfWorkItems, Iterable<IStatus> errors) {
 			super();
 			this.numberOfActivities = numberOfActivities;
 			this.numberOfWorkItems = numberOfWorkItems;
@@ -96,17 +88,6 @@ public interface WorkTrackingService {
 					.add("numberOfWorkItems", numberOfWorkItems)
 					.add("numberOfErrors", errors.size())
 					.toString();
-		}
-	}
-
-	/**
-	 *
-	 * @author tobbaumann
-	 *
-	 */
-	public static final class ActivityAlreadyExistsException extends RuntimeException {
-		public ActivityAlreadyExistsException(String activityName) {
-			super(activityName);
 		}
 	}
 

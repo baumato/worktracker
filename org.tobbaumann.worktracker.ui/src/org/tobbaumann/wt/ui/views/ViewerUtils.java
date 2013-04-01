@@ -28,7 +28,7 @@ public class ViewerUtils {
 		viewer.getControl().getDisplay().timerExec(millis.intValue(), new Runnable() {
 			@Override
 			public void run() {
-				if (viewer != null && !viewer.getControl().isDisposed()) {
+				if (!viewer.getControl().isDisposed()) {
 					viewer.refresh(true);
 					refreshViewerPeriodically(viewer, delay, timeUnit);
 				}

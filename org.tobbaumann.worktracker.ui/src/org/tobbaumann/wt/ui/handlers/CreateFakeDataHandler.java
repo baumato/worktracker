@@ -32,7 +32,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.tobbaumann.wt.core.WorkTrackingService;
-import org.tobbaumann.wt.core.WorkTrackingService.ImportResult;
+import org.tobbaumann.wt.core.WorkTrackingService.CreationResult;
 import org.tobbaumann.wt.core.WorkTrackingService.OperationCanceledException;
 import org.tobbaumann.wt.ui.event.Events;
 
@@ -60,7 +60,7 @@ public class CreateFakeDataHandler {
 			if (numberOfDays == null) {
 				return;
 			}
-			final ImportResult[] resultExchange = new ImportResult[1];
+			final CreationResult[] resultExchange = new CreationResult[1];
 			ProgressMonitorDialog dlg = new ProgressMonitorDialog(shell);
 			dlg.run(true, true, new IRunnableWithProgress() {
 				@Override
@@ -106,7 +106,7 @@ public class CreateFakeDataHandler {
 		return (dialog.open() == Window.OK) ? Integer.valueOf(dialog.getValue()) : null;
 	}
 
-	private void handleImportResult(final Shell shell, final String errMsg, final ImportResult ir) {
+	private void handleImportResult(final Shell shell, final String errMsg, final CreationResult ir) {
 		shell.getDisplay().asyncExec(new Runnable() {
 			@Override
 			public void run() {
@@ -119,7 +119,7 @@ public class CreateFakeDataHandler {
 		});
 	}
 
-	private MultiStatus createErrorStatus(String errMsg, final ImportResult ir) {
+	private MultiStatus createErrorStatus(String errMsg, final CreationResult ir) {
 		return new MultiStatus(ImportOldWorkTrackerDataHandler.class
 				.getSimpleName(), 0, ir.errors.toArray(new IStatus[0]),
 				errMsg, null);

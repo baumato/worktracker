@@ -29,7 +29,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
-import org.tobbaumann.wt.core.WorkTrackingService.ImportResult;
+import org.tobbaumann.wt.core.WorkTrackingService.CreationResult;
 import org.tobbaumann.wt.core.WorkTrackingService.OperationCanceledException;
 import org.tobbaumann.wt.domain.Activity;
 import org.tobbaumann.wt.domain.WorkItem;
@@ -48,7 +48,7 @@ class WorkTrackerDataImporter {
 		this.service = service;
 	}
 
-	ImportResult importData(String strPath, IProgressMonitor monitor) {
+	CreationResult importData(String strPath, IProgressMonitor monitor) {
 		try {
 			Path path = Paths.get(strPath);
 			SubMonitor progress = SubMonitor.convert(monitor, "Import data from directory " + path.getFileName(), 100);
@@ -59,7 +59,7 @@ class WorkTrackerDataImporter {
 			service.addWorkItems(fp.handler.workItems);
 			int activitiesSize = fp.handler.activities.size();
 			int workItemsSize = fp.handler.workItems.size();
-			return new ImportResult(activitiesSize, workItemsSize, fp.errors);
+			return new CreationResult(activitiesSize, workItemsSize, fp.errors);
 		} catch (Exception e) {
 			Throwables.propagateIfPossible(e);
 			throw new RuntimeException(e);
@@ -86,7 +86,7 @@ class WorkTrackerDataImporter {
 			if (progress.isCanceled()) {
 				throw new OperationCanceledException();
 			}
-			DirectoryStream<Path> ds = Files.newDirectoryStream(path,
+			try (DirectoryStream<Path> ds = Files.newDirectoryStream(path,
 					new DirectoryStream.Filter<Path>() {
 						@Override
 						public boolean accept(Path p) throws IOException {
@@ -95,14 +95,16 @@ class WorkTrackerDataImporter {
 								return false;
 							}
 							String fileName = p.getFileName().toString();
-							return fileName.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}.xml");
+							return fileName
+									.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}.xml");
 						}
-					});
-			for (Path p : ds) {
-				progress.subTask(p.toString());
-				progress.setWorkRemaining(100);
-				fp.processFile(p);
-				progress.worked(1);
+					})) {
+				for (Path p : ds) {
+					progress.subTask(p.toString());
+					progress.setWorkRemaining(100);
+					fp.processFile(p);
+					progress.worked(1);
+				}
 			}
 		}
 	}

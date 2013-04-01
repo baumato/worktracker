@@ -118,13 +118,22 @@ public interface DomainPackage extends EPackage
   int ACTIVITY__NAME = 1;
 
   /**
+   * The feature id for the '<em><b>In Use</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int ACTIVITY__IN_USE = 2;
+
+  /**
    * The feature id for the '<em><b>Occurrence Frequency</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int ACTIVITY__OCCURRENCE_FREQUENCY = 2;
+  int ACTIVITY__OCCURRENCE_FREQUENCY = 3;
 
   /**
    * The number of structural features of the '<em>Activity</em>' class.
@@ -133,7 +142,7 @@ public interface DomainPackage extends EPackage
    * @generated
    * @ordered
    */
-  int ACTIVITY_FEATURE_COUNT = 3;
+  int ACTIVITY_FEATURE_COUNT = 4;
 
   /**
    * The operation id for the '<em>Increment Occurrence Frequency</em>' operation.
@@ -543,6 +552,17 @@ public interface DomainPackage extends EPackage
    * @generated
    */
   EAttribute getActivity_Name();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.tobbaumann.wt.domain.Activity#isInUse <em>In Use</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>In Use</em>'.
+   * @see org.tobbaumann.wt.domain.Activity#isInUse()
+   * @see #getActivity()
+   * @generated
+   */
+  EAttribute getActivity_InUse();
 
   /**
    * Returns the meta object for the attribute '{@link org.tobbaumann.wt.domain.Activity#getOccurrenceFrequency <em>Occurrence Frequency</em>}'.
@@ -964,6 +984,14 @@ public interface DomainPackage extends EPackage
      * @generated
      */
     EAttribute ACTIVITY__NAME = eINSTANCE.getActivity_Name();
+
+    /**
+     * The meta object literal for the '<em><b>In Use</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute ACTIVITY__IN_USE = eINSTANCE.getActivity_InUse();
 
     /**
      * The meta object literal for the '<em><b>Occurrence Frequency</b></em>' attribute feature.
