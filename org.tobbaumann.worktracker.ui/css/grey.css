@@ -90,8 +90,8 @@ CTabFolder {
 	swt-shadow-visible: false;
 	/*swt-tab-height:30px;*/
 	show-close: false;
-	minimize-visible: false;
-	maximize-visible: false;
+	swt-minimize-visible: false;
+	swt-maximize-visible: false;
 }
  
  
