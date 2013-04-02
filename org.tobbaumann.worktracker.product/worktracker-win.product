@@ -30,6 +30,7 @@ All clock icons are from http://www.icons-land.com.
       <linux icon="/org.tobbaumann.worktracker.ui/icons/launcher.xpm"/>
       <solaris/>
       <win useIco="false">
+         <ico path="/org.tobbaumann.worktracker.ui/icons/clocks/clock.ico"/>
          <bmp
             winSmallHigh="/org.tobbaumann.worktracker.ui/icons/clocks/bmp/clock_16x16_32bit.bmp"
             winSmallLow="/org.tobbaumann.worktracker.ui/icons/clocks/bmp/clock_16x16_8bit.bmp"
