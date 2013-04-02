@@ -199,8 +199,7 @@ public class StartWorkItemWithButtonView implements Switchable {
 		final Button btn = new Button(parent, SWT.PUSH | SWT.WRAP | SWT.CENTER);
 		btn.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		btn.setData("org.eclipse.e4.ui.css.id", "QuickAccessButton");
-		btn.setData(BTN_DATA_KEY_ACTIVITY_NAME, activityName);
-		btn.setText(createButtonText(activityName, buttonNumber));
+		updateButtonWithActivityName(btn, activityName, buttonNumber);
 		btn.setToolTipText(activityName);
 		startWorkItemOnButtonSelection(btn);
 		makeButtonDropTarget(btn);
@@ -208,9 +207,14 @@ public class StartWorkItemWithButtonView implements Switchable {
 
 	private void handleButtonDrop(final Button btn, DropTargetEvent event) {
 		if (service.getActivity((String) event.data).isPresent()) {
-			btn.setText(createButtonText(event.data.toString(), getButtonIndex(btn)+1));
+			updateButtonWithActivityName(btn, event.data.toString(), getButtonIndex(btn)+1);
 			saveButtonTextsToPreferences(btn.getParent());
 		}
+	}
+	
+	private void updateButtonWithActivityName(Button btn, String activityName, int buttonNumber) {
+		btn.setData(BTN_DATA_KEY_ACTIVITY_NAME, activityName);
+		btn.setText(createButtonText(activityName, buttonNumber));
 	}
 
 	private String createButtonText(String activityName, int buttonNumber) {
