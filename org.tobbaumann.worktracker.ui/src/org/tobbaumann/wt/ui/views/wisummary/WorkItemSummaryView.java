@@ -93,7 +93,6 @@ public class WorkItemSummaryView {
 			TableColumn tcol = new TableColumn(tableViewer.getTable(), SWT.LEFT);
 			tcol.setText(colName);
 		}
-		new TableColumn(tableViewer.getTable(), SWT.LEFT); // empty column
 	}
 
 	@Inject
