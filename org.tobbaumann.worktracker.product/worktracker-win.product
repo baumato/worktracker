@@ -29,9 +29,16 @@ All clock icons are from http://www.icons-land.com.
    <launcher name="WorkTracker">
       <linux icon="/org.tobbaumann.worktracker.ui/icons/launcher.xpm"/>
       <solaris/>
-      <win useIco="true">
+      <win useIco="false">
          <ico path="/org.tobbaumann.worktracker.ui/icons/clocks/clock.ico"/>
-         <bmp/>
+         <bmp
+            winSmallHigh="/org.tobbaumann.worktracker.ui/icons/clocks/bmp/clock_16x16_32bit.bmp"
+            winSmallLow="/org.tobbaumann.worktracker.ui/icons/clocks/bmp/clock_16x16_8bit.bmp"
+            winMediumHigh="/org.tobbaumann.worktracker.ui/icons/clocks/bmp/clock_32x32_32bit.bmp"
+            winMediumLow="/org.tobbaumann.worktracker.ui/icons/clocks/bmp/clock_32x32_8bit.bmp"
+            winLargeHigh="/org.tobbaumann.worktracker.ui/icons/clocks/bmp/clock_48x48_32bit.bmp"
+            winLargeLow="/org.tobbaumann.worktracker.ui/icons/clocks/bmp/clock_48x48_8bit.bmp"
+            winExtraLargeHigh="/org.tobbaumann.worktracker.ui/icons/clocks/bmp/clock_256x256_32bit.bmp"/>
       </win>
    </launcher>
 

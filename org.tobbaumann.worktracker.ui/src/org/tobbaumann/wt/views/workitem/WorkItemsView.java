@@ -101,7 +101,6 @@ public class WorkItemsView {
 			TableColumn tcol = new TableColumn(table, SWT.LEFT);
 			tcol.setText(colName);
 		}
-		new TableColumn(table, SWT.LEFT); // empty column
 	}
 
 	@Inject
