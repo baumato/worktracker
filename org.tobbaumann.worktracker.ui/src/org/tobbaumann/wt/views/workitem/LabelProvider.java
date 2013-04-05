@@ -14,6 +14,7 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import org.eclipse.jface.preference.JFacePreferences;
+import org.eclipse.jface.resource.FontDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
@@ -21,6 +22,7 @@ import org.eclipse.jface.viewers.StyledString;
 import org.eclipse.jface.viewers.StyledString.Styler;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.TextStyle;
@@ -38,32 +40,42 @@ final class LabelProvider extends StyledCellLabelProvider implements ILabelProvi
 	@Override
 	public void update(ViewerCell cell) {
 		WorkItem wi = (WorkItem) cell.getElement();
+		StyledString text = new StyledString();
 		switch (cell.getColumnIndex()) {
 		case 0:
-			cell.setText(wi.getActivityName());
+			text.append(wi.getActivityName(), createStyler(wi));
 			break;
 		case 1:
-			cell.setText(format(wi.getStart()));
+			text.append(format(wi.getStart()), createStyler(wi));
 			break;
 		case 2:			
 			String strDate = format(wi.getEnd());
-			if (wi.getEndDate() == null) {
-				StyledString text = new StyledString();
-				text.append("now ", new NowStyler());
-				text.append("(" + strDate + ")", StyledString.DECORATIONS_STYLER);
-				cell.setText(text.toString());
-				cell.setStyleRanges(text.getStyleRanges());
+			if (isActiveWorkItem(wi)) {
+				text.append("now ", new NowCellStyler());
+				text.append("(" + strDate + ")", createStyler(wi));
 			} else {
-				cell.setText(strDate);
+				text.append(strDate, createStyler(wi));
 			}
 			break;
 		case 3:
-			cell.setText(wi.getDuration().toString());
+			text.append(wi.getDuration().toString(), createStyler(wi));
 			break;
 		default:
 			break;
 		}
+		
+		cell.setText(text.toString());
+		cell.setStyleRanges(text.getStyleRanges());
+		
 		super.update(cell);
+	}
+
+	private Styler createStyler(WorkItem wi) {
+		return isActiveWorkItem(wi) ? new ActiveWorkItemStyler() : null;
+	}
+
+	private boolean isActiveWorkItem(WorkItem wi) {
+		return wi.getEndDate() == null;
 	}
 
 	private String format(Date date) {
@@ -86,15 +98,36 @@ final class LabelProvider extends StyledCellLabelProvider implements ILabelProvi
 	/**
 	 * 
 	 * @author tobbaumann
-	 * 
+	 *
 	 */
-	private class NowStyler extends Styler {
+	private class ActiveWorkItemStyler extends Styler {
 
 		private final String fontName = viewer.getControl().getFont().getFontData()[0].getName();
-
+		
 		@Override
 		public void applyStyles(TextStyle textStyle) {
-			textStyle.font = JFaceResources.getFontRegistry().getItalic(fontName);
+			textStyle.font = JFaceResources.getFontRegistry().getBold(fontName);
+		}
+		
+	}
+	
+	/**
+	 * 
+	 * @author tobbaumann
+	 * 
+	 */
+	private class NowCellStyler extends ActiveWorkItemStyler {
+		private final String NOW_CELL_STYLE_FONT_NAME = NowCellStyler.class.getName();
+		
+		@Override
+		public void applyStyles(TextStyle textStyle) {
+			super.applyStyles(textStyle);
+			if (!JFaceResources.getFontRegistry().hasValueFor(NOW_CELL_STYLE_FONT_NAME)) {
+				FontDescriptor fd = FontDescriptor.createFrom(textStyle.font);
+				fd.setStyle(SWT.BOLD | SWT.ITALIC);
+				JFaceResources.getFontRegistry().put(NOW_CELL_STYLE_FONT_NAME, fd.getFontData());
+			}
+			textStyle.font = JFaceResources.getFontRegistry().get(NOW_CELL_STYLE_FONT_NAME);
 			Color color = JFaceResources.getColorRegistry().get(JFacePreferences.COUNTER_COLOR);
 			textStyle.foreground = color;
 		}
