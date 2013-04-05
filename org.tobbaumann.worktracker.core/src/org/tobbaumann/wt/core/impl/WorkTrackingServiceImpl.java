@@ -149,7 +149,11 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 
 		// add new work item
 		WorkItem wi = createWorkItem(activity, now, null, null);
-		activeWorkItem = wi;
+		setActiveWorkItem(wi);
+	}
+	
+	void setActiveWorkItem(WorkItem activeWorkItem) {
+		this.activeWorkItem = activeWorkItem;
 	}
 
 	@Override

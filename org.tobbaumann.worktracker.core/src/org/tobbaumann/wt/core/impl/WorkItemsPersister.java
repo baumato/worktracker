@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.tobbaumann.wt.core.impl;
 
+import static com.google.common.collect.Iterables.getLast;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
 
@@ -112,6 +113,9 @@ final class WorkItemsPersister extends ResourceFactoryImpl implements IListChang
 	    }
 	    service.addActivities(activities);
 	    service.addWorkItems(workItems);
+	    if (getLast(workItems).getEndDate() == null) {
+	    	service.setActiveWorkItem(getLast(workItems));
+	    }
 	}
 
 	@Override
