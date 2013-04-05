@@ -47,11 +47,15 @@ final class LabelProvider extends StyledCellLabelProvider implements ILabelProvi
 			break;
 		case 2:			
 			String strDate = format(wi.getEnd());
-			StyledString text = new StyledString();
-			text.append("now ", new NowStyler());
-			text.append("(" + strDate + ")", StyledString.DECORATIONS_STYLER);
-			cell.setText(text.toString());
-			cell.setStyleRanges(text.getStyleRanges());
+			if (wi.getEndDate() == null) {
+				StyledString text = new StyledString();
+				text.append("now ", new NowStyler());
+				text.append("(" + strDate + ")", StyledString.DECORATIONS_STYLER);
+				cell.setText(text.toString());
+				cell.setStyleRanges(text.getStyleRanges());
+			} else {
+				cell.setText(strDate);
+			}
 			break;
 		case 3:
 			cell.setText(wi.getDuration().toString());
