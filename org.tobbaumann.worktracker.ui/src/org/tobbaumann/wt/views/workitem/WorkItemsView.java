@@ -73,7 +73,7 @@ public class WorkItemsView {
 	private void createAndConfigureTableViewer(Composite parent) {
 		tableViewer = new TableViewer(parent, SWT.FULL_SELECTION);
 		tableViewer.setContentProvider(new ArrayContentProvider());
-		tableViewer.setLabelProvider(new LabelProvider());
+		tableViewer.setLabelProvider(new LabelProvider(tableViewer));
 		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {

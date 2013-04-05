@@ -381,9 +381,14 @@ public class StartWorkItemView {
 	@Inject @Optional
 	void startWorkItemPostProcessing(@UIEventTopic(Events.START_WORK_ITEM) String activityName) {
 		txtActivity.setText("");
-		txtActivity.setMessage("Currently working on '" + activityName + "'.");
+		showCurrentActivity(activityName);
 		startedSpinner.setSelection(0);
 		updateActivitiesTable();
+	}
+
+	private void showCurrentActivity(String activityName) {
+		//TODO use status line?
+		//txtActivity.setMessage("Currently working on '" + activityName + "'.");
 	}
 
 	private void updateActivitiesTable() {
