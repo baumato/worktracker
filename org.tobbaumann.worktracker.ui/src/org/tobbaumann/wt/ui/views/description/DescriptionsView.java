@@ -49,7 +49,7 @@ public class DescriptionsView {
 	 */
 	@PostConstruct
 	public void createControls(Composite parent) {
-		txtDescr = new Text(parent, SWT.MULTI);
+		txtDescr = new Text(parent, SWT.MULTI | SWT.WRAP);
 		txtDescr.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		txtDescr.setText("");
 		txtDescr.addFocusListener(new FocusAdapter() {
