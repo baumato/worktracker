@@ -39,6 +39,8 @@ import org.eclipse.jface.preference.JFacePreferences;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -240,6 +242,17 @@ public class StartWorkItemView {
 				txtActivity.setText(selectedActivity.getName());
 			}
 		});
+		activitiesTable.addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				if (event.getSelection().isEmpty()) {
+					return;
+				}
+				IStructuredSelection s = (IStructuredSelection) event.getSelection();
+				Activity a = (Activity) s.getFirstElement();
+				startWorkItem(a.getName());				
+			}
+		});
 		applySorting();
 		applyFilter();
 		applyMenu();
@@ -371,11 +384,15 @@ public class StartWorkItemView {
 	}
 	
 	private void startWorkItem() {
-		if (isNullOrEmpty(txtActivity.getText())) {
+		startWorkItem(txtActivity.getText());
+	}
+	
+	private void startWorkItem(String activityName) {
+		if (isNullOrEmpty(activityName)) {
 			return;
 		}
-		service.startWorkItem(txtActivity.getText(), startedSpinner.getSelection());
-		startWorkItemPostProcessing(txtActivity.getText());
+		service.startWorkItem(activityName, startedSpinner.getSelection());
+		startWorkItemPostProcessing(activityName);
 	}
 
 	@Inject @Optional
