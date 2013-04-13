@@ -22,7 +22,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.e4.core.di.annotations.Execute;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -41,13 +40,11 @@ import com.google.common.collect.Ranges;
 public class CreateFakeDataHandler {
 
 	private WorkTrackingService service;
-	private IEventBroker eventBroker;
 	private Shell shell;
 
 	@Inject
-	public CreateFakeDataHandler(WorkTrackingService service, IEventBroker eventBroker, Shell shell) {
+	public CreateFakeDataHandler(WorkTrackingService service, Shell shell) {
 		this.service = service;
-		this.eventBroker = eventBroker;
 		this.shell = shell;
 	}
 

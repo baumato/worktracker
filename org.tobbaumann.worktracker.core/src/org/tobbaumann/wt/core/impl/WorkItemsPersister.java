@@ -49,7 +49,7 @@ final class WorkItemsPersister extends ResourceFactoryImpl implements IListChang
 	private final WorkTrackingServiceImpl service;
 	private final List<?> lookupTable = newArrayList();
 	private final XMLParserPool parserPool = new XMLParserPoolImpl();
-	private Map<?, ?> nameToFeatureMap = newHashMap();
+	private final Map<?, ?> nameToFeatureMap = newHashMap();
 
 
 	public WorkItemsPersister(WorkTrackingServiceImpl service) {

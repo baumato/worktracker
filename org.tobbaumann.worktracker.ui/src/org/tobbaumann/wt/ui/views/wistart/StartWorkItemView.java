@@ -253,7 +253,7 @@ public class StartWorkItemView {
 				}
 				IStructuredSelection s = (IStructuredSelection) event.getSelection();
 				Activity a = (Activity) s.getFirstElement();
-				startWorkItem(a.getName());				
+				startWorkItem(a.getName());
 			}
 		});
 		applySorting();
@@ -282,8 +282,13 @@ public class StartWorkItemView {
 	}
 
 	private void applyFilter() {
-		this.activitiesTableFilter = new ActivitiesTableFilter();
+		this.activitiesTableFilter = new ActivitiesTableFilter(!getShowUnusedActivitiesToolItem().isSelected());
 		activitiesTable.addFilter(activitiesTableFilter);
+	}
+
+	// TODO how get the MToolItem in a better and more robust way?
+	private MToolItem getShowUnusedActivitiesToolItem() {
+		return (MToolItem) part.getToolbar().getChildren().get(2);
 	}
 
 	private void applyMenu() {
@@ -292,9 +297,9 @@ public class StartWorkItemView {
 			public void menuDetected(MenuDetectEvent e) {
 				createAndShowMenu();
 			}
-		});	
+		});
 	}
-	
+
 	private void createAndShowMenu() {
 		Menu menu = new Menu(activitiesTable.getTable().getShell(), SWT.POP_UP);
 		IStructuredSelection sel = (IStructuredSelection) activitiesTable.getSelection();
@@ -308,8 +313,8 @@ public class StartWorkItemView {
 			menu.setVisible(true);
 		}
 	}
-	
-	
+
+
 	private void addShowActions(Menu menu, final Activity a) {
 		if (!activitiesTable.getSelection().isEmpty()) {
 			MenuItem miShow = new MenuItem(menu, SWT.NONE);
@@ -322,7 +327,7 @@ public class StartWorkItemView {
 				}
 			});
 		}
-		
+
 		if (service.getActivities().size() > 1) {
 			MenuItem miShowAll = new MenuItem(menu, SWT.NONE);
 			miShowAll.setText("Mark all in use");
@@ -351,7 +356,7 @@ public class StartWorkItemView {
 				}
 			});
 		}
-		
+
 		if (service.getActivities().size() > 1) {
 			MenuItem miHideAll = new MenuItem(menu, SWT.NONE);
 			miHideAll.setText("Mark all unused");
@@ -364,10 +369,10 @@ public class StartWorkItemView {
 					}
 					activitiesTable.refresh();
 				}
-			});			
+			});
 		}
 	}
-	
+
 	private void makeActivitiesTableDragSource() {
 		DragSource ds = new DragSource(activitiesTable.getTable(), DND.DROP_MOVE);
 		ds.setTransfer(new Transfer[] { TextTransfer.getInstance() });
@@ -385,7 +390,7 @@ public class StartWorkItemView {
 		this.activitiesTableFilter.toggleFilterUsage();
 		this.activitiesTable.refresh();
 	}
-	
+
 	private void startWorkItem() {
 		startWorkItem(txtActivity.getText());
 	}
@@ -506,16 +511,20 @@ public class StartWorkItemView {
 			}
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @author tobbaumann
 	 *
 	 */
 	private static final class ActivitiesTableFilter extends ViewerFilter {
 
-		private boolean filterActive = true;
-		
+		private boolean filterActive;
+
+		public ActivitiesTableFilter(boolean filterActive) {
+			this.filterActive = filterActive;
+		}
+
 		@Override
 		public boolean select(Viewer viewer, Object parentElement,
 				Object element) {
@@ -525,7 +534,7 @@ public class StartWorkItemView {
 			Activity a = (Activity) element;
 			return a.isInUse();
 		}
-		
+
 		void toggleFilterUsage() {
 			filterActive = !filterActive;
 		}

@@ -21,7 +21,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.e4.core.di.annotations.Execute;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -37,12 +36,10 @@ import com.google.common.base.Throwables;
 public class ImportOldWorkTrackerDataHandler {
 
 	private final WorkTrackingService service;
-	private final IEventBroker eventBroker;
 
 	@Inject
-	public ImportOldWorkTrackerDataHandler(WorkTrackingService service, IEventBroker eventBroker) {
+	public ImportOldWorkTrackerDataHandler(WorkTrackingService service) {
 		this.service = service;
-		this.eventBroker = eventBroker;
 	}
 
 	@Execute
