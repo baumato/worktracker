@@ -10,8 +10,6 @@
  ******************************************************************************/
 package org.tobbaumann.wt.ui.views.date;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.Date;
 
 import javax.annotation.PostConstruct;
@@ -134,24 +132,15 @@ public class DatesView implements Switchable {
 		switchComposite.switchActiveControl();
 		viewer.refresh(true);
 	}
-	
+
 	@Inject
 	@Optional
 	void workItemStarted(@UIEventTopic(Events.START_WORK_ITEM)  com.google.common.base.Optional<WorkItem> optStartedWorkItem) {
 		if (!optStartedWorkItem.isPresent()) {
 			return;
 		}
-		// TODO getDateWithoutTime from WorkItem
 		WorkItem wi = optStartedWorkItem.get();
-		DateFormat df = DateFormat.getDateInstance();
-		Date d;
-		try {
-			d = df.parse(wi.formatStart(df));
-		} catch (ParseException e) {
-			return;
-		}
-		viewer.setSelection(new StructuredSelection(d));
+		viewer.setSelection(new StructuredSelection(wi.getDatePartOfStart()));
 		requestFocus();
-
 	}
 }

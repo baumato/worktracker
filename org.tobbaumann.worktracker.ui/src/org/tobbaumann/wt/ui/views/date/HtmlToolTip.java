@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     tobba_000 - initial API and implementation
  ******************************************************************************/
@@ -25,7 +25,11 @@ public class HtmlToolTip extends ToolTip {
 	private String toolTipText;
 	private Point size;
 
-	public HtmlToolTip(Control control, String toolTipText, int width, int height) {
+	static void apply(Control control, String toolTipText, int width, int height) {
+		new HtmlToolTip(control, toolTipText, width, height);
+	}
+
+	private HtmlToolTip(Control control, String toolTipText, int width, int height) {
 		super(control);
 		this.toolTipText = toolTipText;
 		this.size = new Point(width, height);
@@ -35,7 +39,7 @@ public class HtmlToolTip extends ToolTip {
 	protected Composite createToolTipContentArea(Event event, Composite parent) {
 		Composite comp = new Composite(parent, SWT.NONE);
 		GridLayoutFactory.fillDefaults().spacing(0, 0).applyTo(comp);
-		Browser browser = new Browser(comp, SWT.BORDER | SWT.NO_SCROLL);
+		Browser browser = new Browser(comp, SWT.NO_SCROLL);
 		browser.setText(toolTipText);
 		browser.setLayoutData(new GridData(size.x, size.y));
 		return comp;
