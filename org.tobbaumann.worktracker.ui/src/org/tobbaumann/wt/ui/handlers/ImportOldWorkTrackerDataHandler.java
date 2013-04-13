@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
@@ -31,7 +31,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.core.WorkTrackingService.CreationResult;
 import org.tobbaumann.wt.core.WorkTrackingService.OperationCanceledException;
-import org.tobbaumann.wt.ui.event.Events;
 
 import com.google.common.base.Throwables;
 
@@ -63,13 +62,11 @@ public class ImportOldWorkTrackerDataHandler {
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException,
 						InterruptedException {
-					eventBroker.send(Events.START_IMPORT, Events.START_IMPORT);
 					try {
 						resultExchange[0] = service.importData(path, monitor);
 					} catch (OperationCanceledException e) {
 						throw new InterruptedException(Throwables.getStackTraceAsString(e));
 					}
-					eventBroker.send(Events.END_IMPORT, Events.END_IMPORT);
 				}
 			});
 			handleImportResult(shell, errMsg, resultExchange[0]);

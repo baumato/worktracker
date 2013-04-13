@@ -34,7 +34,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.core.WorkTrackingService.CreationResult;
 import org.tobbaumann.wt.core.WorkTrackingService.OperationCanceledException;
-import org.tobbaumann.wt.ui.event.Events;
 
 import com.google.common.base.Throwables;
 import com.google.common.collect.Ranges;
@@ -66,13 +65,11 @@ public class CreateFakeDataHandler {
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException,
 						InterruptedException {
-					eventBroker.send(Events.START_IMPORT, Events.START_IMPORT);
 					try {
 						resultExchange[0] = service.createFakeData(numberOfDays, monitor);
 					} catch (OperationCanceledException e) {
 						throw new InterruptedException(Throwables.getStackTraceAsString(e));
 					}
-					eventBroker.send(Events.END_IMPORT, Events.END_IMPORT);
 				}
 			});
 			handleImportResult(shell, errMsg, resultExchange[0]);
@@ -103,7 +100,7 @@ public class CreateFakeDataHandler {
 					}
 				});
 		dialog.setBlockOnOpen(true);
-		return (dialog.open() == Window.OK) ? Integer.valueOf(dialog.getValue()) : null;
+		return dialog.open() == Window.OK ? Integer.valueOf(dialog.getValue()) : null;
 	}
 
 	private void handleImportResult(final Shell shell, final String errMsg, final CreationResult ir) {
