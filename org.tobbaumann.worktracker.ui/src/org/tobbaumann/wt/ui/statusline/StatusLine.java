@@ -8,7 +8,7 @@
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
-package org.tobbaumann.wt.statusline;
+package org.tobbaumann.wt.ui.statusline;
 
 import java.text.DateFormat;
 

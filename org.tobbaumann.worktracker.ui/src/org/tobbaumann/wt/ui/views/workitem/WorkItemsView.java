@@ -8,7 +8,7 @@
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
-package org.tobbaumann.wt.views.workitem;
+package org.tobbaumann.wt.ui.views.workitem;
 
 
 import java.util.Arrays;

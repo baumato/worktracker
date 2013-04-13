@@ -8,7 +8,7 @@
  * Contributors:
  *     tobba_000 - initial API and implementation
  ******************************************************************************/
-package org.tobbaumann.wt.views.workitem;
+package org.tobbaumann.wt.ui.views.workitem;
 
 import java.text.DateFormat;
 import java.util.Date;

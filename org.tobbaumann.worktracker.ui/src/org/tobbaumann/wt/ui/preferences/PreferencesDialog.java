@@ -8,7 +8,7 @@
  * Contributors:
  *     tobba_000 - initial API and implementation
  ******************************************************************************/
-package org.tobbaumann.wt.preferences;
+package org.tobbaumann.wt.ui.preferences;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;

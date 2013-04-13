@@ -8,7 +8,7 @@
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
-package org.tobbaumann.wt.preferences;
+package org.tobbaumann.wt.ui.preferences;
 
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.swt.widgets.Shell;
