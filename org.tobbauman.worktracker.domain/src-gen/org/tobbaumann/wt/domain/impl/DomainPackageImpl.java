@@ -323,7 +323,7 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EOperation getWorkItem__FormatEnd__DateFormat()
+  public EOperation getWorkItem__GetDatePartOfStart()
   {
     return workItemEClass.getEOperations().get(1);
   }
@@ -333,9 +333,19 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EOperation getWorkItem__CompareTo__WorkItem()
+  public EOperation getWorkItem__FormatEnd__DateFormat()
   {
     return workItemEClass.getEOperations().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EOperation getWorkItem__CompareTo__WorkItem()
+  {
+    return workItemEClass.getEOperations().get(3);
   }
 
   /**
@@ -587,6 +597,7 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
     createEReference(workItemEClass, WORK_ITEM__DURATION);
     createEAttribute(workItemEClass, WORK_ITEM__DESCRIPTION);
     createEOperation(workItemEClass, WORK_ITEM___FORMAT_START__DATEFORMAT);
+    createEOperation(workItemEClass, WORK_ITEM___GET_DATE_PART_OF_START);
     createEOperation(workItemEClass, WORK_ITEM___FORMAT_END__DATEFORMAT);
     createEOperation(workItemEClass, WORK_ITEM___COMPARE_TO__WORKITEM);
 
@@ -673,6 +684,8 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
     EOperation op = initEOperation(getWorkItem__FormatStart__DateFormat(), theEcorePackage.getEString(), "formatStart", 0, 1, !IS_UNIQUE, IS_ORDERED);
     addEParameter(op, this.getDateFormat(), "df", 0, 1, !IS_UNIQUE, IS_ORDERED);
 
+    initEOperation(getWorkItem__GetDatePartOfStart(), this.getDate(), "getDatePartOfStart", 0, 1, !IS_UNIQUE, IS_ORDERED);
+
     op = initEOperation(getWorkItem__FormatEnd__DateFormat(), theEcorePackage.getEString(), "formatEnd", 0, 1, !IS_UNIQUE, IS_ORDERED);
     addEParameter(op, this.getDateFormat(), "df", 0, 1, !IS_UNIQUE, IS_ORDERED);
 
@@ -733,7 +746,7 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
        {
        "Ecore", "http://www.eclipse.org/emf/2002/Ecore",
        "GenModel", "http://www.eclipse.org/emf/2002/GenModel"
-       });																					
+       });																						
   }
 
 } //DomainPackageImpl

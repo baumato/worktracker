@@ -225,6 +225,15 @@ public interface WorkItem extends EObject, Comparable<WorkItem>
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   * @model kind="operation" dataType="org.tobbaumann.wt.domain.Date" unique="false"
+   *        annotation="http://www.eclipse.org/emf/2002/GenModel body='try\n{\n\tfinal <%java.text.DateFormat%> df = <%java.text.DateFormat%>.getDateInstance();\n\t<%org.tobbaumann.wt.domain.WorkItem%> _this = this;\n\t<%java.lang.String%> _formatStart = _this.formatStart(df);\n\treturn df.parse(_formatStart);\n}\ncatch (final Throwable _t) {\n\tif (_t instanceof <%java.text.ParseException%>) {\n\t\tfinal <%java.text.ParseException%> e = (<%java.text.ParseException%>)_t;\n\t\t<%java.lang.RuntimeException%> _runtimeException = new <%java.lang.RuntimeException%>(e);\n\t\tthrow _runtimeException;\n\t}\n\telse\n\t{\n\t\tthrow <%org.eclipse.xtext.xbase.lib.Exceptions%>.sneakyThrow(_t);\n\t}\n}'"
+   * @generated
+   */
+  Date getDatePartOfStart();
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
    * @model unique="false" dfDataType="org.tobbaumann.wt.domain.DateFormat" dfUnique="false"
    *        annotation="http://www.eclipse.org/emf/2002/GenModel body='<%org.tobbaumann.wt.domain.WorkItem%> _this = this;\n<%java.util.Date%> _end = _this.getEnd();\nreturn df.format(_end);'"
    * @generated

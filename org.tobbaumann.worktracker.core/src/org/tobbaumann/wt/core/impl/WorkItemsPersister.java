@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
@@ -76,6 +76,7 @@ final class WorkItemsPersister extends ResourceFactoryImpl implements IListChang
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private void commitUnchecked() throws IOException {
 		URI uri = URI.createURI(WORKTRACKER_STORAGE_URI);
 		XMIResource resource = createResource(uri);

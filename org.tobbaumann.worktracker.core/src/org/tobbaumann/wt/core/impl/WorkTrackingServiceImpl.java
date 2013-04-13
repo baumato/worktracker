@@ -13,8 +13,6 @@ package org.tobbaumann.wt.core.impl;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collection;
@@ -285,7 +283,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 				@Override
 				public void handleRemove(int index, Object element) {
 					WorkItem wi = (WorkItem) element;
-					Date date = getDatePartOfWorkItemStart(wi);
+					Date date = wi.getDatePartOfStart();
 					if (getWorkItems(date).isEmpty()) {
 						workItemDates.remove(date);
 					}
@@ -294,18 +292,9 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 				@Override
 				public void handleAdd(int index, Object element) {
 					WorkItem wi = (WorkItem) element;
-					workItemDates.add(getDatePartOfWorkItemStart(wi));
+					workItemDates.add(wi.getDatePartOfStart());
 				}
 			});
-		}
-
-		private Date getDatePartOfWorkItemStart(WorkItem wi) {
-			try {
-				DateFormat df = DateFormat.getDateInstance();
-				return df.parse(wi.formatStart(df));
-			} catch (ParseException e) {
-				throw new RuntimeException(e);
-			}
 		}
 	}
 

@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
@@ -54,9 +54,11 @@ class WorkTrackerDataImporter {
 			SubMonitor progress = SubMonitor.convert(monitor, "Import data from directory " + path.getFileName(), 100);
 			DirectoryScanner scanner = new DirectoryScanner(path);
 			XmlFileProcessor fp = new XmlFileProcessor();
-			scanner.scanDirectoryRecursively(fp, progress.newChild(100));
+			scanner.scanDirectoryRecursively(fp, progress.newChild(90));
 			service.addActivities(fp.handler.activities);
+			progress.worked(5);
 			service.addWorkItems(fp.handler.workItems);
+			progress.worked(5);
 			int activitiesSize = fp.handler.activities.size();
 			int workItemsSize = fp.handler.workItems.size();
 			return new CreationResult(activitiesSize, workItemsSize, fp.errors);

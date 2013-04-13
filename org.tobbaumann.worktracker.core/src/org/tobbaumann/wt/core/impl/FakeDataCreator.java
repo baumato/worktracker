@@ -47,11 +47,13 @@ class FakeDataCreator {
 
 	CreationResult createFakeData(int numberOfDays, IProgressMonitor monitor) {
 		SubMonitor progress = SubMonitor.convert(monitor, "Creating fake data", 100);
-		List<Activity> activities = createActivities(progress.newChild(30));
+		List<Activity> activities = createActivities(progress.newChild(20));
 		ImmutableSet<WorkItem> workItems = createItems(numberOfDays, activities,
 				progress.newChild(70));
 		service.addActivities(activities);
+		progress.worked(5);
 		service.addWorkItems(workItems);
+		progress.worked(5);
 		return new CreationResult(activities.size(), workItems.size(),
 				Collections.<IStatus> emptyList());
 	}

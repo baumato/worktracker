@@ -263,13 +263,22 @@ public interface DomainPackage extends EPackage
   int WORK_ITEM___FORMAT_START__DATEFORMAT = COMPARABLE_OPERATION_COUNT + 0;
 
   /**
+   * The operation id for the '<em>Get Date Part Of Start</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WORK_ITEM___GET_DATE_PART_OF_START = COMPARABLE_OPERATION_COUNT + 1;
+
+  /**
    * The operation id for the '<em>Format End</em>' operation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int WORK_ITEM___FORMAT_END__DATEFORMAT = COMPARABLE_OPERATION_COUNT + 1;
+  int WORK_ITEM___FORMAT_END__DATEFORMAT = COMPARABLE_OPERATION_COUNT + 2;
 
   /**
    * The operation id for the '<em>Compare To</em>' operation.
@@ -278,7 +287,7 @@ public interface DomainPackage extends EPackage
    * @generated
    * @ordered
    */
-  int WORK_ITEM___COMPARE_TO__WORKITEM = COMPARABLE_OPERATION_COUNT + 2;
+  int WORK_ITEM___COMPARE_TO__WORKITEM = COMPARABLE_OPERATION_COUNT + 3;
 
   /**
    * The number of operations of the '<em>Work Item</em>' class.
@@ -287,7 +296,7 @@ public interface DomainPackage extends EPackage
    * @generated
    * @ordered
    */
-  int WORK_ITEM_OPERATION_COUNT = COMPARABLE_OPERATION_COUNT + 3;
+  int WORK_ITEM_OPERATION_COUNT = COMPARABLE_OPERATION_COUNT + 4;
 
   /**
    * The meta object id for the '{@link org.tobbaumann.wt.domain.impl.WorkItemSummaryImpl <em>Work Item Summary</em>}' class.
@@ -694,6 +703,16 @@ public interface DomainPackage extends EPackage
   EOperation getWorkItem__FormatStart__DateFormat();
 
   /**
+   * Returns the meta object for the '{@link org.tobbaumann.wt.domain.WorkItem#getDatePartOfStart() <em>Get Date Part Of Start</em>}' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the '<em>Get Date Part Of Start</em>' operation.
+   * @see org.tobbaumann.wt.domain.WorkItem#getDatePartOfStart()
+   * @generated
+   */
+  EOperation getWorkItem__GetDatePartOfStart();
+
+  /**
    * Returns the meta object for the '{@link org.tobbaumann.wt.domain.WorkItem#formatEnd(java.text.DateFormat) <em>Format End</em>}' operation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1090,6 +1109,14 @@ public interface DomainPackage extends EPackage
      * @generated
      */
     EOperation WORK_ITEM___FORMAT_START__DATEFORMAT = eINSTANCE.getWorkItem__FormatStart__DateFormat();
+
+    /**
+     * The meta object literal for the '<em><b>Get Date Part Of Start</b></em>' operation.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EOperation WORK_ITEM___GET_DATE_PART_OF_START = eINSTANCE.getWorkItem__GetDatePartOfStart();
 
     /**
      * The meta object literal for the '<em><b>Format End</b></em>' operation.

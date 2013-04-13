@@ -8,6 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import java.text.DateFormat;
 
+import java.text.ParseException;
 import java.util.Date;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -21,6 +22,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
+import org.eclipse.xtext.xbase.lib.Exceptions;
 import org.tobbaumann.wt.domain.Activity;
 import org.tobbaumann.wt.domain.DomainFactory;
 import org.tobbaumann.wt.domain.DomainPackage;
@@ -435,6 +437,33 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
    * <!-- end-user-doc -->
    * @generated
    */
+  public Date getDatePartOfStart()
+  {
+    try
+    {
+      final DateFormat df = DateFormat.getDateInstance();
+      WorkItem _this = this;
+      String _formatStart = _this.formatStart(df);
+      return df.parse(_formatStart);
+    }
+    catch (final Throwable _t) {
+      if (_t instanceof ParseException) {
+        final ParseException e = (ParseException)_t;
+        RuntimeException _runtimeException = new RuntimeException(e);
+        throw _runtimeException;
+      }
+      else
+      {
+        throw Exceptions.sneakyThrow(_t);
+      }
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public String formatEnd(DateFormat df)
   {
     WorkItem _this = this;
@@ -602,6 +631,8 @@ public class WorkItemImpl extends MinimalEObjectImpl.Container implements WorkIt
     {
       case DomainPackage.WORK_ITEM___FORMAT_START__DATEFORMAT:
         return formatStart((DateFormat)arguments.get(0));
+      case DomainPackage.WORK_ITEM___GET_DATE_PART_OF_START:
+        return getDatePartOfStart();
       case DomainPackage.WORK_ITEM___FORMAT_END__DATEFORMAT:
         return formatEnd((DateFormat)arguments.get(0));
       case DomainPackage.WORK_ITEM___COMPARE_TO__WORKITEM:
