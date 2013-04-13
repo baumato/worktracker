@@ -40,6 +40,8 @@ import org.eclipse.jface.preference.JFacePreferences;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -133,7 +135,7 @@ public class StartWorkItemView {
 
 	private void createActivityTextField(Composite stripe) {
 		txtActivity = new Text(stripe, SWT.SINGLE | SWT.LEAD | SWT.BORDER);
-		txtActivity.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		txtActivity.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		txtActivity.setMessage("Enter activity here...");
 		txtActivity.setToolTipText("Enter the name of your activity you want to start.");
 		txtActivity.addKeyListener(new StartWorkItemOnKeyShortcutListener());
@@ -187,7 +189,7 @@ public class StartWorkItemView {
 
 	private void createStartedNumberOfMintuesBeforeSpinner(Composite stripe) {
 		startedSpinner = new Spinner (stripe, SWT.BORDER);
-		startedSpinner.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
+		startedSpinner.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 		startedSpinner.setMinimum(0);
 		startedSpinner.setMaximum(24*60);
 		startedSpinner.setSelection(0);
@@ -199,7 +201,7 @@ public class StartWorkItemView {
 
 	private void createStartWorkItemButton(Composite stripe) {
 		btnAdd = new Button(stripe, SWT.PUSH);
-		btnAdd.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
+		btnAdd.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 		btnAdd.setImage(getAddImage());
 		btnAdd.setToolTipText("Starts a new work item with the entered activity.");
 		btnAdd.setEnabled(false);
@@ -239,6 +241,17 @@ public class StartWorkItemView {
 				if (event.getSelection().isEmpty()) return;
 				Activity selectedActivity = (Activity) ((IStructuredSelection)event.getSelection()).getFirstElement();
 				txtActivity.setText(selectedActivity.getName());
+			}
+		});
+		activitiesTable.addDoubleClickListener(new IDoubleClickListener() {
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				if (event.getSelection().isEmpty()) {
+					return;
+				}
+				IStructuredSelection s = (IStructuredSelection) event.getSelection();
+				Activity a = (Activity) s.getFirstElement();
+				startWorkItem(a.getName());				
 			}
 		});
 		applySorting();
@@ -372,7 +385,10 @@ public class StartWorkItemView {
 	}
 	
 	private void startWorkItem() {
-		String activityName = txtActivity.getText();
+		startWorkItem(txtActivity.getText());
+	}
+
+	private void startWorkItem(String activityName) {
 		if (isNullOrEmpty(activityName)) {
 			return;
 		}
