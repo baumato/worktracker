@@ -27,6 +27,7 @@ import org.eclipse.core.databinding.observable.list.IListChangeListener;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.list.ListChangeEvent;
 import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -88,8 +89,8 @@ import com.google.common.collect.Ordering;
 
 public class StartWorkItemView {
 
-	@Inject
-	private WorkTrackingService service;
+	private @Inject WorkTrackingService service;
+	private @Inject IEventBroker eventBroker;
 
 	private @Inject MPart part;
 	private Text txtActivity;
@@ -132,7 +133,7 @@ public class StartWorkItemView {
 
 	private void createActivityTextField(Composite stripe) {
 		txtActivity = new Text(stripe, SWT.SINGLE | SWT.LEAD | SWT.BORDER);
-		txtActivity.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		txtActivity.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		txtActivity.setMessage("Enter activity here...");
 		txtActivity.setToolTipText("Enter the name of your activity you want to start.");
 		txtActivity.addKeyListener(new StartWorkItemOnKeyShortcutListener());
@@ -186,7 +187,7 @@ public class StartWorkItemView {
 
 	private void createStartedNumberOfMintuesBeforeSpinner(Composite stripe) {
 		startedSpinner = new Spinner (stripe, SWT.BORDER);
-		startedSpinner.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+		startedSpinner.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
 		startedSpinner.setMinimum(0);
 		startedSpinner.setMaximum(24*60);
 		startedSpinner.setSelection(0);
@@ -198,7 +199,7 @@ public class StartWorkItemView {
 
 	private void createStartWorkItemButton(Composite stripe) {
 		btnAdd = new Button(stripe, SWT.PUSH);
-		btnAdd.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+		btnAdd.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
 		btnAdd.setImage(getAddImage());
 		btnAdd.setToolTipText("Starts a new work item with the entered activity.");
 		btnAdd.setEnabled(false);
@@ -371,24 +372,18 @@ public class StartWorkItemView {
 	}
 	
 	private void startWorkItem() {
-		if (isNullOrEmpty(txtActivity.getText())) {
+		String activityName = txtActivity.getText();
+		if (isNullOrEmpty(activityName)) {
 			return;
 		}
-		service.startWorkItem(txtActivity.getText(), startedSpinner.getSelection());
-		startWorkItemPostProcessing(txtActivity.getText());
+		service.startWorkItem(activityName, startedSpinner.getSelection());
+		eventBroker.send(Events.START_WORK_ITEM, activityName);
 	}
 
 	@Inject @Optional
 	void startWorkItemPostProcessing(@UIEventTopic(Events.START_WORK_ITEM) String activityName) {
 		txtActivity.setText("");
-		showCurrentActivity(activityName);
 		startedSpinner.setSelection(0);
-		updateActivitiesTable();
-	}
-
-	private void showCurrentActivity(String activityName) {
-		//TODO use status line?
-		//txtActivity.setMessage("Currently working on '" + activityName + "'.");
 	}
 
 	private void updateActivitiesTable() {
@@ -496,7 +491,7 @@ public class StartWorkItemView {
 	
 	/**
 	 * 
-	 * @author tobba_000
+	 * @author tobbaumann
 	 *
 	 */
 	private static final class ActivitiesTableFilter extends ViewerFilter {
