@@ -57,6 +57,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	private final IObservableList activities;
 	private final IObservableSet workItemDates;
 	private final IObservableList workItems;
+	private final WorkItemsPersister persister;
 	private WorkItem activeWorkItem;
 
 	public WorkTrackingServiceImpl() {
@@ -64,14 +65,15 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		this.activities = new WritableList(newArrayList(), Activity.class);
 		this.workItemDates = new WritableSet(newArrayList(), Date.class);
 		this.workItems = new WritableList(newArrayList(), WorkItem.class);
-		WorkItemsPersister persister = new WorkItemsPersister(this);
-		this.workItems.addListChangeListener(persister);
 		this.workItems.addListChangeListener(new WorkItemDatesUpdater());
-		persister.load();
+		this.persister = new WorkItemsPersister(this);
 	}
 
 	public void activate() {
 		LOGGER.trace("activate");
+		persister.load();
+		// add persister as list change listener after load to save one commit
+		this.workItems.addListChangeListener(persister);
 	}
 
 	public void deactivate() {
@@ -151,9 +153,14 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		WorkItem wi = createWorkItem(activity, now, null, null);
 		setActiveWorkItem(wi);
 	}
-	
+
 	void setActiveWorkItem(WorkItem activeWorkItem) {
 		this.activeWorkItem = activeWorkItem;
+	}
+
+	@Override
+	public Optional<WorkItem> getActiveWorkItem() {
+		return Optional.fromNullable(activeWorkItem);
 	}
 
 	@Override

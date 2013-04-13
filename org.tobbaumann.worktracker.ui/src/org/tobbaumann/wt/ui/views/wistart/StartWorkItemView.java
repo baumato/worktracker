@@ -238,7 +238,9 @@ public class StartWorkItemView {
 		activitiesTable.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				if (event.getSelection().isEmpty()) return;
+				if (event.getSelection().isEmpty()) {
+					return;
+				}
 				Activity selectedActivity = (Activity) ((IStructuredSelection)event.getSelection()).getFirstElement();
 				txtActivity.setText(selectedActivity.getName());
 			}
@@ -393,11 +395,11 @@ public class StartWorkItemView {
 			return;
 		}
 		service.startWorkItem(activityName, startedSpinner.getSelection());
-		eventBroker.send(Events.START_WORK_ITEM, activityName);
+		eventBroker.send(Events.START_WORK_ITEM, service.getActiveWorkItem());
 	}
 
 	@Inject @Optional
-	void startWorkItemPostProcessing(@UIEventTopic(Events.START_WORK_ITEM) String activityName) {
+	void workItemStarted(@SuppressWarnings("unused") @UIEventTopic(Events.START_WORK_ITEM) Object o) {
 		txtActivity.setText("");
 		startedSpinner.setSelection(0);
 	}
@@ -426,8 +428,8 @@ public class StartWorkItemView {
 		}
 
 		private boolean altAPressed(KeyEvent e) {
-			return ((e.stateMask & SWT.ALT) != 0)
-					&& (e.character == 'a');
+			return (e.stateMask & SWT.ALT) != 0
+					&& e.character == 'a';
 		}
 
 		private boolean isProposalPopupOpen() {

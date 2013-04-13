@@ -211,7 +211,7 @@ public class StartWorkItemWithButtonView implements Switchable {
 			saveButtonTextsToPreferences(btn.getParent());
 		}
 	}
-	
+
 	private void updateButtonWithActivityName(Button btn, String activityName, int buttonNumber) {
 		btn.setData(BTN_DATA_KEY_ACTIVITY_NAME, activityName);
 		btn.setText(createButtonText(activityName, buttonNumber));
@@ -274,7 +274,8 @@ public class StartWorkItemWithButtonView implements Switchable {
 	private void startWorkItem(String activityName) {
 		if (activityName != null && !activityName.trim().isEmpty()) {
 			service.startWorkItem(activityName, 0);
-			eventBroker.send(Events.START_WORK_ITEM, activityName);
+			eventBroker.send(Events.START_WORK_ITEM,
+					service.getActiveWorkItem());
 		}
 	}
 

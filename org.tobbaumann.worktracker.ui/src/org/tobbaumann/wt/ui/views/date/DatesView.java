@@ -10,16 +10,14 @@
  ******************************************************************************/
 package org.tobbaumann.wt.ui.views.date;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Date;
-import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.core.databinding.observable.set.IObservableSet;
-import org.eclipse.core.databinding.observable.set.ISetChangeListener;
-import org.eclipse.core.databinding.observable.set.SetChangeEvent;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UIEventTopic;
@@ -38,12 +36,12 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.tobbaumann.wt.core.WorkTrackingService;
+import org.tobbaumann.wt.domain.WorkItem;
 import org.tobbaumann.wt.ui.event.Events;
 import org.tobbaumann.wt.ui.views.SwitchComposite;
 import org.tobbaumann.wt.ui.views.Switchable;
 import org.tobbaumann.wt.ui.views.ViewerUtils;
 
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 
 public class DatesView implements Switchable {
@@ -57,14 +55,10 @@ public class DatesView implements Switchable {
 	private Composite settingsPanel;
 	private TableViewer viewer;
 
-	private final ViewerSelectionOnNewDateUpdater selectionUpdater;
-
-
 	@Inject
 	public DatesView(WorkTrackingService service, ESelectionService selectionService) {
 		this.service = service;
 		this.selectionService = selectionService;
-		this.selectionUpdater = new ViewerSelectionOnNewDateUpdater();
 	}
 
 	/**
@@ -90,7 +84,6 @@ public class DatesView implements Switchable {
 		viewer.setComparator(new ViewerComparator(Ordering.natural().reverse()));
 		viewer.setInput(service.readDates());
 		updateSelectionServiceIfViewerSelectionChanges();
-		updateViewerSelectionIfNewDateAdded(service.readDates());
 		ViewerUtils.requestFocusOnMouseEnter(viewer);
 	}
 
@@ -102,13 +95,6 @@ public class DatesView implements Switchable {
 				selectionService.setSelection(date);
 			}
 		});
-	}
-
-	private void updateViewerSelectionIfNewDateAdded(IObservableSet dates) {
-		// this listener registration must be after setInput,
-		// otherwise the ContentProvider has not updated the viewer and
-		// the selection can't be set.
-		dates.addSetChangeListener(selectionUpdater);
 	}
 
 	private void createSettingsPanel() {
@@ -148,49 +134,24 @@ public class DatesView implements Switchable {
 		switchComposite.switchActiveControl();
 		viewer.refresh(true);
 	}
-
-	@Inject @Optional
-	void startViewerSelectionUpdating(@UIEventTopic(Events.END_IMPORT) String s) {
-		this.selectionUpdater.startUpdating();
-	}
-
-	@Inject @Optional
-	void stopViewerSelectionUpdating(@UIEventTopic(Events.START_IMPORT) String s) {
-		this.selectionUpdater.stopUdating();
-	}
-
-	/**
-	 *
-	 * @author tobbaumann
-	 *
-	 */
-	private final class ViewerSelectionOnNewDateUpdater implements ISetChangeListener {
-
-		private boolean performUpdate = true;
-
-		@Override
-		public void handleSetChange(SetChangeEvent event) {
-			if (!performUpdate) {
-				return;
-			}
-			Set<?> added = event.diff.getAdditions();
-			if (!added.isEmpty()) {
-				update(added);
-			}
+	
+	@Inject
+	@Optional
+	void workItemStarted(@UIEventTopic(Events.START_WORK_ITEM)  com.google.common.base.Optional<WorkItem> optStartedWorkItem) {
+		if (!optStartedWorkItem.isPresent()) {
+			return;
 		}
-
-		private void update(Set<?> added) {
-			final Date d = (Date) Iterables.getLast(added);
-			viewer.setSelection(new StructuredSelection(d));
-			requestFocus();
+		// TODO getDateWithoutTime from WorkItem
+		WorkItem wi = optStartedWorkItem.get();
+		DateFormat df = DateFormat.getDateInstance();
+		Date d;
+		try {
+			d = df.parse(wi.formatStart(df));
+		} catch (ParseException e) {
+			return;
 		}
+		viewer.setSelection(new StructuredSelection(d));
+		requestFocus();
 
-		void startUpdating() {
-			performUpdate = true;
-		}
-
-		void stopUdating() {
-			performUpdate = false;
-		}
 	}
 }

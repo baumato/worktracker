@@ -42,6 +42,7 @@ public interface WorkTrackingService {
 	IObservableList getWorkItems();
 	List<WorkItem> getWorkItems(Date date);
 	void startWorkItem(String activityName, int numberOfMinutesBeforeNow);
+	Optional<WorkItem> getActiveWorkItem();
 
 	List<WorkItemSummary> getWorkItemSummaries(Date date);
 
