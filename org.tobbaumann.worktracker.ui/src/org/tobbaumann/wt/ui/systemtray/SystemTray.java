@@ -16,13 +16,14 @@ import java.net.URI;
 import java.net.URL;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.e4.core.di.annotations.Creatable;
-import org.eclipse.e4.core.di.extensions.Preference;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
@@ -45,10 +46,11 @@ import org.tobbaumann.wt.ui.event.Events;
 import org.tobbaumann.wt.ui.preferences.Preferences;
 
 @Creatable
+@Singleton
 public class SystemTray {
 
-	private static final String REMINDER_TEXT = "Do you still working on '%s'?";
-	private static final String TOOL_TIP_TEXT = "Working on '%s'";
+	private static final String REMINDER_TEXT = "Do you still working on \"%s\"?";
+	private static final String TOOL_TIP_TEXT = "Working on \"%s\"";
 	private static final String TRAY_ICON_IMAGE_NAME = "trayIcon";
 
 	static {
@@ -65,9 +67,8 @@ public class SystemTray {
 	private @Inject	Shell shell;
 	private TrayItem trayItem;
 	private ToolTip reminderToolTip;
+	private Job reminderJob = null;
 	private volatile String currentTooltipText = null;
-	private boolean useReminder = Preferences.USE_REMINDER_DEFAULT;
-	private long remindFrequencyInMillis = Preferences.REMIND_FREQUENCY_DEFAULT;
 
 	@Inject
 	public SystemTray(Shell shell) {
@@ -85,7 +86,6 @@ public class SystemTray {
 		reminderToolTip = createReminderToolTip();
 		switchApplicationStateOnMinimize();
 		switchApplicationStateOnSelection();
-		remindPeriodically();
 		createTrayItemMenu();
 	}
 
@@ -123,14 +123,18 @@ public class SystemTray {
 	}
 
 	private void remindPeriodically() {
-		Job reminderJob = new Job("Show Reminder Persiodically") {
+		if (reminderJob != null) {
+			return;
+		}
+		reminderJob = new Job("Show Reminder Periodically") {
 			@Override
 			protected IStatus run(IProgressMonitor monitor) {
 				shell.getDisplay().asyncExec(new Runnable() {
 					@Override
 					public void run() {
-						if (!useReminder
+						if (!useReminder()
 								|| isNullOrEmpty(currentTooltipText)) {
+							schedule(10000);
 							return;
 						}
 						shell.getDisplay().syncExec(new Runnable() {
@@ -139,13 +143,19 @@ public class SystemTray {
 								showReminder();
 							}
 						});
-						schedule(remindFrequencyInMillis);
+						schedule(getRemindFrequencyInMillis());
 					}
 				});
 				return Status.OK_STATUS;
 			}
 		};
-		reminderJob.schedule(remindFrequencyInMillis);
+		reminderJob.schedule(getRemindFrequencyInMillis());
+	}
+
+	private long getRemindFrequencyInMillis() {
+		return ConfigurationScope.INSTANCE.getNode(Preferences.REMINDER)
+				.getLong(Preferences.REMIND_FREQUENCY,
+						Preferences.REMIND_FREQUENCY_DEFAULT);
 	}
 
 	private void createTrayItemMenu() {
@@ -196,22 +206,8 @@ public class SystemTray {
 		});
 	}
 
-	@Inject
-	@org.eclipse.e4.core.di.annotations.Optional
-	public void setShouldUseReminder(
-			@Preference(nodePath = Preferences.REMINDER, value = Preferences.USE_REMINDER) Boolean useReminder) {
-		this.useReminder = useReminder;
-	}
 
-	@Inject
-	@org.eclipse.e4.core.di.annotations.Optional
-	public void setRemindFrequency(
-			@Preference(nodePath = Preferences.REMINDER, value = Preferences.REMIND_FREQUENCY) Long remindFrequencyInMillis) {
-		this.remindFrequencyInMillis = remindFrequencyInMillis;
-	}
-
-	@Inject
-	@org.eclipse.e4.core.di.annotations.Optional
+	@Inject @org.eclipse.e4.core.di.annotations.Optional
 	void workItemStarted(
 			@UIEventTopic(Events.START_WORK_ITEM) com.google.common.base.Optional<WorkItem> owi) {
 		if (!owi.isPresent()) {
@@ -221,6 +217,7 @@ public class SystemTray {
 		currentTooltipText = String.format(REMINDER_TEXT, wi.getActivityName());
 		reminderToolTip.setText(currentTooltipText);
 		trayItem.setToolTipText(String.format(TOOL_TIP_TEXT, wi.getActivityName()));
+		remindPeriodically();
 	}
 
 	private void switchApplicationState() {
@@ -242,8 +239,13 @@ public class SystemTray {
 		shell.setMinimized(false);
 	}
 
+	private boolean useReminder() {
+		return ConfigurationScope.INSTANCE.getNode(Preferences.REMINDER)
+				.getBoolean(Preferences.USE_REMINDER,
+						Preferences.USE_REMINDER_DEFAULT);
+	}
+
 	private void showReminder() {
-		//reminderToolTip.setText(currentTooltipText);
 		reminderToolTip.setVisible(true);
 	}
 
