@@ -69,7 +69,9 @@ public class SystemTray {
 	private boolean useReminder = Preferences.USE_REMINDER_DEFAULT;
 	private long remindFrequencyInMillis = Preferences.REMIND_FREQUENCY_DEFAULT;
 
-	public SystemTray() {
+	@Inject
+	public SystemTray(Shell shell) {
+		this.shell = shell;
 		setupTray();
 	}
 
@@ -217,8 +219,8 @@ public class SystemTray {
 		}
 		WorkItem wi = owi.get();
 		currentTooltipText = String.format(REMINDER_TEXT, wi.getActivityName());
-		trayItem.setToolTipText(String.format(TOOL_TIP_TEXT,
-				wi.getActivityName()));
+		reminderToolTip.setText(currentTooltipText);
+		trayItem.setToolTipText(String.format(TOOL_TIP_TEXT, wi.getActivityName()));
 	}
 
 	private void switchApplicationState() {
@@ -241,7 +243,7 @@ public class SystemTray {
 	}
 
 	private void showReminder() {
-		reminderToolTip.setText(currentTooltipText);
+		//reminderToolTip.setText(currentTooltipText);
 		reminderToolTip.setVisible(true);
 	}
 
