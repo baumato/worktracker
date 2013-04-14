@@ -18,4 +18,8 @@ public class Preferences {
 	public static final Boolean USE_REMINDER_DEFAULT = true;
 	public static final String REMIND_FREQUENCY = "remindFrequency";
 	public static final long REMIND_FREQUENCY_DEFAULT = TimeUnit.MILLISECONDS.convert(15, TimeUnit.MINUTES);
+
+	public static final String STATUS_LINE = "worktracker.preferences.statusLine";
+	public static final String STATUS_LINE_UPDATE_FREQUENCY = "updateFrequency";
+	public static final long STATUS_LINE_UPDATE_FREQUENCY_DEFAULT = 1000;
 }

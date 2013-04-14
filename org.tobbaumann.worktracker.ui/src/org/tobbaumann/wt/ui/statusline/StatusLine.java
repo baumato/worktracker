@@ -14,6 +14,7 @@ import java.text.DateFormat;
 
 import javax.inject.Inject;
 
+import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -23,12 +24,12 @@ import org.eclipse.swt.widgets.Label;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.WorkItem;
 import org.tobbaumann.wt.ui.event.Events;
+import org.tobbaumann.wt.ui.preferences.Preferences;
 
 import com.google.common.base.Optional;
 
 public class StatusLine extends Composite {
 
-	private static final int UPDATE_FREQUENCY_IN_MILLIS = 1000; // TODO take update frequency from preferences
 	private WorkTrackingService service;
 	private Label statusBar;
 
@@ -84,7 +85,7 @@ public class StatusLine extends Composite {
 	}
 
 	private void updateStatusLinePeriodically() {
-		getDisplay().timerExec(UPDATE_FREQUENCY_IN_MILLIS, new Runnable() {
+		getDisplay().timerExec((int)getUpdateFrequency(), new Runnable() {
 			@Override
 			public void run() {
 				if (isStatusLineActive()) {
@@ -93,5 +94,9 @@ public class StatusLine extends Composite {
 				}
 			}
 		});
+	}
+
+	private long getUpdateFrequency() {
+		return ConfigurationScope.INSTANCE.getNode(Preferences.STATUS_LINE).getLong(Preferences.STATUS_LINE_UPDATE_FREQUENCY, Preferences.STATUS_LINE_UPDATE_FREQUENCY_DEFAULT);
 	}
 }
