@@ -17,6 +17,7 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -36,6 +37,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.WorkItem;
 import org.tobbaumann.wt.ui.event.Events;
+import org.tobbaumann.wt.ui.systemtray.SystemTray;
 import org.tobbaumann.wt.ui.views.SwitchComposite;
 import org.tobbaumann.wt.ui.views.Switchable;
 import org.tobbaumann.wt.ui.views.ViewerUtils;
@@ -46,12 +48,21 @@ public class DatesView implements Switchable {
 
 	private WorkTrackingService service;
 	private ESelectionService selectionService;
+	private @Inject IEventBroker eventBroker;
 
 	private @Inject MPart part;
 	private SwitchComposite switchComposite;
 	private Composite datesPanel;
 	private Composite settingsPanel;
 	private TableViewer viewer;
+
+	/*
+	 * TODO
+	 * I really do not want to setup the tray here
+	 * but I found no other location where the shell and the eventbroker is in place.
+	 * Neither is a LifeCycleHook available nor can I access eventBroker in the bundle activator.
+	 */
+	private @Inject SystemTray systemTray;
 
 	@Inject
 	public DatesView(WorkTrackingService service, ESelectionService selectionService) {

@@ -33,4 +33,3 @@ Import-Package: javax.inject;version="1.0.0",
  org.tobbaumann.wt.domain.util
 Bundle-ClassPath: .
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: org.tobbaumann.wt.ui.WorkTrackerUi
