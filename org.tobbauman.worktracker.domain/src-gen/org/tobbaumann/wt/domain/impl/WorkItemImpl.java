@@ -7,8 +7,8 @@ import com.google.common.base.Objects;
 import java.lang.reflect.InvocationTargetException;
 
 import java.text.DateFormat;
-
 import java.text.ParseException;
+
 import java.util.Date;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.xtext.xbase.lib.Exceptions;
+
 import org.tobbaumann.wt.domain.Activity;
 import org.tobbaumann.wt.domain.DomainFactory;
 import org.tobbaumann.wt.domain.DomainPackage;
