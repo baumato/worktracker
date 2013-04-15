@@ -20,6 +20,7 @@ import javax.inject.Singleton;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
@@ -124,32 +125,41 @@ public class SystemTray {
 
 	private void remindPeriodically() {
 		if (reminderJob != null) {
-			return;
+			reminderJob.cancel();
 		}
 		reminderJob = new Job("Show Reminder Periodically") {
 			@Override
-			protected IStatus run(IProgressMonitor monitor) {
+			protected IStatus run(final IProgressMonitor monitor) {
 				shell.getDisplay().asyncExec(new Runnable() {
 					@Override
 					public void run() {
-						if (!useReminder()
-								|| isNullOrEmpty(currentTooltipText)) {
-							schedule(10000);
+						try {
+							checkIfCanceled(monitor);
+							if (!useReminder()
+									|| isNullOrEmpty(currentTooltipText)) {
+								checkIfCanceled(monitor);
+								schedule(10000);
+							} else {
+								checkIfCanceled(monitor);
+								showReminder();
+								checkIfCanceled(monitor);
+								schedule(getRemindFrequencyInMillis());
+							}
+						} catch (OperationCanceledException e) {
 							return;
 						}
-						shell.getDisplay().syncExec(new Runnable() {
-							@Override
-							public void run() {
-								showReminder();
-							}
-						});
-						schedule(getRemindFrequencyInMillis());
 					}
 				});
 				return Status.OK_STATUS;
 			}
 		};
 		reminderJob.schedule(getRemindFrequencyInMillis());
+	}
+	
+	private void checkIfCanceled(IProgressMonitor monitor) {
+		if (monitor.isCanceled()) {
+			throw new OperationCanceledException();
+		}
 	}
 
 	private long getRemindFrequencyInMillis() {
