@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.ui.di.UIEventTopic;
+import org.eclipse.e4.ui.workbench.IWorkbench;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
@@ -35,6 +36,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.ShellAdapter;
 import org.eclipse.swt.events.ShellEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -44,6 +46,7 @@ import org.eclipse.swt.widgets.Tray;
 import org.eclipse.swt.widgets.TrayItem;
 import org.tobbaumann.wt.domain.WorkItem;
 import org.tobbaumann.wt.ui.event.Events;
+import org.tobbaumann.wt.ui.handlers.ExitHandler;
 import org.tobbaumann.wt.ui.preferences.Preferences;
 
 @Creatable
@@ -65,11 +68,14 @@ public class SystemTray {
 		}
 	}
 
+	private @Inject IWorkbench workbench;
 	private @Inject	Shell shell;
 	private TrayItem trayItem;
 	private ToolTip reminderToolTip;
 	private Job reminderJob = null;
 	private volatile String currentTooltipText = null;
+	private Point shellLocation;
+	private Point shellSize;
 
 	@Inject
 	public SystemTray(Shell shell) {
@@ -200,8 +206,8 @@ public class SystemTray {
 				menuItem.addSelectionListener(new SelectionAdapter() {
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						// TODO call ExitHandler
-						shell.close();
+						ExitHandler exitHandler = new ExitHandler();
+						exitHandler.exit(workbench);
 					}
 				});
 
@@ -239,11 +245,15 @@ public class SystemTray {
 	}
 
 	private void pushApplicationToTray() {
+		shellLocation = shell.getLocation();
+		shellSize = shell.getSize();
 		shell.setVisible(false);
 	}
 
 	private void popApplicationFromTray() {
 		shell.setVisible(true);
+		shell.setLocation(shellLocation);
+		shell.setSize(shellSize);
 		shell.setActive();
 		shell.setFocus();
 		shell.setMinimized(false);
