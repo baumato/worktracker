@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="WorkTracker" id="org.tobbaumann.worktracker.ui.product" application="org.eclipse.e4.ui.workbench.swt.E4Application" version="1.0.0.qualifier" useFeatures="false" includeLaunchers="true">
+<product name="WorkTracker" id="org.tobbaumann.worktracker.ui.product" application="org.eclipse.e4.ui.workbench.swt.E4Application" version="1.0.0" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/org.tobbaumann.worktracker.ui/icons/clock_128x128.png"/>
