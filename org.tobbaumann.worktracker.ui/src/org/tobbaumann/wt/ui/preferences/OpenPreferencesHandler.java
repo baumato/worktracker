@@ -19,8 +19,8 @@ public class OpenPreferencesHandler {
 	}
 
 	@Execute
-	public void openPreferences(Shell shell) {
-		PreferencesDialog dlg = new PreferencesDialog(shell);
+	public void openPreferences(Shell shell, WorkTrackerPreferences prefs) {
+		PreferencesDialog dlg = new PreferencesDialog(shell, prefs);
 		dlg.open();
 	}
 }

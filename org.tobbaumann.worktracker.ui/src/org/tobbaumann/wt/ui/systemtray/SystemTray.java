@@ -23,7 +23,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.workbench.IWorkbench;
@@ -47,7 +46,7 @@ import org.eclipse.swt.widgets.TrayItem;
 import org.tobbaumann.wt.domain.WorkItem;
 import org.tobbaumann.wt.ui.event.Events;
 import org.tobbaumann.wt.ui.handlers.ExitHandler;
-import org.tobbaumann.wt.ui.preferences.Preferences;
+import org.tobbaumann.wt.ui.preferences.WorkTrackerPreferences;
 
 @Creatable
 @Singleton
@@ -68,6 +67,7 @@ public class SystemTray {
 		}
 	}
 
+	private @Inject WorkTrackerPreferences prefs;
 	private @Inject IWorkbench workbench;
 	private @Inject	Shell shell;
 	private TrayItem trayItem;
@@ -141,7 +141,7 @@ public class SystemTray {
 					public void run() {
 						try {
 							checkIfCanceled(monitor);
-							if (!useReminder()
+							if (!prefs.getUseReminder()
 									|| isNullOrEmpty(currentTooltipText)) {
 								checkIfCanceled(monitor);
 								schedule(10000);
@@ -149,7 +149,7 @@ public class SystemTray {
 								checkIfCanceled(monitor);
 								showReminder();
 								checkIfCanceled(monitor);
-								schedule(getRemindFrequencyInMillis());
+								schedule(prefs.getRemindFrequencyInMillis());
 							}
 						} catch (OperationCanceledException e) {
 							return;
@@ -159,19 +159,13 @@ public class SystemTray {
 				return Status.OK_STATUS;
 			}
 		};
-		reminderJob.schedule(getRemindFrequencyInMillis());
+		reminderJob.schedule(prefs.getRemindFrequencyInMillis());
 	}
-	
+
 	private void checkIfCanceled(IProgressMonitor monitor) {
 		if (monitor.isCanceled()) {
 			throw new OperationCanceledException();
 		}
-	}
-
-	private long getRemindFrequencyInMillis() {
-		return ConfigurationScope.INSTANCE.getNode(Preferences.REMINDER)
-				.getLong(Preferences.REMIND_FREQUENCY,
-						Preferences.REMIND_FREQUENCY_DEFAULT);
 	}
 
 	private void createTrayItemMenu() {
@@ -259,11 +253,7 @@ public class SystemTray {
 		shell.setMinimized(false);
 	}
 
-	private boolean useReminder() {
-		return ConfigurationScope.INSTANCE.getNode(Preferences.REMINDER)
-				.getBoolean(Preferences.USE_REMINDER,
-						Preferences.USE_REMINDER_DEFAULT);
-	}
+
 
 	private void showReminder() {
 		reminderToolTip.setVisible(true);

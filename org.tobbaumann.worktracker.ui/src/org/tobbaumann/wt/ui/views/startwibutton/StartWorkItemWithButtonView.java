@@ -111,7 +111,7 @@ public class StartWorkItemWithButtonView implements Switchable {
 				createMostUsedActivitiesButtons();
 			}
 		} catch (BackingStoreException e) {
-			logger.error(e, "Error druing reading preferences.");
+			logger.error(e, "Error during reading preferences.");
 			createMostUsedActivitiesButtons();
 		}
 	}
@@ -289,6 +289,7 @@ public class StartWorkItemWithButtonView implements Switchable {
 				prefs.put(String.valueOf(buttonIndex), getActivityNameFromButton(btn));
 			}
 		}
+		Preference.flushAllPreferences();
 	}
 
 	private String getActivityNameFromButton(Button btn) {

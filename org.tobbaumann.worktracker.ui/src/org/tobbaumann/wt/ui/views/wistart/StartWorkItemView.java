@@ -195,7 +195,7 @@ public class StartWorkItemView {
 		startedSpinner.setSelection(0);
 		startedSpinner.setIncrement(1);
 		startedSpinner.setPageIncrement(10);
-		startedSpinner.setToolTipText("Enter how many minutes ago this activity has been started?");
+		startedSpinner.setToolTipText("Enter how many minutes ago this activity has been started.");
 		startedSpinner.addKeyListener(new StartWorkItemOnKeyShortcutListener());
 	}
 
