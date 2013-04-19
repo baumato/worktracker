@@ -9,7 +9,7 @@ package org.tobbaumann.wt.domain
 
 import java.util.Date
 import java.lang.String
-import org.tobbaumann.wt.domain.impl.TimeSpanHelper
+import org.tobbaumann.wt.domain.util.TimeSpanHelper
 import org.eclipse.emf.common.util.BasicEList
 import com.google.common.base.Strings
 import java.text.DateFormat

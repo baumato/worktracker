@@ -4,11 +4,11 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
-package org.tobbaumann.wt.domain.impl;
+package org.tobbaumann.wt.domain.util;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -31,6 +31,19 @@ public class TimeSpanHelper {
 		this.seconds = seconds;
 		diff = seconds + 60 * minutes + 60 * 60 * hours + 24 * 60 * 60 * days + 365 * 24 * 60 * 60
 				* years;
+	}
+
+	public TimeSpanHelper(long millis) {
+		long diff = millis / 1000;
+		this.seconds = (int) (diff % 60);
+		diff /= 60;
+		this.minutes = (int) (diff % 60);
+		diff /= 60;
+		this.hours = (int) (diff % 24);
+		diff /= 24;
+		this.days = (int) (diff % 365);
+		this.years = (int) (diff / 365);
+		this.diff = millis / 1000;
 	}
 
 	protected TimeSpanHelper(int years, int days, int hours, int minutes, int seconds, long diff) {
@@ -72,10 +85,12 @@ public class TimeSpanHelper {
 
 		if (summer) { // Sommerzeit ausgleichen
 			tz = first.getTimeZone();
-			if (!(tz.inDaylightTime(first.getTime())) && (tz.inDaylightTime(last.getTime())))
+			if (!tz.inDaylightTime(first.getTime()) && tz.inDaylightTime(last.getTime())) {
 				diff += tz.getDSTSavings() / 1000;
-			if ((tz.inDaylightTime(first.getTime())) && !(tz.inDaylightTime(last.getTime())))
+			}
+			if (tz.inDaylightTime(first.getTime()) && !tz.inDaylightTime(last.getTime())) {
 				diff -= tz.getDSTSavings() / 1000;
+			}
 		}
 
 		save = diff;
@@ -98,32 +113,37 @@ public class TimeSpanHelper {
 			int subtractLeapDays = 0; // abzuziehende Schalttage
 			// (da in Jahren enthalten)
 
-			if ((first.get(Calendar.MONTH) < 1)
-					|| ((first.get(Calendar.MONTH) == 1) && (first.get(Calendar.DAY_OF_MONTH) < 29)))
+			if (first.get(Calendar.MONTH) < 1
+					|| first.get(Calendar.MONTH) == 1 && first.get(Calendar.DAY_OF_MONTH) < 29) {
 				startYear = first.get(Calendar.YEAR);
-			else
+			} else {
 				startYear = first.get(Calendar.YEAR) + 1;
+			}
 
-			if ((last.get(Calendar.MONTH) > 1)
-					|| ((last.get(Calendar.MONTH) == 1) && (last.get(Calendar.DAY_OF_MONTH) == 29)))
+			if (last.get(Calendar.MONTH) > 1
+					|| last.get(Calendar.MONTH) == 1 && last.get(Calendar.DAY_OF_MONTH) == 29) {
 				endYear = last.get(Calendar.YEAR);
-			else
+			} else {
 				endYear = last.get(Calendar.YEAR) - 1;
+			}
 
-			for (int i = startYear; i <= endYear; ++i)
-				if (first.isLeapYear(i))
+			for (int i = startYear; i <= endYear; ++i) {
+				if (first.isLeapYear(i)) {
 					++leapDays;
+				}
+			}
 
 			// Jahre berechnen
 			years = (int) ((diff - leapDays) / 365);
 
 			// in Jahren enthaltene Schalttage
 			subtractLeapDays = (years + 3) / 4;
-			if (subtractLeapDays > leapDays)
+			if (subtractLeapDays > leapDays) {
 				subtractLeapDays = leapDays;
+			}
 
 			// Tage berechnen
-			days = (int) (diff - ((years * 365) + subtractLeapDays));
+			days = (int) (diff - (years * 365 + subtractLeapDays));
 
 		} else {
 			days = (int) (diff % 365);
@@ -174,24 +194,30 @@ public class TimeSpanHelper {
 	}
 
 	public int inSeconds() {
-		return (int) (diff);
+		return (int) diff;
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder s = new StringBuilder("");
-		if (years > 0)
+		if (years > 0) {
 			s.append(years + " j  ");
-		if (days > 0)
+		}
+		if (days > 0) {
 			s.append(days + " t  ");
-		if (hours > 0)
+		}
+		if (hours > 0) {
 			s.append(hours + " std  ");
-		if (minutes > 0)
+		}
+		if (minutes > 0) {
 			s.append(minutes + " min  ");
-		if (seconds > 0)
+		}
+		if (seconds > 0) {
 			s.append(seconds + " sec  ");
-		if (s.toString().equals(""))
+		}
+		if (s.toString().equals("")) {
 			s.append("Kein Zeitunterschied");
+		}
 		return s.toString();
 	}
 }

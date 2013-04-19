@@ -30,6 +30,8 @@ import org.tobbaumann.wt.domain.DomainPackage;
 import org.tobbaumann.wt.domain.TimeSpan;
 import org.tobbaumann.wt.domain.WorkItem;
 
+import org.tobbaumann.wt.domain.util.TimeSpanHelper;
+
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Work Item</b></em>'.
