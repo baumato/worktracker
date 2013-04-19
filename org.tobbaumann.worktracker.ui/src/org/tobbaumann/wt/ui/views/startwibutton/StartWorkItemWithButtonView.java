@@ -289,6 +289,7 @@ public class StartWorkItemWithButtonView implements Switchable {
 				prefs.put(String.valueOf(buttonIndex), getActivityNameFromButton(btn));
 			}
 		}
+		Preference.flushAllPreferences();
 	}
 
 	private String getActivityNameFromButton(Button btn) {
