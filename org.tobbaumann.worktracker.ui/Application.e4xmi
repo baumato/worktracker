@@ -30,7 +30,7 @@
         </children>
         <children xsi:type="basic:PartSashContainer" xmi:id="_FSfNADY2EeKiNZbXiGFecg" elementId="worktracker.ui.partsashcontainer.0" containerData="44" horizontal="true">
           <children xsi:type="basic:PartStack" xmi:id="_eg4vIDY2EeKiNZbXiGFecg" elementId="worktracker.ui.partstack.0">
-            <children xsi:type="basic:Part" xmi:id="_HAVO4DY2EeKiNZbXiGFecg" elementId="workitemsview" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.views.workitem.WorkItemsView" label="Work Items" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/finished-work.png"/>
+            <children xsi:type="basic:Part" xmi:id="_HAVO4DY2EeKiNZbXiGFecg" elementId="workitemsview" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.workitem.WorkItemsView" label="Work Items" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/finished-work.png"/>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_hmhqYDY2EeKiNZbXiGFecg" elementId="worktracker.ui.partstack.0">
             <children xsi:type="basic:Part" xmi:id="_U-Wo8DY2EeKiNZbXiGFecg" elementId="workitemssummaryview" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.wisummary.WorkItemSummaryView" label="Work Items Summary" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/finished-work.png"/>
@@ -50,10 +50,10 @@
       </children>
     </mainMenu>
     <trimBars xmi:id="_6k7M4KCKEeKmvsFjGBY_pg" elementId="worktracker.stausline" side="Bottom">
-      <children xsi:type="menu:ToolControl" xmi:id="_Vm0F4KCLEeKmvsFjGBY_pg" elementId="org.tobbaumann.worktracker.ui.toolcontrol.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.statusline.StatusLine"/>
+      <children xsi:type="menu:ToolControl" xmi:id="_Vm0F4KCLEeKmvsFjGBY_pg" elementId="org.tobbaumann.worktracker.ui.toolcontrol.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.statusline.StatusLine"/>
     </trimBars>
   </children>
-  <handlers xmi:id="_Zo-LsDY7EeKHouPeRF3fXg" elementId="worktracker.ui.handler.preferences" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.preferences.OpenPreferencesHandler" command="_-hJtADY-EeKHouPeRF3fXg"/>
+  <handlers xmi:id="_Zo-LsDY7EeKHouPeRF3fXg" elementId="worktracker.ui.handler.preferences" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.preferences.OpenPreferencesHandler" command="_-hJtADY-EeKHouPeRF3fXg"/>
   <handlers xmi:id="_OYyi0I4dEeK-pKqvz6n4Lw" elementId="handler.themeswitch" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.handlers.ThemeSwitchHandler" command="_jIezEI4fEeK-pKqvz6n4Lw"/>
   <handlers xmi:id="_6g6k8JO4EeKwNNMjl4I5UA" elementId="handler.shortcut" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.startwibutton.StartWorkItemWithShortcutHandler" command="_sRCl4JO4EeKwNNMjl4I5UA"/>
   <handlers xmi:id="_GZfssJSOEeKbjMpGHgZ80g" elementId="handler.exit" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.handlers.ExitHandler" command="_HL8dUJSOEeKbjMpGHgZ80g"/>
