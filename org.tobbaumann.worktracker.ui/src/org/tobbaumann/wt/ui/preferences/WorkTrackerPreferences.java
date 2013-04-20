@@ -20,8 +20,6 @@ import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.osgi.service.prefs.BackingStoreException;
 
-import com.google.common.base.CaseFormat;
-
 @Creatable
 public class WorkTrackerPreferences {
 
@@ -37,23 +35,23 @@ public class WorkTrackerPreferences {
 
 	private static final String DATES_VIEW_NODE_NAME = "worktracker.preferences.datesView";
 	private static final String DATES_VIEW_DATE_FORMAT = "DATE_FORMAT";
-	private static final String DATES_VIEW_DATE_FORMAT_DISPLAY_NAME = CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, DATES_VIEW_DATE_FORMAT);
+	private static final String DATES_VIEW_DATE_FORMAT_DISPLAY_NAME = "Date Format";
 	private static final int DATES_VIEW_DATE_FORMAT_DEFAULT = DateFormat.SHORT;
 	private static final String DATES_VIEW_DATE_FORMAT_PATTERN = "DATE_FORMAT_PATTERN";
-	private static final String DATES_VIEW_DATE_FORMAT_PATTERN_DISPLAY_NAME = CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, DATES_VIEW_DATE_FORMAT_PATTERN);
+	private static final String DATES_VIEW_DATE_FORMAT_PATTERN_DISPLAY_NAME = "Date Format Pattner";
 	private static final String DATES_VIEW_DATE_FORMAT_PATTERN_DEFAULT = "yyyy-MM-dd";
 	private static final String DATES_VIEW_SHOW_WEEKDAYS = "SHOW_WEEKDAYS";
-	private static final String DATES_VIEW_SHOW_WEEKDAYS_DISPLAY_NAME = CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, DATES_VIEW_SHOW_WEEKDAYS);
+	private static final String DATES_VIEW_SHOW_WEEKDAYS_DISPLAY_NAME = "Show Weekdays";
 	private static final boolean DATES_VIEW_SHOW_WEEKDAYS_DEFAULT = true;
 
 
 	private static final String STARTWI_VIEW_NODE_NAME = "worktracker.preferences.startWorkItemsWithButtonView";
 	private static final String STARTWI_VIEW_NUMBER_OF_BUTTONS = "NUMBER_OF_BUTTONS";
-	private static final String STARTWI_VIEW_NUMBER_OF_BUTTONS_DISPLAY_NAME = CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, STARTWI_VIEW_NUMBER_OF_BUTTONS);
+	private static final String STARTWI_VIEW_NUMBER_OF_BUTTONS_DISPLAY_NAME = "Number Of Buttons";
 	private static final int STARTWI_VIEW_NUMBER_OF_BUTTONS_DEFAULT_VALUE = 6;
 	private static final int STARTWI_VIEW_NUMBER_OF_BUTTONS_MAXIMUM_VALUE = 20;
 	private static final String STARTWI_VIEW_NUMBER_OF_BUTTON_COLUMNS = "NUMBER_OF_BUTTON_COLUMNS";
-	private static final String STARTWI_VIEW_NUMBER_OF_BUTTON_COLUMNS_DISPLAY_NAME = CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.UPPER_CAMEL, STARTWI_VIEW_NUMBER_OF_BUTTON_COLUMNS);
+	private static final String STARTWI_VIEW_NUMBER_OF_BUTTON_COLUMNS_DISPLAY_NAME = "Number Of Button Columns";
 	private static final int STARTWI_VIEW_NUMBER_OF_BUTTON_COLUMNS_DEFAULT_VALUE = 1;
 	private static final int STARTWI_VIEW_NUMBER_OF_BUTTON_COLUMNS_MAXIMUM_VALUE = 6;
 	private static final String STARTWI_VIEW_BUTTON_LABELS = "BUTTON_LABELS";
