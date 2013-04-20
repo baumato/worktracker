@@ -17,6 +17,7 @@ import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.graphics.Image;
+import org.tobbaumann.wt.ui.preferences.WorkTrackerPreferences;
 
 /**
  *
@@ -25,9 +26,11 @@ import org.eclipse.swt.graphics.Image;
  */
 public class DatesViewLabelProvider extends StyledCellLabelProvider implements ILabelProvider {
 
+	private final WorkTrackerPreferences prefs;
 	private final SimpleDateFormat weekDayFormat;
 
-	DatesViewLabelProvider() {
+	DatesViewLabelProvider(WorkTrackerPreferences prefs) {
+		this.prefs = prefs;
 		this.weekDayFormat = new SimpleDateFormat("EE");
 	}
 
@@ -44,11 +47,11 @@ public class DatesViewLabelProvider extends StyledCellLabelProvider implements I
 	}
 
 	private String format(Date date) {
-		return DatesViewPreference.getCurrentDateFormat().format(date);
+		return prefs.getDatesViewDateFormat().format(date);
 	}
 
 	private Boolean shouldShowWeekdays() {
-		return Boolean.valueOf(DatesViewPreference.SHOW_WEEKDAYS.getValue());
+		return prefs.getDatesViewShowWeekdays();
 	}
 
 	@Override

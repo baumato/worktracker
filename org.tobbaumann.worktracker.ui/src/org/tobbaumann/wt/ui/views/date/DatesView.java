@@ -18,6 +18,7 @@ import javax.inject.Inject;
 
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.e4.core.services.log.Logger;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -37,7 +38,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.WorkItem;
 import org.tobbaumann.wt.ui.event.Events;
+import org.tobbaumann.wt.ui.preferences.WorkTrackerPreferences;
 import org.tobbaumann.wt.ui.systemtray.SystemTray;
+import org.tobbaumann.wt.ui.views.PreferencesComposite;
 import org.tobbaumann.wt.ui.views.SwitchComposite;
 import org.tobbaumann.wt.ui.views.Switchable;
 import org.tobbaumann.wt.ui.views.ViewerUtils;
@@ -46,15 +49,12 @@ import com.google.common.collect.Ordering;
 
 public class DatesView implements Switchable {
 
-	private WorkTrackingService service;
-	private ESelectionService selectionService;
+	private @Inject WorkTrackingService service;
+	private @Inject ESelectionService selectionService;
 	private @Inject IEventBroker eventBroker;
-
+	private @Inject WorkTrackerPreferences prefs;
 	private @Inject MPart part;
-	private SwitchComposite switchComposite;
-	private Composite datesPanel;
-	private Composite settingsPanel;
-	private TableViewer viewer;
+	private @Inject Logger logger;
 
 	/*
 	 * TODO
@@ -64,11 +64,10 @@ public class DatesView implements Switchable {
 	 */
 	private @Inject SystemTray systemTray;
 
-	@Inject
-	public DatesView(WorkTrackingService service, ESelectionService selectionService) {
-		this.service = service;
-		this.selectionService = selectionService;
-	}
+	private SwitchComposite switchComposite;
+	private Composite datesPanel;
+	private PreferencesComposite settingsPanel;
+	private TableViewer viewer;
 
 	/**
 	 * Create contents of the view part.
@@ -89,7 +88,7 @@ public class DatesView implements Switchable {
 		viewer.getControl().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		viewer.setUseHashlookup(true);
 		viewer.setContentProvider(new ObservableSetContentProvider());
-		viewer.setLabelProvider(new DatesViewLabelProvider());
+		viewer.setLabelProvider(new DatesViewLabelProvider(prefs));
 		viewer.setComparator(new ViewerComparator(Ordering.natural().reverse()));
 		viewer.setInput(service.readDates());
 		updateSelectionServiceIfViewerSelectionChanges();
@@ -107,7 +106,7 @@ public class DatesView implements Switchable {
 	}
 
 	private void createSettingsPanel() {
-		settingsPanel = new DatesViewSettings(switchComposite);
+		settingsPanel = new DatesViewSettings(switchComposite, prefs);
 	}
 
 	private Composite determineTopControlFromToolItemState() {
@@ -127,21 +126,28 @@ public class DatesView implements Switchable {
 		return (MToolItem) part.getToolbar().getChildren().get(0);
 	}
 
-	@PreDestroy
-	public void dispose() {
+	@Override
+	public void switchPanel() {
+		deactivate();
+		switchComposite.switchActiveControl();
+		activate();
+		viewer.refresh(true);
 	}
 
-	@Focus
-	public void requestFocus() {
-		if (viewer != null && !viewer.getTable().isDisposed()) {
-			viewer.getTable().setFocus();
+	private void deactivate() {
+		if (switchComposite.getTopControl() == settingsPanel) {
+			settingsPanel.flushPreferences();
 		}
 	}
 
-	@Override
-	public void switchPanel() {
-		switchComposite.switchActiveControl();
-		viewer.refresh(true);
+	private void activate() {
+		if (switchComposite.getTopControl() == settingsPanel) {
+			settingsPanel.updatePreferenceFields();
+		}
+	}
+
+	@PreDestroy
+	public void dispose() {
 	}
 
 	@Inject
@@ -153,5 +159,12 @@ public class DatesView implements Switchable {
 		WorkItem wi = optStartedWorkItem.get();
 		viewer.setSelection(new StructuredSelection(wi.getDatePartOfStart()));
 		requestFocus();
+	}
+
+	@Focus
+	public void requestFocus() {
+		if (viewer != null && !viewer.getTable().isDisposed()) {
+			viewer.getTable().setFocus();
+		}
 	}
 }

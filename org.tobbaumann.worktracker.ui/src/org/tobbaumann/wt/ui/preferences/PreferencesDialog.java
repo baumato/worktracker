@@ -15,6 +15,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -26,6 +27,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.tobbaumann.wt.domain.util.TimeSpanHelper;
+import org.tobbaumann.wt.ui.views.date.DatesViewSettings;
+import org.tobbaumann.wt.ui.views.startwibutton.StartWorkItemWithButtonViewSettings;
 
 public class PreferencesDialog extends TitleAreaDialog {
 
@@ -38,6 +41,8 @@ public class PreferencesDialog extends TitleAreaDialog {
 	private Button btnUseReminder;
 	private Spinner spinnerStatusLineFreq;
 	private Combo cmbStatusLineTimeUnit;
+	private DatesViewSettings datesViewSettings;
+	private StartWorkItemWithButtonViewSettings startWorkItemWithButtonViewSettings;
 
 	/**
 	 * Constructor
@@ -125,6 +130,19 @@ public class PreferencesDialog extends TitleAreaDialog {
 				TimeUnit.HOURS.name().toLowerCase() });
 		cmbStatusLineTimeUnit.setText(duration.timeUnit.name().toLowerCase());
 
+
+		Group grpDatesViewSettings = new Group(container, SWT.NONE);
+		grpDatesViewSettings.setLayout(new FillLayout());
+		grpDatesViewSettings.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		grpDatesViewSettings.setText("Dates View");
+		datesViewSettings = new DatesViewSettings(grpDatesViewSettings, prefs);
+
+		Group grpStartWi = new Group(container, SWT.NONE);
+		grpStartWi.setLayout(new FillLayout());
+		grpStartWi.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		grpStartWi.setText("Start Work Item With Button View");
+		startWorkItemWithButtonViewSettings = new StartWorkItemWithButtonViewSettings(grpStartWi, prefs);
+
 		return area;
 	}
 
@@ -156,6 +174,9 @@ public class PreferencesDialog extends TitleAreaDialog {
 		tu = getTimeUnit(cmbStatusLineTimeUnit.getText());
 		prefs.setStatusLineUpdateFrequencyInMillis(TimeUnit.MILLISECONDS.convert(nr, tu));
 
+		datesViewSettings.flushPreferences();
+		startWorkItemWithButtonViewSettings.flushPreferences();
+
 		super.okPressed();
 	}
 
@@ -173,10 +194,15 @@ public class PreferencesDialog extends TitleAreaDialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return super.getInitialSize();
+		return new Point(480, 600);
 	}
 
 
+	/**
+	 *
+	 * @author tobbaumann
+	 *
+	 */
 	private static final class Duration {
 
 		final int number;
