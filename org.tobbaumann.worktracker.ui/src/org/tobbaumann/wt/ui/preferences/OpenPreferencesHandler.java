@@ -10,8 +10,9 @@
  ******************************************************************************/
 package org.tobbaumann.wt.ui.preferences;
 
+import org.eclipse.e4.core.contexts.ContextInjectionFactory;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Execute;
-import org.eclipse.swt.widgets.Shell;
 
 public class OpenPreferencesHandler {
 
@@ -19,8 +20,8 @@ public class OpenPreferencesHandler {
 	}
 
 	@Execute
-	public void openPreferences(Shell shell, WorkTrackerPreferences prefs) {
-		PreferencesDialog dlg = new PreferencesDialog(shell, prefs);
-		dlg.open();
+	public void openPreferences(IEclipseContext context) {
+		PreferencesDialog dialog = ContextInjectionFactory.make(PreferencesDialog.class, context);
+		dialog.open();
 	}
 }

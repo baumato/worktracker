@@ -17,6 +17,7 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.core.di.extensions.Preference;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.core.services.log.Logger;
 import org.eclipse.e4.ui.di.Focus;
@@ -131,7 +132,6 @@ public class DatesView implements Switchable {
 		deactivate();
 		switchComposite.switchActiveControl();
 		activate();
-		viewer.refresh(true);
 	}
 
 	private void deactivate() {
@@ -161,9 +161,23 @@ public class DatesView implements Switchable {
 		requestFocus();
 	}
 
+	// TODO Is following stmt correct: This method gets called if anything in the DATES_VIEW_NODE_NAME has been changed, not only if
+	// the DATE_FORMAT has been changed.
+	@Inject
+	@org.eclipse.e4.core.di.annotations.Optional
+	public void updateViewerOnDateFormatChange(@Preference(value = WorkTrackerPreferences.DATES_VIEW_DATE_FORMAT_STYLE) int dateFormatStyle) {
+		if (viewerNotNullOrDisposed()) {
+			viewer.refresh(true);
+		}
+	}
+
+	private boolean viewerNotNullOrDisposed() {
+		return viewer != null && !viewer.getControl().isDisposed();
+	}
+
 	@Focus
 	public void requestFocus() {
-		if (viewer != null && !viewer.getTable().isDisposed()) {
+		if (viewerNotNullOrDisposed()) {
 			viewer.getTable().setFocus();
 		}
 	}

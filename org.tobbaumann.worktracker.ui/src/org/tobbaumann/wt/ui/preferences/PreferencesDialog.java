@@ -9,6 +9,10 @@ package org.tobbaumann.wt.ui.preferences;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
+import org.eclipse.e4.core.di.annotations.Creatable;
+import org.eclipse.e4.core.di.extensions.Preference;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
@@ -30,6 +34,7 @@ import org.tobbaumann.wt.domain.util.TimeSpanHelper;
 import org.tobbaumann.wt.ui.views.date.DatesViewSettings;
 import org.tobbaumann.wt.ui.views.startwibutton.StartWorkItemWithButtonViewSettings;
 
+@Creatable
 public class PreferencesDialog extends TitleAreaDialog {
 
 	private static final String DIALOG_TITLE = "Preferences";
@@ -44,12 +49,25 @@ public class PreferencesDialog extends TitleAreaDialog {
 	private DatesViewSettings datesViewSettings;
 	private StartWorkItemWithButtonViewSettings startWorkItemWithButtonViewSettings;
 
+	@Inject
+	@Preference(value = WorkTrackerPreferences.USE_REMINDER)
+	private boolean useReminder;
+
+	@Inject
+	@Preference(value = WorkTrackerPreferences.REMIND_FREQUENCY)
+	private long remindFrequencyInMillis;
+
+	@Inject
+	@Preference(value = WorkTrackerPreferences.STATUS_LINE_UPDATE_FREQUENCY)
+	private long statusLineUpdateFreqInMillis;
+
 	/**
 	 * Constructor
 	 *
 	 * @param parentShell
 	 * @param prefs
 	 */
+	@Inject
 	public PreferencesDialog(Shell parentShell, WorkTrackerPreferences prefs) {
 		super(parentShell);
 		this.prefs = prefs;
@@ -90,7 +108,7 @@ public class PreferencesDialog extends TitleAreaDialog {
 				cmbReminderFreqTimeUnit.setEnabled(useReminder);
 			}
 		});
-		btnUseReminder.setSelection(prefs.getUseReminder());
+		btnUseReminder.setSelection(useReminder);
 		new Label(grpReminder, SWT.NONE);
 
 		lblReminder = new Label(grpReminder, SWT.NONE);
@@ -100,7 +118,7 @@ public class PreferencesDialog extends TitleAreaDialog {
 		spinnerReminderFreq.setPageIncrement(5);
 		spinnerReminderFreq.setMaximum(480);
 		spinnerReminderFreq.setMinimum(1);
-		Duration duration = Duration.newInstance(prefs.getRemindFrequencyInMillis());
+		Duration duration = Duration.newInstance(remindFrequencyInMillis);
 		spinnerReminderFreq.setSelection(duration.number);
 
 		cmbReminderFreqTimeUnit = new Combo(grpReminder, SWT.READ_ONLY);
@@ -120,7 +138,7 @@ public class PreferencesDialog extends TitleAreaDialog {
 
 		spinnerStatusLineFreq = new Spinner(grpStatusLine, SWT.BORDER);
 		spinnerStatusLineFreq.setPageIncrement(5);
-		duration = Duration.newInstance(prefs.getStatusLineUpdateFrequencyInMillis());
+		duration = Duration.newInstance(statusLineUpdateFreqInMillis);
 		spinnerStatusLineFreq.setSelection(duration.number);
 
 		cmbStatusLineTimeUnit = new Combo(grpStatusLine, SWT.READ_ONLY);
@@ -215,14 +233,14 @@ public class PreferencesDialog extends TitleAreaDialog {
 
 		public static Duration newInstance(long millis) {
 			TimeSpanHelper h = new TimeSpanHelper(millis);
-			if (h.inHours() > 0) {
-				return new Duration(h.inHours(), TimeUnit.HOURS);
+			if (h.getSeconds() > 0) {
+				return new Duration(h.inSeconds(), TimeUnit.SECONDS);
 			}
-			if (h.inMinutes() > 0) {
+			if (h.getMinutes() > 0) {
 				return new Duration(h.inMinutes(), TimeUnit.MINUTES);
 			}
-			if (h.inSeconds() > 0) {
-				return new Duration(h.inSeconds(), TimeUnit.SECONDS);
+			if (h.getHours() > 0) {
+				return new Duration(h.inHours(), TimeUnit.HOURS);
 			}
 			return new Duration((int) millis, TimeUnit.MILLISECONDS);
 		}

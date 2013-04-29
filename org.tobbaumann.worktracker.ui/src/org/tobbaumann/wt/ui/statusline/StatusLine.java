@@ -14,6 +14,11 @@ import java.text.DateFormat;
 
 import javax.inject.Inject;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.e4.core.di.extensions.Preference;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -30,15 +35,16 @@ import com.google.common.base.Optional;
 public class StatusLine extends Composite {
 
 	private WorkTrackingService service;
-	private WorkTrackerPreferences prefs;
 	private Label statusBar;
 
+	private long updateFrequencyInMillis; // initialized over preferences
+	private final Job updateJob;
 
 	@Inject
-	public StatusLine(Composite parent, WorkTrackingService service, WorkTrackerPreferences prefs) {
+	public StatusLine(Composite parent, WorkTrackingService service) {
 		super(parent, SWT.NONE);
 		this.service = service;
-		this.prefs = prefs;
+		this.updateJob = new StatusLineUpdateJob();
 		createControl();
 	}
 
@@ -52,11 +58,21 @@ public class StatusLine extends Composite {
 		statusBar.setAlignment(SWT.RIGHT);
 	}
 
+	@Inject
+	@org.eclipse.e4.core.di.annotations.Optional
+	public void updateUpdateFrequencyInMillis(@Preference(value = WorkTrackerPreferences.STATUS_LINE_UPDATE_FREQUENCY) long newUpdateFreq) {
+		if (updateFrequencyInMillis != newUpdateFreq) {
+			this.updateFrequencyInMillis = newUpdateFreq;
+			updateJob.cancel();
+			updateJob.schedule(updateFrequencyInMillis);
+		}
+	}
+
 	@Inject @org.eclipse.e4.core.di.annotations.Optional
 	void workItemStarted(@UIEventTopic(Events.START_WORK_ITEM) Optional<WorkItem> optStartedWorkItem) {
 		if (isStatusLineActive() || !optStartedWorkItem.isPresent()) {
 			setStatusLineMessageFromActiveWorkItem(optStartedWorkItem);
-			updateStatusLinePeriodically();
+			updateJob.schedule(this.updateFrequencyInMillis);
 		}
 	}
 
@@ -73,6 +89,7 @@ public class StatusLine extends Composite {
 		pack(true);
 	}
 
+
 	private String createStatusLineMessage(Optional<WorkItem> optStartedWorkItem) {
 		if (optStartedWorkItem.isPresent()) {
 			WorkItem startedWorkItem = optStartedWorkItem.get();
@@ -82,18 +99,44 @@ public class StatusLine extends Composite {
 					startedWorkItem.formatStart(DateFormat.getTimeInstance()),
 					startedWorkItem.getDuration().toString());
 		}
-		return null;
+		return "";
 	}
 
-	private void updateStatusLinePeriodically() {
-		getDisplay().timerExec((int)prefs.getStatusLineUpdateFrequencyInMillis(), new Runnable() {
-			@Override
-			public void run() {
-				if (isStatusLineActive()) {
-					setStatusLineMessageFromActiveWorkItem(service.getActiveWorkItem());
-					updateStatusLinePeriodically();
+	/**
+	 *
+	 * @author tobbaumann
+	 *
+	 */
+	private final class StatusLineUpdateJob extends Job {
+
+		public StatusLineUpdateJob() {
+			super("StatusLine Update");
+		}
+
+		@Override
+		protected IStatus run(IProgressMonitor monitor) {
+			monitor.beginTask("Updating status line...", IProgressMonitor.UNKNOWN);
+			try {
+				if (statusBar.isDisposed()) {
+					return Status.OK_STATUS;
 				}
+				statusBar.getDisplay().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						updateStatusLine();
+					}
+				});
+			} finally {
+				monitor.done();
 			}
-		});
+			return Status.OK_STATUS;
+		}
+
+		private void updateStatusLine() {
+			if (isStatusLineActive()) {
+				setStatusLineMessageFromActiveWorkItem(service.getActiveWorkItem());
+				updateJob.schedule(updateFrequencyInMillis);
+			}
+		}
 	}
 }

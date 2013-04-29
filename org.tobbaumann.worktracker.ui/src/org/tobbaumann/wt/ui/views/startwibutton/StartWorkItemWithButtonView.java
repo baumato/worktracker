@@ -20,6 +20,8 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.eclipse.e4.core.di.annotations.Optional;
+import org.eclipse.e4.core.di.extensions.Preference;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.core.services.log.Logger;
 import org.eclipse.e4.ui.di.Focus;
@@ -62,6 +64,9 @@ public class StartWorkItemWithButtonView implements Switchable {
 	private Composite buttonPanel;
 	private Composite buttonPanelContent;
 
+	private int nrOfButtons;
+	private int nrOfBtnColumns;
+
 
 	@PostConstruct
 	public void createControls(Composite parent) {
@@ -73,27 +78,34 @@ public class StartWorkItemWithButtonView implements Switchable {
 		switchComposite.setTopControl(determineTopControlFromToolItemState());
 	}
 
-	@Override
-	public void switchPanel() {
-		deactivate();
-		switchComposite.switchActiveControl();
-		activate();
-	}
-
-	private void activate() {
-		if (switchComposite.getTopControl() == buttonPanel) {
-			activateButtonPanel();
-		} else {
-			activateSettingsPanel();
+	@Inject
+	@Optional
+	public void updateNrOfButtons(@Preference(value = WorkTrackerPreferences.STARTWI_VIEW_NUMBER_OF_BUTTONS) int nrOfButtons) {
+		if (this.nrOfButtons != nrOfButtons) {
+			this.nrOfButtons = nrOfButtons;
+			if (buttonPanelContent != null && !buttonPanelContent.isDisposed()) {
+				activateButtonPanel();
+			}
 		}
 	}
-	
+
+	@Inject
+	@Optional
+	public void updateNrOfButtonColumns(@Preference(value = WorkTrackerPreferences.STARTWI_VIEW_NUMBER_OF_BUTTON_COLUMNS) int nrOfBtnColumns) {
+		if (this.nrOfBtnColumns != nrOfBtnColumns) {
+			this.nrOfBtnColumns = nrOfBtnColumns;
+			if (buttonPanelContent != null && !buttonPanelContent.isDisposed()) {
+				activateButtonPanel();
+			}
+		}
+	}
+
 	private void activateButtonPanel() {
 		this.buttonPanelContent.dispose();
 		createButtonPanel();
 		switchComposite.layout(true, true);
 	}
-	
+
 	private void createButtonPanel() {
 		if (prefs.customWorkItemStartButtonLabelsAvailable()) {
 			createButtonPanel(prefs.getWorkItemStartButtonLabels());
@@ -103,7 +115,7 @@ public class StartWorkItemWithButtonView implements Switchable {
 	}
 
 	private void createMostUsedActivitiesButtons() {
-		List<Activity> activities = service.getMostUsedActivities(prefs.getNumberOfButtons());
+		List<Activity> activities = service.getMostUsedActivities(nrOfButtons);
 		List<String> mua = newArrayList();
 		for (Activity a : activities) {
 			mua.add(a.getName());
@@ -114,10 +126,9 @@ public class StartWorkItemWithButtonView implements Switchable {
 	private void createButtonPanel(List<String> activityNames) {
 		buttonPanel.setLayout(new FillLayout());
 		buttonPanelContent = new Composite(buttonPanel, SWT.NONE);
-		GridLayout layout = new GridLayout(prefs.getNumberOfButtonColumns(), true);
+		GridLayout layout = new GridLayout(nrOfBtnColumns, true);
 		buttonPanelContent.setLayout(layout);
-		int numberOfBtns = prefs.getNumberOfButtons();
-		for (int i = 0; i < numberOfBtns; i++) {
+		for (int i = 0; i < nrOfButtons; i++) {
 			int buttonNumber = i+1;
 			if (i < activityNames.size()) {
 				createButton(buttonPanelContent, activityNames.get(i), buttonNumber);
@@ -195,7 +206,7 @@ public class StartWorkItemWithButtonView implements Switchable {
 				? settingsPanel
 				: buttonPanel;
 	}
-	
+
 	@Override
 	public void switchToolItemState() {
 		getSettingsToolItem().setSelected(!getSettingsToolItem().isSelected());
@@ -206,6 +217,13 @@ public class StartWorkItemWithButtonView implements Switchable {
 		return (MToolItem) part.getToolbar().getChildren().get(0);
 	}
 
+	@Override
+	public void switchPanel() {
+		deactivate();
+		switchComposite.switchActiveControl();
+		activate();
+	}
+
 	private void deactivate() {
 		if (switchComposite.getTopControl() == settingsPanel) {
 			deactivateSettingsPanel();
@@ -214,6 +232,12 @@ public class StartWorkItemWithButtonView implements Switchable {
 
 	private void deactivateSettingsPanel() {
 		settingsPanel.flushPreferences();
+	}
+
+	private void activate() {
+		if (switchComposite.getTopControl() == settingsPanel) {
+			activateSettingsPanel();
+		}
 	}
 
 	private void activateSettingsPanel() {
@@ -253,7 +277,7 @@ public class StartWorkItemWithButtonView implements Switchable {
 	private String getActivityNameFromButton(Button btn) {
 		return btn.getData(BTN_DATA_KEY_ACTIVITY_NAME).toString();
 	}
-
+	
 	@Focus
 	public void requestFocus() {
 		if (switchComposite != null && !switchComposite.isDisposed()) {

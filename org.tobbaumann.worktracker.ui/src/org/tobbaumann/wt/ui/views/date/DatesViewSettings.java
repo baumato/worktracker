@@ -53,6 +53,7 @@ public class DatesViewSettings extends PreferencesComposite {
 	 */
 	private static class ComboDateFormat {
 		static ComboDateFormat SHORT = new ComboDateFormat("short", DateFormat.SHORT);
+		static ComboDateFormat MEDIUM = new ComboDateFormat("medium", DateFormat.MEDIUM);
 		static ComboDateFormat LONG = new ComboDateFormat("long", DateFormat.LONG);
 		static ComboDateFormat CUSTOM = new ComboDateFormat("custom", -1);
 
@@ -69,6 +70,8 @@ public class DatesViewSettings extends PreferencesComposite {
 			switch (dateFormatStyle) {
 				case DateFormat.SHORT:
 					return SHORT;
+				case DateFormat.MEDIUM:
+					return MEDIUM;
 				case DateFormat.LONG:
 					return LONG;
 				default:
@@ -79,6 +82,9 @@ public class DatesViewSettings extends PreferencesComposite {
 		static ComboDateFormat instance(DateFormat df) {
 			if (df.equals(DateFormat.getDateInstance(DateFormat.SHORT))) {
 				return SHORT;
+			}
+			if (df.equals(DateFormat.getDateInstance(DateFormat.MEDIUM))) {
+				return MEDIUM;
 			}
 			if (df.equals(DateFormat.getDateInstance(DateFormat.LONG))) {
 				return LONG;
@@ -91,7 +97,9 @@ public class DatesViewSettings extends PreferencesComposite {
 		}
 
 		private DateFormat getDateFormat() {
-			return dateFormatStyle == -1 ? new SimpleDateFormat(prefs.getDatesViewDateFormatPattern()) : DateFormat.getDateInstance(dateFormatStyle);
+			return dateFormatStyle == -1
+					? new SimpleDateFormat(prefs.getDatesViewDateFormatPattern())
+					: DateFormat.getDateInstance(dateFormatStyle);
 		}
 
 		public boolean isCustomDateFormat() {
@@ -138,7 +146,7 @@ public class DatesViewSettings extends PreferencesComposite {
 				return ((ComboDateFormat)element).getDisplayName();
 			}
 		});
-		cmbDateFormat.setInput(Arrays.asList(ComboDateFormat.SHORT, ComboDateFormat.LONG, ComboDateFormat.CUSTOM));
+		cmbDateFormat.setInput(Arrays.asList(ComboDateFormat.SHORT, ComboDateFormat.MEDIUM, ComboDateFormat.LONG, ComboDateFormat.CUSTOM));
 		cmbDateFormat.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -240,7 +248,7 @@ public class DatesViewSettings extends PreferencesComposite {
 
 	@Override
 	public void flushPreferences() {
-		prefs.setDatesViewDateFormat(dateFormatStyle);
+		prefs.setDatesViewDateFormatStyle(dateFormatStyle);
 		prefs.setDatesViewDateFormatPattern(dateFormatPattern);
 		prefs.setDatesViewShowWeekdays(showWeekdays);
 	}

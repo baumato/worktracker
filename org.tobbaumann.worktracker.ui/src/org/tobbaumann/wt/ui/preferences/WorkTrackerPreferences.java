@@ -11,75 +11,95 @@ import static com.google.common.collect.Lists.newArrayList;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
+import org.eclipse.core.runtime.preferences.DefaultScope;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
+import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.osgi.service.prefs.BackingStoreException;
 
+/**
+ *
+ * Keep default values in sync with plugin_customization.ini
+ * @author tobbaumann
+ *
+ */
 @Creatable
 public class WorkTrackerPreferences {
 
-	private static final String REMINDER_NODE_NAME = "worktracker.preferences.reminder";
-	private static final String USE_REMINDER = "useReminder";
+	public static final String NODE_NAME = "org.tobbaumann.worktracker.ui";
+
+	public static final String USE_REMINDER = "useReminder";
 	private static final Boolean USE_REMINDER_DEFAULT = true;
-	private static final String REMIND_FREQUENCY = "remindFrequency";
+	public static final String REMIND_FREQUENCY = "remindFrequency";
 	private static final long REMIND_FREQUENCY_DEFAULT = TimeUnit.MILLISECONDS.convert(15, TimeUnit.MINUTES);
 
-	private static final String STATUS_LINE_NODE_NAME = "worktracker.preferences.statusLine";
-	private static final String STATUS_LINE_UPDATE_FREQUENCY = "updateFrequency";
+	public static final String STATUS_LINE_UPDATE_FREQUENCY = "updateFrequency";
 	private static final long STATUS_LINE_UPDATE_FREQUENCY_DEFAULT = 1000;
 
-	private static final String DATES_VIEW_NODE_NAME = "worktracker.preferences.datesView";
-	private static final String DATES_VIEW_DATE_FORMAT = "DATE_FORMAT";
-	private static final String DATES_VIEW_DATE_FORMAT_DISPLAY_NAME = "Date Format";
-	private static final int DATES_VIEW_DATE_FORMAT_DEFAULT = DateFormat.SHORT;
-	private static final String DATES_VIEW_DATE_FORMAT_PATTERN = "DATE_FORMAT_PATTERN";
+	public static final String DATES_VIEW_DATE_FORMAT_STYLE = "dateFormatStyle";
+	private static final String DATES_VIEW_DATE_FORMAT_STYLE_DISPLAY_NAME = "Date Format";
+	private static final int DATES_VIEW_DATE_FORMAT_STYLE_DEFAULT = DateFormat.SHORT;
+	public static final String DATES_VIEW_DATE_FORMAT_PATTERN = "dateFormatPattern";
 	private static final String DATES_VIEW_DATE_FORMAT_PATTERN_DISPLAY_NAME = "Date Format Pattner";
 	private static final String DATES_VIEW_DATE_FORMAT_PATTERN_DEFAULT = "yyyy-MM-dd";
-	private static final String DATES_VIEW_SHOW_WEEKDAYS = "SHOW_WEEKDAYS";
+	public static final String DATES_VIEW_SHOW_WEEKDAYS = "showWeekdays";
 	private static final String DATES_VIEW_SHOW_WEEKDAYS_DISPLAY_NAME = "Show Weekdays";
 	private static final boolean DATES_VIEW_SHOW_WEEKDAYS_DEFAULT = true;
 
 
-	private static final String STARTWI_VIEW_NODE_NAME = "worktracker.preferences.startWorkItemsWithButtonView";
-	private static final String STARTWI_VIEW_NUMBER_OF_BUTTONS = "NUMBER_OF_BUTTONS";
+	public static final String STARTWI_VIEW_NUMBER_OF_BUTTONS = "numberOfButtons";
 	private static final String STARTWI_VIEW_NUMBER_OF_BUTTONS_DISPLAY_NAME = "Number Of Buttons";
 	private static final int STARTWI_VIEW_NUMBER_OF_BUTTONS_DEFAULT_VALUE = 6;
 	private static final int STARTWI_VIEW_NUMBER_OF_BUTTONS_MAXIMUM_VALUE = 20;
-	private static final String STARTWI_VIEW_NUMBER_OF_BUTTON_COLUMNS = "NUMBER_OF_BUTTON_COLUMNS";
+	public static final String STARTWI_VIEW_NUMBER_OF_BUTTON_COLUMNS = "numberOfButtonColumns";
 	private static final String STARTWI_VIEW_NUMBER_OF_BUTTON_COLUMNS_DISPLAY_NAME = "Number Of Button Columns";
 	private static final int STARTWI_VIEW_NUMBER_OF_BUTTON_COLUMNS_DEFAULT_VALUE = 1;
 	private static final int STARTWI_VIEW_NUMBER_OF_BUTTON_COLUMNS_MAXIMUM_VALUE = 6;
-	private static final String STARTWI_VIEW_BUTTON_LABELS = "BUTTON_LABELS";
+	private static final String STARTWI_VIEW_BUTTON_LABELS = "buttonLabels";
 
 	/*
 	 * Reminder
 	 */
 
 	public long getRemindFrequencyInMillis() {
-		return ConfigurationScope.INSTANCE.getNode(REMINDER_NODE_NAME).getLong(
-			REMIND_FREQUENCY,
-			REMIND_FREQUENCY_DEFAULT);
+		return getLong(NODE_NAME, REMIND_FREQUENCY, REMIND_FREQUENCY_DEFAULT);
+	}
+
+	private long getLong(String node, String key, long defaultValue) {
+		try {
+			for (IScopeContext sc : new IScopeContext[]{InstanceScope.INSTANCE, ConfigurationScope.INSTANCE, DefaultScope.INSTANCE}) {
+				IEclipsePreferences prefs = sc.getNode(node);
+				if (Arrays.asList(prefs.keys()).contains(key)) {
+					return prefs.getLong(key, defaultValue);
+				}
+			}
+		} catch (BackingStoreException e) {
+			throw new RuntimeException(e);
+		}
+		return defaultValue;
 	}
 
 	public void setRemindFrequencyInMillis(long millis) {
-		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(REMINDER_NODE_NAME);
+		InstanceScope.INSTANCE.getNode(NODE_NAME).putLong(REMIND_FREQUENCY, millis);
+		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(NODE_NAME);
 		node.putLong(REMIND_FREQUENCY, millis);
 		flushNode(node);
 	}
 
 	public boolean getUseReminder() {
-		return ConfigurationScope.INSTANCE.getNode(REMINDER_NODE_NAME).getBoolean(
-			USE_REMINDER,
-			USE_REMINDER_DEFAULT);
+		return getBoolean(NODE_NAME, USE_REMINDER, USE_REMINDER_DEFAULT);
 	}
 
 	public void setUseReminder(boolean useReminder) {
-		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(REMINDER_NODE_NAME);
+		InstanceScope.INSTANCE.getNode(NODE_NAME).putBoolean(USE_REMINDER, useReminder);
+		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(NODE_NAME);
 		node.putBoolean(USE_REMINDER, useReminder);
 		flushNode(node);
 	}
@@ -90,13 +110,12 @@ public class WorkTrackerPreferences {
 	 */
 
 	public long getStatusLineUpdateFrequencyInMillis() {
-		return ConfigurationScope.INSTANCE.getNode(STATUS_LINE_NODE_NAME).getLong(
-			STATUS_LINE_UPDATE_FREQUENCY,
-			STATUS_LINE_UPDATE_FREQUENCY_DEFAULT);
+		return getLong(NODE_NAME, STATUS_LINE_UPDATE_FREQUENCY, STATUS_LINE_UPDATE_FREQUENCY_DEFAULT);
 	}
 
 	public void setStatusLineUpdateFrequencyInMillis(long millis) {
-		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(STATUS_LINE_NODE_NAME);
+		InstanceScope.INSTANCE.getNode(NODE_NAME).putLong(STATUS_LINE_UPDATE_FREQUENCY, millis);
+		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(NODE_NAME);
 		node.putLong(STATUS_LINE_UPDATE_FREQUENCY, millis);
 		flushNode(node);
 	}
@@ -107,21 +126,38 @@ public class WorkTrackerPreferences {
 	 */
 
 	public String getDatesViewDateFormatDisplayName() {
-		return DATES_VIEW_DATE_FORMAT_DISPLAY_NAME;
+		return DATES_VIEW_DATE_FORMAT_STYLE_DISPLAY_NAME;
 	}
 
-	// TODO evtl. zu int (dateFormatStyle ändern)
 	public DateFormat getDatesViewDateFormat() {
-		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(DATES_VIEW_NODE_NAME);
-		Integer dfStyle = Integer.valueOf(node.getInt(DATES_VIEW_DATE_FORMAT, DATES_VIEW_DATE_FORMAT_DEFAULT));
+		Integer dfStyle = getDatesViewDateFormatStyle();
 		return dfStyle == -1
 				? new SimpleDateFormat(getDatesViewDateFormatPattern())
 				: DateFormat.getDateInstance(dfStyle);
 	}
 
-	public void setDatesViewDateFormat(int dfStyle) {
-		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(DATES_VIEW_NODE_NAME);
-		node.putInt(DATES_VIEW_DATE_FORMAT, dfStyle);
+	public int getDatesViewDateFormatStyle() {
+		return getInt(NODE_NAME, DATES_VIEW_DATE_FORMAT_STYLE, DATES_VIEW_DATE_FORMAT_STYLE_DEFAULT);
+	}
+
+	private int getInt(String node, String key, int defaultValue) {
+		try {
+			for (IScopeContext sc : new IScopeContext[]{InstanceScope.INSTANCE, ConfigurationScope.INSTANCE, DefaultScope.INSTANCE}) {
+				IEclipsePreferences prefs = sc.getNode(node);
+				if (Arrays.asList(prefs.keys()).contains(key)) {
+					return prefs.getInt(key, defaultValue);
+				}
+			}
+		} catch (BackingStoreException e) {
+			throw new RuntimeException(e);
+		}
+		return defaultValue;
+	}
+
+	public void setDatesViewDateFormatStyle(int dfStyle) {
+		InstanceScope.INSTANCE.getNode(NODE_NAME).putInt(DATES_VIEW_DATE_FORMAT_STYLE, dfStyle);
+		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(NODE_NAME);
+		node.putInt(DATES_VIEW_DATE_FORMAT_STYLE, dfStyle);
 		flushNode(node);
 	}
 
@@ -130,12 +166,27 @@ public class WorkTrackerPreferences {
 	}
 
 	public String getDatesViewDateFormatPattern() {
-		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(DATES_VIEW_NODE_NAME);
-		return node.get(DATES_VIEW_DATE_FORMAT_PATTERN, DATES_VIEW_DATE_FORMAT_PATTERN_DEFAULT);
+		return getString(NODE_NAME, DATES_VIEW_DATE_FORMAT_PATTERN, DATES_VIEW_DATE_FORMAT_PATTERN_DEFAULT);
 	}
 
+	private String getString(String node, String key, String defaultValue) {
+		try {
+			for (IScopeContext sc : new IScopeContext[]{InstanceScope.INSTANCE, ConfigurationScope.INSTANCE, DefaultScope.INSTANCE}) {
+				IEclipsePreferences prefs = sc.getNode(node);
+				if (Arrays.asList(prefs.keys()).contains(key)) {
+					return prefs.get(key, defaultValue);
+				}
+			}
+		} catch (BackingStoreException e) {
+			throw new RuntimeException(e);
+		}
+		return defaultValue;
+	}
+
+
 	public void setDatesViewDateFormatPattern(String pattern) {
-		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(DATES_VIEW_NODE_NAME);
+		InstanceScope.INSTANCE.getNode(NODE_NAME).put(DATES_VIEW_DATE_FORMAT_PATTERN, pattern);
+		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(NODE_NAME);
 		node.put(DATES_VIEW_DATE_FORMAT_PATTERN, pattern);
 		flushNode(node);
 	}
@@ -145,12 +196,26 @@ public class WorkTrackerPreferences {
 	}
 
 	public boolean getDatesViewShowWeekdays() {
-		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(DATES_VIEW_NODE_NAME);
-		return node.getBoolean(DATES_VIEW_SHOW_WEEKDAYS, DATES_VIEW_SHOW_WEEKDAYS_DEFAULT);
+		return getBoolean(NODE_NAME, DATES_VIEW_SHOW_WEEKDAYS, DATES_VIEW_SHOW_WEEKDAYS_DEFAULT);
+	}
+
+	private boolean getBoolean(String node, String key, boolean defaultValue) {
+		try {
+			for (IScopeContext sc : new IScopeContext[]{InstanceScope.INSTANCE, ConfigurationScope.INSTANCE, DefaultScope.INSTANCE}) {
+				IEclipsePreferences prefs = sc.getNode(node);
+				if (Arrays.asList(prefs.keys()).contains(key)) {
+					return prefs.getBoolean(key, defaultValue);
+				}
+			}
+		} catch (BackingStoreException e) {
+			throw new RuntimeException(e);
+		}
+		return defaultValue;
 	}
 
 	public void setDatesViewShowWeekdays(boolean showWeekdays) {
-		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(DATES_VIEW_NODE_NAME);
+		InstanceScope.INSTANCE.getNode(NODE_NAME).putBoolean(DATES_VIEW_SHOW_WEEKDAYS, showWeekdays);
+		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(NODE_NAME);
 		node.putBoolean(DATES_VIEW_SHOW_WEEKDAYS, showWeekdays);
 		flushNode(node);
 	}
@@ -160,17 +225,17 @@ public class WorkTrackerPreferences {
 	 * StartWorkItemWithButtonView
 	 */
 
-	public int getNumberOfButtons() {
-		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(STARTWI_VIEW_NODE_NAME);
-		return node.getInt(STARTWI_VIEW_NUMBER_OF_BUTTONS, STARTWI_VIEW_NUMBER_OF_BUTTONS_DEFAULT_VALUE);
-	}
-
 	public String getNumberOfButtonsDisplayName() {
 		return STARTWI_VIEW_NUMBER_OF_BUTTONS_DISPLAY_NAME;
 	}
 
+	public int getNumberOfButtons() {
+		return getInt(NODE_NAME, STARTWI_VIEW_NUMBER_OF_BUTTONS, STARTWI_VIEW_NUMBER_OF_BUTTONS_DEFAULT_VALUE);
+	}
+
 	public void setNumberOfButtons(int numberOfButtons) {
-		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(STARTWI_VIEW_NODE_NAME);
+		InstanceScope.INSTANCE.getNode(NODE_NAME).putInt(STARTWI_VIEW_NUMBER_OF_BUTTONS, numberOfButtons);
+		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(NODE_NAME);
 		node.putInt(STARTWI_VIEW_NUMBER_OF_BUTTONS, numberOfButtons);
 		flushNode(node);
 	}
@@ -180,8 +245,7 @@ public class WorkTrackerPreferences {
 	}
 
 	public int getNumberOfButtonColumns() {
-		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(STARTWI_VIEW_NODE_NAME);
-		return node.getInt(STARTWI_VIEW_NUMBER_OF_BUTTON_COLUMNS, STARTWI_VIEW_NUMBER_OF_BUTTON_COLUMNS_DEFAULT_VALUE);
+		return getInt(NODE_NAME, STARTWI_VIEW_NUMBER_OF_BUTTON_COLUMNS, STARTWI_VIEW_NUMBER_OF_BUTTON_COLUMNS_DEFAULT_VALUE);
 	}
 
 	public String getNumberOfButtonColumnsDisplayName() {
@@ -189,7 +253,8 @@ public class WorkTrackerPreferences {
 	}
 
 	public void setNumberOfButtonColumns(int numberOfButtonColumns) {
-		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(STARTWI_VIEW_NODE_NAME);
+		InstanceScope.INSTANCE.getNode(NODE_NAME).putInt(STARTWI_VIEW_NUMBER_OF_BUTTON_COLUMNS, numberOfButtonColumns);
+		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(NODE_NAME);
 		node.putInt(STARTWI_VIEW_NUMBER_OF_BUTTON_COLUMNS, numberOfButtonColumns);
 		flushNode(node);
 	}
@@ -208,7 +273,7 @@ public class WorkTrackerPreferences {
 	}
 
 	private IEclipsePreferences getButtonLabelsNode() {
-		String nodePath = STARTWI_VIEW_NODE_NAME + "/" + STARTWI_VIEW_BUTTON_LABELS;
+		String nodePath = NODE_NAME + "/" + STARTWI_VIEW_BUTTON_LABELS;
 		return ConfigurationScope.INSTANCE.getNode(nodePath);
 	}
 

@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.e4.core.di.annotations.Creatable;
+import org.eclipse.e4.core.di.extensions.Preference;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.workbench.IWorkbench;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -53,33 +54,37 @@ import org.tobbaumann.wt.ui.preferences.WorkTrackerPreferences;
 public class SystemTray {
 
 	private static final String REMINDER_TEXT = "Do you still working on \"%s\"?";
+
 	private static final String TOOL_TIP_TEXT = "Working on \"%s\"";
 	private static final String TRAY_ICON_IMAGE_NAME = "trayIcon";
 
 	static {
-		try {
-			String strImgUrl = "platform:/plugin/org.tobbaumann.worktracker.ui/icons/clocks/clock_16x16.png";
-			URL imgUrl = URI.create(strImgUrl).toURL();
-			ImageDescriptor id = ImageDescriptor.createFromURL(imgUrl);
-			JFaceResources.getImageRegistry().put(TRAY_ICON_IMAGE_NAME, id);
-		} catch (Exception e) {
-			e.printStackTrace();
+			try {
+				String strImgUrl = "platform:/plugin/org.tobbaumann.worktracker.ui/icons/clocks/clock_16x16.png";
+				URL imgUrl = URI.create(strImgUrl).toURL();
+				ImageDescriptor id = ImageDescriptor.createFromURL(imgUrl);
+				JFaceResources.getImageRegistry().put(TRAY_ICON_IMAGE_NAME, id);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-	}
 
-	private @Inject WorkTrackerPreferences prefs;
 	private @Inject IWorkbench workbench;
 	private @Inject	Shell shell;
 	private TrayItem trayItem;
 	private ToolTip reminderToolTip;
-	private Job reminderJob = null;
+	private final Job reminderJob;
 	private volatile String currentTooltipText = null;
 	private Point shellLocation;
 	private Point shellSize;
 
+	private boolean useReminder;
+	private long remindFreqInMillis;
+
 	@Inject
 	public SystemTray(Shell shell) {
 		this.shell = shell;
+		this.reminderJob = new RemindJob();
 		setupTray();
 	}
 
@@ -127,45 +132,6 @@ public class SystemTray {
 				switchApplicationState();
 			}
 		});
-	}
-
-	private void remindPeriodically() {
-		if (reminderJob != null) {
-			reminderJob.cancel();
-		}
-		reminderJob = new Job("Show Reminder Periodically") {
-			@Override
-			protected IStatus run(final IProgressMonitor monitor) {
-				shell.getDisplay().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							checkIfCanceled(monitor);
-							if (!prefs.getUseReminder()
-									|| isNullOrEmpty(currentTooltipText)) {
-								checkIfCanceled(monitor);
-								schedule(10000);
-							} else {
-								checkIfCanceled(monitor);
-								showReminder();
-								checkIfCanceled(monitor);
-								schedule(prefs.getRemindFrequencyInMillis());
-							}
-						} catch (OperationCanceledException e) {
-							return;
-						}
-					}
-				});
-				return Status.OK_STATUS;
-			}
-		};
-		reminderJob.schedule(prefs.getRemindFrequencyInMillis());
-	}
-
-	private void checkIfCanceled(IProgressMonitor monitor) {
-		if (monitor.isCanceled()) {
-			throw new OperationCanceledException();
-		}
 	}
 
 	private void createTrayItemMenu() {
@@ -216,6 +182,25 @@ public class SystemTray {
 		});
 	}
 
+	@Inject
+	@org.eclipse.e4.core.di.annotations.Optional
+	public void updateUseReminder(
+			@Preference(value = WorkTrackerPreferences.USE_REMINDER) boolean useReminder) {
+		if (this.useReminder != useReminder) {
+			this.useReminder = useReminder;
+			remindPeriodically();
+		}
+	}
+
+	@Inject
+	@org.eclipse.e4.core.di.annotations.Optional
+	public void updateRemindFrequency(
+			@Preference(value = WorkTrackerPreferences.REMIND_FREQUENCY) long remindFrequency) {
+		if (this.remindFreqInMillis != remindFrequency) {
+			this.remindFreqInMillis = remindFrequency;
+			remindPeriodically();
+		}
+	}
 
 	@Inject @org.eclipse.e4.core.di.annotations.Optional
 	void workItemStarted(
@@ -229,6 +214,14 @@ public class SystemTray {
 		trayItem.setToolTipText(String.format(TOOL_TIP_TEXT, wi.getActivityName()));
 		remindPeriodically();
 	}
+
+	private void remindPeriodically() {
+		reminderJob.cancel();
+		if (useReminder) {
+			reminderJob.schedule(remindFreqInMillis);
+		}
+	}
+
 
 	private void switchApplicationState() {
 		if (shell.isVisible()) {
@@ -253,6 +246,12 @@ public class SystemTray {
 		shell.setMinimized(false);
 	}
 
+	private void checkIfCanceled(IProgressMonitor monitor) {
+		if (monitor.isCanceled()) {
+			throw new OperationCanceledException();
+		}
+	}
+
 
 
 	private void showReminder() {
@@ -263,5 +262,38 @@ public class SystemTray {
 		return shell.isVisible() ? String.format("Push %s to tray",
 				Display.getAppName()) : String.format("Bring %s to front",
 				Display.getAppName());
+	}
+
+
+	/**
+	 *
+	 * @author tobbaumann
+	 *
+	 */
+	private final class RemindJob extends Job {
+
+		private RemindJob() {
+			super("Show Reminder Periodically");
+		}
+
+		@Override
+		protected IStatus run(final IProgressMonitor monitor) {
+			shell.getDisplay().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						if (!isNullOrEmpty(currentTooltipText)) {
+							checkIfCanceled(monitor);
+							showReminder();
+							checkIfCanceled(monitor);
+							schedule(remindFreqInMillis);
+						}
+					} catch (OperationCanceledException e) {
+						return;
+					}
+				}
+			});
+			return Status.OK_STATUS;
+		}
 	}
 }
