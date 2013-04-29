@@ -44,8 +44,10 @@
     <mainMenu xmi:id="_QawRADYtEeKvpYoU2mBS0w" elementId="menu:org.eclipse.ui.main.menu">
       <children xsi:type="menu:Menu" xmi:id="_m8-GcDY9EeKHouPeRF3fXg" elementId="worktracker.ui.menu.0" label="&amp;Menu" tooltip="This status bar always shows  the currently running work item">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_EtDOkDY_EeKHouPeRF3fXg" elementId="worktracker.ui.handledmenuitem.0" label="&amp;Preferences" tooltip="Opens the preferences" command="_-hJtADY-EeKHouPeRF3fXg"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_vuoMcLEXEeKE5Orpyhzryg" elementId="org.tobbaumann.worktracker.ui.menuseparator.0"/>
         <children xsi:type="menu:DirectMenuItem" xmi:id="_APzZ0I5oEeKzvsrGpQnnXQ" elementId="org.tobbaumann.worktracker.ui.directmenuitem.0" label="&amp;Import WorkTracker Data" tooltip="Imports the data from previous version of WorkTracker" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.handlers.ImportOldWorkTrackerDataHandler"/>
         <children xsi:type="menu:DirectMenuItem" xmi:id="_Ao3FcJR7EeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.directmenuitem.1" label="Create &amp;fake data" tooltip="Create fake data for demonstration purposes" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.handlers.CreateFakeDataHandler"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_wqND4LEXEeKE5Orpyhzryg" elementId="org.tobbaumann.worktracker.ui.menuseparator.1"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_R19I8JSOEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.handledmenuitem.0" label="Exit" tooltip="Quits the application." command="_HL8dUJSOEeKbjMpGHgZ80g"/>
       </children>
     </mainMenu>
