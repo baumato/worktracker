@@ -17,19 +17,23 @@
          </property>
          <property
                name="aboutImage"
-               value="icons/clock_128x128.png">
+               value="icons/clocks/clock_128x128.png">
          </property>
          <property
                name="aboutText"
-               value="Copyright (c) 2013 Tobias Baumann.&#x0A;All rights reserved. This program and the accompanying materials&#x0A;are made available under the terms of the Eclipse Public License v1.0&#x0A;which accompanies this distribution, and is available at&#x0A;http://www.eclipse.org/legal/epl-v10.html&#x0A;&#x0A;All clock icons are from http://www.icons-land.com.">
+               value="Copyright (c) 2013 Tobias Baumann.&#x0A;All rights reserved. This program and the accompanying materials&#x0A;are made available under the terms of the Eclipse Public License v1.0&#x0A;which accompanies this distribution, and is available at&#x0A;http://www.eclipse.org/legal/epl-v10.html&#x0A;&#x0A;All clock icons are from http://www.icons-land.com.&#x0A;All other icons are from http://pc.de/ico/">
          </property>
          <property
                name="windowImages"
-               value="icons/clock_16x16.png,icons/clock_32x32.png,icons/clock_48x48.png,icons/clock_64x64.png,icons/clock_128x128.png">
+               value="icons/clocks/clock_16x16.png,icons/clocks/clock_32x32.png,icons/clocks/clock_48x48.png,icons/clocks/clock_64x64.png,icons/clocks/clock_128x128.png">
          </property>
          <property
                name="cssTheme"
                value="theme.blue">
+         </property>
+         <property
+               name="preferenceCustomization"
+               value="plugin_customization.ini">
          </property>
       </product>
    </extension>
