@@ -1,0 +1,8 @@
+AboutDialog
+AboutDialog: Lizenzen anzeigen?
+Preferences verstehen/fixen
+jeeeyul / eclipse-themes anschauen
+TODO: ToolItem: MToolControl element = (MToolControl) service.find("statusbar",
+  application);
+Fill Buttons with most used activities als checkbox
+Most used activities ins tray menu
