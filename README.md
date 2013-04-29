@@ -2,7 +2,7 @@ WorkTracker
 ===========
 
 This program has been written to get to know Eclipse 4 RCP development,
-EMF and a bit ObservableLists and other cool stuff.
+EMF and other cool stuff.
 
 Nevertheless this program is very helpful and I use it on a daily basis.
 
