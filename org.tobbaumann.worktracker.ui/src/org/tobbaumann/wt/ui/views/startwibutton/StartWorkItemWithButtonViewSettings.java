@@ -34,8 +34,8 @@ public class StartWorkItemWithButtonViewSettings extends PreferencesComposite {
 	public StartWorkItemWithButtonViewSettings(Composite parent, WorkTrackerPreferences prefs) {
 		super(parent, prefs);
 		this.pcs = new PropertyChangeSupport(this);
-		updatePreferenceFields();
 		createSettingsPanel();
+		updatePreferenceFields();
 	}
 
 
@@ -98,6 +98,7 @@ public class StartWorkItemWithButtonViewSettings extends PreferencesComposite {
 		pcs.removePropertyChangeListener(listener);
 	}
 
+	@Override
 	public void updatePreferenceFields() {
 		this.numberOfButtonColumns = prefs.getNumberOfButtonColumns();
 		this.numberOfButtons = prefs.getNumberOfButtons();

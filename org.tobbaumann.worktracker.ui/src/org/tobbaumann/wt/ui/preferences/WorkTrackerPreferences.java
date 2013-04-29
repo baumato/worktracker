@@ -8,12 +8,14 @@
 package org.tobbaumann.wt.ui.preferences;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Sets.newTreeSet;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.core.runtime.preferences.ConfigurationScope;
@@ -63,6 +65,7 @@ public class WorkTrackerPreferences {
 	private static final int STARTWI_VIEW_NUMBER_OF_BUTTON_COLUMNS_DEFAULT_VALUE = 1;
 	private static final int STARTWI_VIEW_NUMBER_OF_BUTTON_COLUMNS_MAXIMUM_VALUE = 6;
 	private static final String STARTWI_VIEW_BUTTON_LABELS = "buttonLabels";
+	public static final String STARTWI_VIEW_BUTTON_LABELS_NODE_PATH = NODE_NAME + "/" + STARTWI_VIEW_BUTTON_LABELS;
 
 	/*
 	 * Reminder
@@ -273,8 +276,7 @@ public class WorkTrackerPreferences {
 	}
 
 	private IEclipsePreferences getButtonLabelsNode() {
-		String nodePath = NODE_NAME + "/" + STARTWI_VIEW_BUTTON_LABELS;
-		return ConfigurationScope.INSTANCE.getNode(nodePath);
+		return ConfigurationScope.INSTANCE.getNode(STARTWI_VIEW_BUTTON_LABELS_NODE_PATH);
 	}
 
 	public List<String> getWorkItemStartButtonLabels() {
@@ -284,8 +286,12 @@ public class WorkTrackerPreferences {
 		IEclipsePreferences node = getButtonLabelsNode();
 		try {
 			List<String> activityNames = newArrayList();
-			for (String key : node.keys()) {
-				activityNames.add(node.get(key, ""));
+			TreeSet<Integer> keySet = newTreeSet();
+			for (String k : node.keys()) {
+				keySet.add(Integer.valueOf(k));
+			}
+			for (Integer key : keySet) {
+				activityNames.add(node.get(String.valueOf(key), ""));
 			}
 			return activityNames;
 		} catch (BackingStoreException e) {

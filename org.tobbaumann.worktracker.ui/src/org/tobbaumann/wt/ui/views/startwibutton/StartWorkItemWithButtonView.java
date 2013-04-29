@@ -66,7 +66,7 @@ public class StartWorkItemWithButtonView implements Switchable {
 
 	private int nrOfButtons;
 	private int nrOfBtnColumns;
-
+	private List<String> buttonLabels;
 
 	@PostConstruct
 	public void createControls(Composite parent) {
@@ -83,9 +83,7 @@ public class StartWorkItemWithButtonView implements Switchable {
 	public void updateNrOfButtons(@Preference(value = WorkTrackerPreferences.STARTWI_VIEW_NUMBER_OF_BUTTONS) int nrOfButtons) {
 		if (this.nrOfButtons != nrOfButtons) {
 			this.nrOfButtons = nrOfButtons;
-			if (buttonPanelContent != null && !buttonPanelContent.isDisposed()) {
-				activateButtonPanel();
-			}
+			activateButtonPanel();
 		}
 	}
 
@@ -94,13 +92,24 @@ public class StartWorkItemWithButtonView implements Switchable {
 	public void updateNrOfButtonColumns(@Preference(value = WorkTrackerPreferences.STARTWI_VIEW_NUMBER_OF_BUTTON_COLUMNS) int nrOfBtnColumns) {
 		if (this.nrOfBtnColumns != nrOfBtnColumns) {
 			this.nrOfBtnColumns = nrOfBtnColumns;
-			if (buttonPanelContent != null && !buttonPanelContent.isDisposed()) {
-				activateButtonPanel();
-			}
+			activateButtonPanel();
+		}
+	}
+
+	@Inject
+	@Optional
+	public void updateButtonLabels(@Preference (nodePath = "/configuration/" + WorkTrackerPreferences.STARTWI_VIEW_BUTTON_LABELS_NODE_PATH, value = "any") String any) {
+		List<String> newButtonLables = this.prefs.getWorkItemStartButtonLabels();
+		if (!newButtonLables.equals(this.buttonLabels)) {
+			this.buttonLabels = newButtonLables;
+			activateButtonPanel();
 		}
 	}
 
 	private void activateButtonPanel() {
+		if (buttonPanelContent == null || buttonPanelContent.isDisposed()) {
+			return;
+		}
 		this.buttonPanelContent.dispose();
 		createButtonPanel();
 		switchComposite.layout(true, true);
@@ -277,7 +286,7 @@ public class StartWorkItemWithButtonView implements Switchable {
 	private String getActivityNameFromButton(Button btn) {
 		return btn.getData(BTN_DATA_KEY_ACTIVITY_NAME).toString();
 	}
-	
+
 	@Focus
 	public void requestFocus() {
 		if (switchComposite != null && !switchComposite.isDisposed()) {
