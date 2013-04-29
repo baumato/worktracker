@@ -1,6 +1,5 @@
-WorkTracker
+worktracker
 ===========
-
 This program has been written to get to know Eclipse 4 RCP development,
 EMF and a bit ObservableLists and other cool stuff.
 
