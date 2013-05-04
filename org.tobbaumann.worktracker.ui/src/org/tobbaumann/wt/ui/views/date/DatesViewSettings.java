@@ -11,10 +11,7 @@
 package org.tobbaumann.wt.ui.views.date;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
 
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecoration;
@@ -46,67 +43,6 @@ import com.google.common.io.Resources;
 
 public class DatesViewSettings extends PreferencesComposite {
 
-	/**
-	 *
-	 * @author tobbaumann
-	 *
-	 */
-	private static class ComboDateFormat {
-		static ComboDateFormat SHORT = new ComboDateFormat("short", DateFormat.SHORT);
-		static ComboDateFormat MEDIUM = new ComboDateFormat("medium", DateFormat.MEDIUM);
-		static ComboDateFormat LONG = new ComboDateFormat("long", DateFormat.LONG);
-		static ComboDateFormat CUSTOM = new ComboDateFormat("custom", -1);
-
-		private final String displayNamePrefix;
-		private final int dateFormatStyle;
-		private final WorkTrackerPreferences prefs = new WorkTrackerPreferences();
-
-		private ComboDateFormat(String displayNamePrefix, int dateFormatStyle) {
-			this.displayNamePrefix = displayNamePrefix;
-			this.dateFormatStyle = dateFormatStyle;
-		}
-
-		static ComboDateFormat instance(int dateFormatStyle) {
-			switch (dateFormatStyle) {
-				case DateFormat.SHORT:
-					return SHORT;
-				case DateFormat.MEDIUM:
-					return MEDIUM;
-				case DateFormat.LONG:
-					return LONG;
-				default:
-					return CUSTOM;
-			}
-		}
-
-		static ComboDateFormat instance(DateFormat df) {
-			if (df.equals(DateFormat.getDateInstance(DateFormat.SHORT))) {
-				return SHORT;
-			}
-			if (df.equals(DateFormat.getDateInstance(DateFormat.MEDIUM))) {
-				return MEDIUM;
-			}
-			if (df.equals(DateFormat.getDateInstance(DateFormat.LONG))) {
-				return LONG;
-			}
-			return CUSTOM;
-		}
-
-		String getDisplayName() {
-			return displayNamePrefix + " (" + getDateFormat().format(new Date()) + ")";
-		}
-
-		private DateFormat getDateFormat() {
-			return dateFormatStyle == -1
-					? new SimpleDateFormat(prefs.getDatesViewDateFormatPattern())
-					: DateFormat.getDateInstance(dateFormatStyle);
-		}
-
-		public boolean isCustomDateFormat() {
-			return this == CUSTOM;
-		}
-	}
-
 	private ComboViewer cmbDateFormat;
 	private ControlDecoration dateFormatControlDecoration;
 	private Text txtCustomDateFormat;
@@ -124,7 +60,7 @@ public class DatesViewSettings extends PreferencesComposite {
 
 	@Override
 	public void updatePreferenceFields() {
-		this.dateFormatStyle = ComboDateFormat.instance(prefs.getDatesViewDateFormat()).dateFormatStyle;
+		this.dateFormatStyle = prefs.getDatesViewDateFormatStyle();
 		this.dateFormatPattern = prefs.getDatesViewDateFormatPattern();
 		this.showWeekdays = prefs.getDatesViewShowWeekdays();
 		cmbDateFormat.setSelection(new StructuredSelection(ComboDateFormat.instance(dateFormatStyle)));
@@ -143,10 +79,10 @@ public class DatesViewSettings extends PreferencesComposite {
 		cmbDateFormat.setLabelProvider(new LabelProvider() {
 			@Override
 			public String getText(Object element) {
-				return ((ComboDateFormat)element).getDisplayName();
+				return ((ComboDateFormat)element).getDisplayName(prefs);
 			}
 		});
-		cmbDateFormat.setInput(Arrays.asList(ComboDateFormat.SHORT, ComboDateFormat.MEDIUM, ComboDateFormat.LONG, ComboDateFormat.CUSTOM));
+		cmbDateFormat.setInput(ComboDateFormat.comboDateFormats());
 		cmbDateFormat.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
