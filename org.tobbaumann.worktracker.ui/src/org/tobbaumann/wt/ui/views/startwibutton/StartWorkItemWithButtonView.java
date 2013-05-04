@@ -43,7 +43,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.tobbaumann.wt.core.WorkTrackingService;
-import org.tobbaumann.wt.domain.Activity;
 import org.tobbaumann.wt.ui.event.Events;
 import org.tobbaumann.wt.ui.preferences.WorkTrackerPreferences;
 import org.tobbaumann.wt.ui.views.SwitchComposite;
@@ -57,6 +56,7 @@ public class StartWorkItemWithButtonView implements Switchable {
 	private @Inject WorkTrackingService service;
 	private @Inject WorkTrackerPreferences prefs;
 	private @Inject IEventBroker eventBroker;
+	private @Inject ShortcutActivityNamesCreator shorcutNamesCreator;
 	private @Inject MPart part;
 
 	private SwitchComposite switchComposite;
@@ -116,20 +116,8 @@ public class StartWorkItemWithButtonView implements Switchable {
 	}
 
 	private void createButtonPanel() {
-		if (prefs.customWorkItemStartButtonLabelsAvailable()) {
-			createButtonPanel(prefs.getWorkItemStartButtonLabels());
-		} else {
-			createMostUsedActivitiesButtons();
-		}
-	}
-
-	private void createMostUsedActivitiesButtons() {
-		List<Activity> activities = service.getMostUsedActivities(nrOfButtons);
-		List<String> mua = newArrayList();
-		for (Activity a : activities) {
-			mua.add(a.getName());
-		}
-		createButtonPanel(mua);
+		List<String> names = shorcutNamesCreator.create();
+		createButtonPanel(names);
 	}
 
 	private void createButtonPanel(List<String> activityNames) {
