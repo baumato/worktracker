@@ -14,6 +14,7 @@ import static com.google.common.base.Strings.isNullOrEmpty;
 
 import java.net.URI;
 import java.net.URL;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -25,6 +26,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.core.di.extensions.Preference;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.workbench.IWorkbench;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -38,16 +40,20 @@ import org.eclipse.swt.events.ShellAdapter;
 import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolTip;
 import org.eclipse.swt.widgets.Tray;
 import org.eclipse.swt.widgets.TrayItem;
+import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.WorkItem;
 import org.tobbaumann.wt.ui.event.Events;
 import org.tobbaumann.wt.ui.handlers.ExitHandler;
 import org.tobbaumann.wt.ui.preferences.WorkTrackerPreferences;
+import org.tobbaumann.wt.ui.views.startwibutton.ShortcutActivityNamesCreator;
 
 @Creatable
 @Singleton
@@ -71,6 +77,9 @@ public class SystemTray {
 
 	private @Inject IWorkbench workbench;
 	private @Inject	Shell shell;
+	private @Inject WorkTrackingService service;
+	private @Inject IEventBroker eventBroker;
+	private @Inject ShortcutActivityNamesCreator shortcutNamesCreator;
 	private TrayItem trayItem;
 	private ToolTip reminderToolTip;
 	private final Job reminderJob;
@@ -98,7 +107,7 @@ public class SystemTray {
 		reminderToolTip = createReminderToolTip();
 		switchApplicationStateOnMinimize();
 		switchApplicationStateOnSelection();
-		createTrayItemMenu();
+		registerTrayItemMenuDetectListener();
 	}
 
 	private TrayItem createTrayItem(Tray tray) {
@@ -134,52 +143,76 @@ public class SystemTray {
 		});
 	}
 
-	private void createTrayItemMenu() {
+	private void registerTrayItemMenuDetectListener() {
 		trayItem.addMenuDetectListener(new MenuDetectListener() {
 			@Override
 			public void menuDetected(MenuDetectEvent e) {
-				final Menu menu = new Menu(shell, SWT.POP_UP);
-				MenuItem menuItem = new MenuItem(menu, SWT.PUSH);
-				menuItem.setText(createShowHideText());
-				menuItem.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						switchApplicationState();
-					}
-				});
-
-				if (!isNullOrEmpty(currentTooltipText)) {
-					menuItem = new MenuItem(menu, SWT.PUSH);
-					menuItem.setText("Show reminder");
-					menuItem.addSelectionListener(new SelectionAdapter() {
-						@Override
-						public void widgetSelected(SelectionEvent e) {
-							showReminder();
-						}
-					});
-				}
-
-				menuItem = new MenuItem(menu, SWT.SEPARATOR);
-
-				menuItem = new MenuItem(menu, SWT.PUSH);
-				menuItem.setText("Exit");
-				menuItem.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-						ExitHandler exitHandler = new ExitHandler();
-						exitHandler.exit(workbench);
-					}
-				});
-
-				menu.setVisible(true);
-				while (!menu.isDisposed() && menu.isVisible()) {
-					if (!menu.getDisplay().readAndDispatch()) {
-						menu.getDisplay().sleep();
-					}
-				}
-				menu.dispose();
+				createAndShowMenu();
 			}
 		});
+	}
+
+	private void createAndShowMenu() {
+		final Menu menu = new Menu(shell, SWT.POP_UP);
+
+		MenuItem menuItem = new MenuItem(menu, SWT.PUSH);
+		menuItem.setText(createShowHideText());
+		menuItem.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				switchApplicationState();
+			}
+		});
+
+		if (!isNullOrEmpty(currentTooltipText)) {
+			menuItem = new MenuItem(menu, SWT.PUSH);
+			menuItem.setText("Show reminder");
+			menuItem.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					showReminder();
+				}
+			});
+		}
+
+		menuItem = new MenuItem(menu, SWT.SEPARATOR);
+
+		createMenuItemsFromMostUsedActivites(menu);
+
+		menuItem = new MenuItem(menu, SWT.SEPARATOR);
+
+		menuItem = new MenuItem(menu, SWT.PUSH);
+		menuItem.setText("Exit");
+		menuItem.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				ExitHandler exitHandler = new ExitHandler();
+				exitHandler.exit(workbench);
+			}
+		});
+
+		menu.setVisible(true);
+		while (!menu.isDisposed() && menu.isVisible()) {
+			if (!menu.getDisplay().readAndDispatch()) {
+				menu.getDisplay().sleep();
+			}
+		}
+		menu.dispose();
+	}
+
+	private void createMenuItemsFromMostUsedActivites(final Menu menu) {
+		List<String> names = shortcutNamesCreator.create();
+		for (String name : names) {
+			final MenuItem menuItem = new MenuItem(menu, SWT.PUSH);
+			menuItem.setText(name);
+			menuItem.addListener(SWT.MouseDown, new Listener() {
+				@Override
+				public void handleEvent(Event event) {
+					service.startWorkItem(menuItem.getText(), 0);
+					eventBroker.send(Events.START_WORK_ITEM, service.getActiveWorkItem());
+				}
+			});
+		}
 	}
 
 	@Inject
@@ -251,8 +284,6 @@ public class SystemTray {
 			throw new OperationCanceledException();
 		}
 	}
-
-
 
 	private void showReminder() {
 		reminderToolTip.setVisible(true);
