@@ -160,6 +160,7 @@
   <addons xmi:id="_zmOyNDYrEeKvpYoU2mBS0w" elementId="org.eclipse.e4.ui.workbench.commands.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.CommandProcessingAddon"/>
   <addons xmi:id="_zmOyNTYrEeKvpYoU2mBS0w" elementId="org.eclipse.e4.ui.workbench.contexts.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.ContextProcessingAddon"/>
   <addons xmi:id="_zmOyNjYrEeKvpYoU2mBS0w" elementId="org.eclipse.e4.ui.workbench.bindings.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.swt/org.eclipse.e4.ui.workbench.swt.util.BindingProcessingAddon"/>
-  <addons xmi:id="_m9Si8LF1EeKtVanYJ-BOOQ" elementId="org.eclipse.e4.ui.workbench.addons.cleanupaddon.CleanupAddon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.cleanupaddon.CleanupAddon"/>
-  <addons xmi:id="_70fl4LF2EeKtVanYJ-BOOQ" elementId="org.eclipse.e4.ui.workbench.addons.cleanupaddon.DndAddon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.cleanupaddon.DndAddon"/>
+  <addons xmi:id="_2qG_YLNdEeKE5Orpyhzryg" elementId="MinMaxAddon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.minmax.MinMaxAddon"/>
+  <addons xmi:id="_2qG_YbNdEeKE5Orpyhzryg" elementId="DnDAddon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.dndaddon.DnDAddon"/>
+  <addons xmi:id="_2qG_YrNdEeKE5Orpyhzryg" elementId="CleanupAddon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.cleanupaddon.CleanupAddon"/>
 </application:Application>
