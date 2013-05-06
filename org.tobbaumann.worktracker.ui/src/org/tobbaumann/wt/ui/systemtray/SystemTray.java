@@ -40,8 +40,6 @@ import org.eclipse.swt.events.ShellAdapter;
 import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
@@ -205,9 +203,9 @@ public class SystemTray {
 		for (String name : names) {
 			final MenuItem menuItem = new MenuItem(menu, SWT.PUSH);
 			menuItem.setText(name);
-			menuItem.addListener(SWT.MouseDown, new Listener() {
+			menuItem.addSelectionListener(new SelectionAdapter() {
 				@Override
-				public void handleEvent(Event event) {
+				public void widgetSelected(SelectionEvent e) {
 					service.startWorkItem(menuItem.getText(), 0);
 					eventBroker.send(Events.START_WORK_ITEM, service.getActiveWorkItem());
 				}
