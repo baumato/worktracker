@@ -45,6 +45,7 @@ public interface WorkTrackingService {
 	Optional<WorkItem> getActiveWorkItem();
 
 	List<WorkItemSummary> getWorkItemSummaries(Date date);
+	List<WorkItemSummary> getWorkItemSummaries(int weekInYear);
 
 	/**
 	 * Imports the old WorkTracker data.

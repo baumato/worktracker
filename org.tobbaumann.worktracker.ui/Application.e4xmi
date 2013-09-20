@@ -33,7 +33,11 @@
             <children xsi:type="basic:Part" xmi:id="_HAVO4DY2EeKiNZbXiGFecg" elementId="workitemsview" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.workitem.WorkItemsView" label="Work Items" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/finished-work.png"/>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_hmhqYDY2EeKiNZbXiGFecg" elementId="worktracker.ui.partstack.0">
-            <children xsi:type="basic:Part" xmi:id="_U-Wo8DY2EeKiNZbXiGFecg" elementId="workitemssummaryview" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.wisummary.WorkItemSummaryView" label="Work Items Summary" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/finished-work.png"/>
+            <children xsi:type="basic:Part" xmi:id="_U-Wo8DY2EeKiNZbXiGFecg" elementId="workitemssummaryview" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.wisummary.WorkItemSummaryView" label="Work Items Summary" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/finished-work.png">
+              <toolbar xmi:id="_2SyWsCCZEeOhFua4W3kHnA" elementId="org.tobbaumann.worktracker.ui.toolbar.2">
+                <children xsi:type="menu:DirectToolItem" xmi:id="_3sD2wCCZEeOhFua4W3kHnA" elementId="org.tobbaumann.worktracker.ui.directtoolitem.3" label="Switch daily/weekly summary" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/star.png" tooltip="Switch between daily and weekly summary" type="Check" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.wisummary.DailyVsWeeklySummarySwitcher"/>
+              </toolbar>
+            </children>
           </children>
         </children>
         <children xsi:type="basic:PartStack" xmi:id="_fGFG4DY2EeKiNZbXiGFecg" elementId="worktracker.ui.partstack.0" containerData="12">

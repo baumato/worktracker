@@ -14,6 +14,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
@@ -187,6 +188,10 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	@Override
 	public List<WorkItemSummary> getWorkItemSummaries(Date date) {
 		List<WorkItem> items = getWorkItems(date);
+		return createSummaries(items);
+	}
+
+	private List<WorkItemSummary> createSummaries(List<WorkItem> items) {
 		Multimap<String, WorkItem> map = ArrayListMultimap.create();
 		for (Object o : items) {
 			WorkItem wi = (WorkItem) o;
@@ -200,6 +205,26 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 			res.add(wis);
 		}
 		return res.build();
+	}
+
+	@Override
+	public List<WorkItemSummary> getWorkItemSummaries(int weekInYear) {
+		List<WorkItem> items = newArrayList();
+		Calendar c = Calendar.getInstance();
+		c.set(Calendar.WEEK_OF_YEAR, weekInYear);
+		List<Integer> days = Arrays.asList(
+			Calendar.MONDAY,
+			Calendar.TUESDAY,
+			Calendar.WEDNESDAY,
+			Calendar.THURSDAY,
+			Calendar.FRIDAY,
+			Calendar.SATURDAY,
+			Calendar.SUNDAY);
+		for (int day : days) {
+			c.set(Calendar.DAY_OF_WEEK, day);
+			items.addAll(getWorkItems(c.getTime()));
+		}
+		return createSummaries(items);
 	}
 
 	private Activity createActivity(String activityName) {
