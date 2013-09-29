@@ -14,11 +14,17 @@ import org.eclipse.emf.common.util.BasicEList
 import com.google.common.base.Strings
 import java.text.DateFormat
 import java.text.ParseException
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 annotation "http://www.eclipse.org/emf/2002/Ecore" as Ecore
 annotation "http://www.eclipse.org/emf/2002/GenModel" as GenModel
 
 interface Comparable wraps java.lang.Comparable<WorkItem>{}
+
+type Date wraps java.util.Date
+
+type DateFormat wraps java.text.DateFormat
 
 class Activity {
 	id String ^id
@@ -82,10 +88,6 @@ class WorkItem extends Comparable {
 	}
 }
 
-type Date wraps java.util.Date
-
-type DateFormat wraps java.text.DateFormat
-
 
 class WorkItemSummary {
 	
@@ -99,13 +101,59 @@ class WorkItemSummary {
 	}
 	
 	contains derived TimeSpan sumOfDurations get {
+		var long duration = workItems
+			.map[it.duration.millis]
+			.reduce[a,b|a+b]
 		val TimeSpan ts = DomainFactory::eINSTANCE.createTimeSpan
-		ts.millis = workItems.map([it | it.duration.millis]).reduce([a, b | a + b])
+		ts.millis = duration
 		return ts
 	}
 	
 	derived String[] sumOfDescriptions get {
 		return new BasicEList(workItems.map([Strings::nullToEmpty(description)]))
+	}
+}
+
+class WorkItemSummaries {
+	refers WorkItemSummary[] workItemSummaries
+	
+	contains derived TimeSpan sumOfDurations get {
+		val long duration = workItemSummaries
+			.map[it.sumOfDurations.millis]
+			.reduce[a,b|a+b]
+		val TimeSpan ts = DomainFactory::eINSTANCE.createTimeSpan
+		ts.millis = duration
+		return ts
+	}
+	
+	op BigDecimal computeDurationRatioInPercent(WorkItemSummary wis) {
+		val durationAll = sumOfDurations
+		if (durationAll.millis == 0) {
+			return BigDecimal::ZERO
+		}
+		val BigDecimal durationSingle = new BigDecimal(wis.sumOfDurations.millis)
+		val BigDecimal durationAllMillis = new BigDecimal(durationAll.millis)
+		val BigDecimal ratio = durationSingle.divide(durationAllMillis, 10, RoundingMode::HALF_UP).multiply(new BigDecimal(100))
+		return ratio
+	}
+	
+	op TimeSpan computeDurationRatio(WorkItemSummary wis, int totalMinutes) {
+		val BigDecimal ratio = computeDurationRatioInPercent(wis)
+		val BigDecimal totalMillis = new BigDecimal(totalMinutes).multiply(new BigDecimal(60*1000))
+		val BigDecimal ratioMillis = ratio.divide(new BigDecimal(100), 10, RoundingMode::HALF_UP).multiply(totalMillis) 
+		val TimeSpan ts = DomainFactory::eINSTANCE.createTimeSpan
+		ts.millis = ratioMillis.longValue
+		return ts		
+	}
+	
+	op TimeSpan computeSumOfDurationRatio(int totalMinutes) {
+		var long millis = 0
+		for (wis : workItemSummaries) {
+			millis = millis + computeDurationRatio(wis, totalMinutes).millis
+		}
+		val TimeSpan ts = DomainFactory::eINSTANCE.createTimeSpan
+		ts.millis = millis
+		return ts
 	}
 }
 
@@ -138,7 +186,7 @@ class TimeSpan {
 	}
 	
 	op long inMinutes() {
-		return seconds / 60
+		return inSeconds / 60
 	}
 	
 	op long inHours() {
@@ -155,13 +203,13 @@ class TimeSpan {
 	
 	op String toString() {
 		val StringBuilder s = new StringBuilder();
-        if(weeks > 0) s.append(weeks + " w  ");
-        if(days > 0) s.append(days + " d  ");
-        if(hours > 0) s.append(hours + " h  ");
-        if(minutes > 0) s.append(minutes + " m  ");
-        if(seconds> 0) s.append(seconds+ " s  ");
+        if(weeks > 0) s.append(weeks + "w ");
+        if(days > 0) s.append(days + "d ");
+        if(hours > 0) s.append(hours + "h ");
+        if(minutes > 0) s.append(minutes + "m ");
+        if(seconds> 0) s.append(seconds+ "s ");
         if (s.toString.empty) {
-        	s.append("0 s")
+        	s.append("0s")
         }
         return s.toString.trim;
 	}

@@ -111,3 +111,7 @@ CTabItem {
 	background-color: #fafafa;
 	color: #333;
 }
+
+#PreferencesDialogHeadline {
+	font: bold;
+}

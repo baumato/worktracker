@@ -21,10 +21,12 @@ public class SwitchButtonPanelHandler {
 
 	@Execute
 	public void switchPanel(MPart part, @Optional @Named("commandparameter.keyboardstart") String strStartedByShortcut) {
-		Switchable view = (Switchable) part.getObject();
-		view.switchPanel();
-		if (Boolean.valueOf(strStartedByShortcut)) {
-			view.switchToolItemState();
+		if (part.getObject() instanceof Switchable) {
+			Switchable view = (Switchable) part.getObject();
+			view.switchPanel();
+			if (Boolean.valueOf(strStartedByShortcut)) {
+				view.switchToolItemState();
+			}
 		}
 	}
 }

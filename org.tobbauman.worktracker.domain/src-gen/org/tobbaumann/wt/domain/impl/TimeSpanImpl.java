@@ -244,8 +244,8 @@ public class TimeSpanImpl extends MinimalEObjectImpl.Container implements TimeSp
   public long inMinutes()
   {
     TimeSpan _this = this;
-    int _seconds = _this.getSeconds();
-    return (_seconds / 60);
+    long _inSeconds = _this.inSeconds();
+    return (_inSeconds / 60);
   }
 
   /**
@@ -300,7 +300,7 @@ public class TimeSpanImpl extends MinimalEObjectImpl.Container implements TimeSp
     {
       TimeSpan _this_1 = this;
       int _weeks_1 = _this_1.getWeeks();
-      String _plus = (Integer.valueOf(_weeks_1) + " w  ");
+      String _plus = (Integer.valueOf(_weeks_1) + "w ");
       s.append(_plus);
     }
     TimeSpan _this_2 = this;
@@ -310,7 +310,7 @@ public class TimeSpanImpl extends MinimalEObjectImpl.Container implements TimeSp
     {
       TimeSpan _this_3 = this;
       int _days_1 = _this_3.getDays();
-      String _plus_1 = (Integer.valueOf(_days_1) + " d  ");
+      String _plus_1 = (Integer.valueOf(_days_1) + "d ");
       s.append(_plus_1);
     }
     TimeSpan _this_4 = this;
@@ -320,7 +320,7 @@ public class TimeSpanImpl extends MinimalEObjectImpl.Container implements TimeSp
     {
       TimeSpan _this_5 = this;
       int _hours_1 = _this_5.getHours();
-      String _plus_2 = (Integer.valueOf(_hours_1) + " h  ");
+      String _plus_2 = (Integer.valueOf(_hours_1) + "h ");
       s.append(_plus_2);
     }
     TimeSpan _this_6 = this;
@@ -330,7 +330,7 @@ public class TimeSpanImpl extends MinimalEObjectImpl.Container implements TimeSp
     {
       TimeSpan _this_7 = this;
       int _minutes_1 = _this_7.getMinutes();
-      String _plus_3 = (Integer.valueOf(_minutes_1) + " m  ");
+      String _plus_3 = (Integer.valueOf(_minutes_1) + "m ");
       s.append(_plus_3);
     }
     TimeSpan _this_8 = this;
@@ -340,14 +340,14 @@ public class TimeSpanImpl extends MinimalEObjectImpl.Container implements TimeSp
     {
       TimeSpan _this_9 = this;
       int _seconds_1 = _this_9.getSeconds();
-      String _plus_4 = (Integer.valueOf(_seconds_1) + " s  ");
+      String _plus_4 = (Integer.valueOf(_seconds_1) + "s ");
       s.append(_plus_4);
     }
     String _string = s.toString();
     boolean _isEmpty = _string.isEmpty();
     if (_isEmpty)
     {
-      s.append("0 s");
+      s.append("0s");
     }
     String _string_1 = s.toString();
     return _string_1.trim();

@@ -117,3 +117,7 @@ CTabItem:selected {
 Label {
 	color: #999999;
 }
+
+#PreferencesDialogHeadline {
+	font: bold;
+}

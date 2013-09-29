@@ -26,6 +26,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.menu.MToolItem;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.databinding.viewers.ObservableSetContentProvider;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -33,9 +34,13 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.WorkItem;
 import org.tobbaumann.wt.ui.event.Events;
@@ -80,6 +85,27 @@ public class DatesView implements Switchable {
 		createDatesPanel();
 		createSettingsPanel();
 		switchComposite.setTopControl(determineTopControlFromToolItemState());
+
+		// TODO put this in lifecycle manager or so
+		switchComposite.getShell().addDisposeListener(new DisposeListener() {
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+				if (service.getActiveWorkItem().isPresent()) {
+					Shell shell = new Shell(Display.getCurrent());
+					try {
+						boolean ok = MessageDialog.openQuestion(
+							switchComposite.getShell(),
+							"End current active work item?",
+							"Do you want to end your current active work item?");
+						if (ok) {
+							service.getActiveWorkItem().get().setEndDate(new Date());
+						}
+					} finally {
+						shell.dispose();
+					}
+				}
+			}
+		});
 	}
 
 	private void createDatesPanel() {

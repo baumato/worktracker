@@ -23,6 +23,7 @@ import org.tobbaumann.wt.domain.DomainFactory;
 import org.tobbaumann.wt.domain.DomainPackage;
 import org.tobbaumann.wt.domain.TimeSpan;
 import org.tobbaumann.wt.domain.WorkItem;
+import org.tobbaumann.wt.domain.WorkItemSummaries;
 import org.tobbaumann.wt.domain.WorkItemSummary;
 
 /**
@@ -67,6 +68,13 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
    * @generated
    */
   private EClass timeSpanEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass workItemSummariesEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -533,6 +541,66 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getWorkItemSummaries()
+  {
+    return workItemSummariesEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getWorkItemSummaries_WorkItemSummaries()
+  {
+    return (EReference)workItemSummariesEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getWorkItemSummaries_SumOfDurations()
+  {
+    return (EReference)workItemSummariesEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EOperation getWorkItemSummaries__ComputeDurationRatioInPercent__WorkItemSummary()
+  {
+    return workItemSummariesEClass.getEOperations().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EOperation getWorkItemSummaries__ComputeDurationRatio__WorkItemSummary_int()
+  {
+    return workItemSummariesEClass.getEOperations().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EOperation getWorkItemSummaries__ComputeSumOfDurationRatio__int()
+  {
+    return workItemSummariesEClass.getEOperations().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EDataType getDate()
   {
     return dateEDataType;
@@ -606,6 +674,13 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
     createEAttribute(workItemSummaryEClass, WORK_ITEM_SUMMARY__ACTIVITY_NAME);
     createEReference(workItemSummaryEClass, WORK_ITEM_SUMMARY__SUM_OF_DURATIONS);
     createEAttribute(workItemSummaryEClass, WORK_ITEM_SUMMARY__SUM_OF_DESCRIPTIONS);
+
+    workItemSummariesEClass = createEClass(WORK_ITEM_SUMMARIES);
+    createEReference(workItemSummariesEClass, WORK_ITEM_SUMMARIES__WORK_ITEM_SUMMARIES);
+    createEReference(workItemSummariesEClass, WORK_ITEM_SUMMARIES__SUM_OF_DURATIONS);
+    createEOperation(workItemSummariesEClass, WORK_ITEM_SUMMARIES___COMPUTE_DURATION_RATIO_IN_PERCENT__WORKITEMSUMMARY);
+    createEOperation(workItemSummariesEClass, WORK_ITEM_SUMMARIES___COMPUTE_DURATION_RATIO__WORKITEMSUMMARY_INT);
+    createEOperation(workItemSummariesEClass, WORK_ITEM_SUMMARIES___COMPUTE_SUM_OF_DURATION_RATIO__INT);
 
     timeSpanEClass = createEClass(TIME_SPAN);
     createEAttribute(timeSpanEClass, TIME_SPAN__MILLIS);
@@ -698,6 +773,20 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
     initEReference(getWorkItemSummary_SumOfDurations(), this.getTimeSpan(), null, "sumOfDurations", null, 0, 1, WorkItemSummary.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
     initEAttribute(getWorkItemSummary_SumOfDescriptions(), theEcorePackage.getEString(), "sumOfDescriptions", null, 0, -1, WorkItemSummary.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
+    initEClass(workItemSummariesEClass, WorkItemSummaries.class, "WorkItemSummaries", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getWorkItemSummaries_WorkItemSummaries(), this.getWorkItemSummary(), null, "workItemSummaries", null, 0, -1, WorkItemSummaries.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getWorkItemSummaries_SumOfDurations(), this.getTimeSpan(), null, "sumOfDurations", null, 0, 1, WorkItemSummaries.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+
+    op = initEOperation(getWorkItemSummaries__ComputeDurationRatioInPercent__WorkItemSummary(), theEcorePackage.getEBigDecimal(), "computeDurationRatioInPercent", 0, 1, !IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, this.getWorkItemSummary(), "wis", 0, 1, !IS_UNIQUE, IS_ORDERED);
+
+    op = initEOperation(getWorkItemSummaries__ComputeDurationRatio__WorkItemSummary_int(), this.getTimeSpan(), "computeDurationRatio", 0, 1, !IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, this.getWorkItemSummary(), "wis", 0, 1, !IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, theEcorePackage.getEInt(), "totalMinutes", 0, 1, !IS_UNIQUE, IS_ORDERED);
+
+    op = initEOperation(getWorkItemSummaries__ComputeSumOfDurationRatio__int(), this.getTimeSpan(), "computeSumOfDurationRatio", 0, 1, !IS_UNIQUE, IS_ORDERED);
+    addEParameter(op, theEcorePackage.getEInt(), "totalMinutes", 0, 1, !IS_UNIQUE, IS_ORDERED);
+
     initEClass(timeSpanEClass, TimeSpan.class, "TimeSpan", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getTimeSpan_Millis(), theEcorePackage.getELong(), "millis", null, 0, 1, TimeSpan.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getTimeSpan_Seconds(), theEcorePackage.getEInt(), "seconds", null, 0, 1, TimeSpan.class, IS_TRANSIENT, IS_VOLATILE, !IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, IS_DERIVED, IS_ORDERED);
@@ -746,7 +835,7 @@ public class DomainPackageImpl extends EPackageImpl implements DomainPackage
        {
        "Ecore", "http://www.eclipse.org/emf/2002/Ecore",
        "GenModel", "http://www.eclipse.org/emf/2002/GenModel"
-       });																						
+       });																										
   }
 
 } //DomainPackageImpl

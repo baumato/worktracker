@@ -20,6 +20,11 @@ Button {
 	color: rgb(240, 240, 240);
 }
 
+#PreferencesDialogHeadline {
+	font: bold;
+}
+
+
 #QuickAccessButton {
 	font: Verdana 10px;
 	background-color: #575757;

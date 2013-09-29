@@ -15,24 +15,25 @@ import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.core.di.extensions.Preference;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.tobbaumann.wt.domain.util.TimeSpanHelper;
 import org.tobbaumann.wt.ui.views.date.DatesViewSettings;
 import org.tobbaumann.wt.ui.views.startwibutton.StartWorkItemWithButtonViewSettings;
+import org.tobbaumann.wt.ui.views.wisummary.WorkItemSummaryViewSettings;
 
 @Creatable
 public class PreferencesDialog extends TitleAreaDialog {
@@ -48,6 +49,7 @@ public class PreferencesDialog extends TitleAreaDialog {
 	private Combo cmbStatusLineTimeUnit;
 	private DatesViewSettings datesViewSettings;
 	private StartWorkItemWithButtonViewSettings startWorkItemWithButtonViewSettings;
+	private WorkItemSummaryViewSettings summarySettings;
 
 	@Inject
 	@Preference(value = WorkTrackerPreferences.USE_REMINDER)
@@ -85,20 +87,28 @@ public class PreferencesDialog extends TitleAreaDialog {
 		setMessage("Change the general preferences here.");
 		Composite area = (Composite) super.createDialogArea(parent);
 		Composite container = new Composite(area, SWT.NONE);
-		container.setLayout(new GridLayout(1, false));
-		GridData gd_container = new GridData(GridData.FILL_BOTH);
-		gd_container.heightHint = 226;
-		container.setLayoutData(gd_container);
+		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		GridLayoutFactory.fillDefaults().applyTo(container);
 
-		Group grpReminder = new Group(container, SWT.NONE);
-		grpReminder.setLayout(new GridLayout(3, false));
-		grpReminder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		grpReminder.setText("Reminder");
+		createReminderPart(container);
+		createStatusLinePart(container);
+		createDatesViewPart(container);
+		createStartWorkItemWithButtonViewPart(container);
+		createWorkItemSummaryPart(container);
+		return area;
+	}
 
-		Label lblUseReminder = new Label(grpReminder, SWT.NONE);
+	private void createReminderPart(Composite parent) {
+		createHeadline(parent, "Reminder");
+
+		Composite container = new Composite(parent, SWT.NONE);
+		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		container.setLayout(new GridLayout(3, false));
+
+		Label lblUseReminder = new Label(container, SWT.NONE);
 		lblUseReminder.setText("Use Reminder");
-
-		btnUseReminder = new Button(grpReminder, SWT.CHECK);
+		btnUseReminder = new Button(container, SWT.CHECK);
+		btnUseReminder.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, false, false, 2, 1));
 		btnUseReminder.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -109,65 +119,86 @@ public class PreferencesDialog extends TitleAreaDialog {
 			}
 		});
 		btnUseReminder.setSelection(useReminder);
-		new Label(grpReminder, SWT.NONE);
 
-		lblReminder = new Label(grpReminder, SWT.NONE);
+		lblReminder = new Label(container, SWT.NONE);
 		lblReminder.setText("Remember me every");
-
-		spinnerReminderFreq = new Spinner(grpReminder, SWT.BORDER);
+		spinnerReminderFreq = new Spinner(container, SWT.BORDER);
 		spinnerReminderFreq.setPageIncrement(5);
 		spinnerReminderFreq.setMaximum(480);
 		spinnerReminderFreq.setMinimum(1);
 		Duration duration = Duration.newInstance(remindFrequencyInMillis);
 		spinnerReminderFreq.setSelection(duration.number);
 
-		cmbReminderFreqTimeUnit = new Combo(grpReminder, SWT.READ_ONLY);
+		cmbReminderFreqTimeUnit = new Combo(container, SWT.READ_ONLY);
 		cmbReminderFreqTimeUnit.setItems(new String[] {
 				TimeUnit.SECONDS.name().toLowerCase(),
 				TimeUnit.MINUTES.name().toLowerCase(),
 				TimeUnit.HOURS.name().toLowerCase() });
 		cmbReminderFreqTimeUnit.setText(duration.timeUnit.name().toLowerCase());
+	}
 
-		Group grpStatusLine = new Group(container, SWT.NONE);
-		grpStatusLine.setLayout(new GridLayout(3, false));
-		grpStatusLine.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		grpStatusLine.setText("Status Line");
+	private void createStatusLinePart(Composite parent) {
+		createHeadline(parent, "Status Line");
 
-		Label lblStatusLine = new Label(grpStatusLine, SWT.NONE);
+		Composite container = new Composite(parent, SWT.NONE);
+		container.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		container.setLayout(new GridLayout(3, false));
+
+		Duration duration;
+		Label lblStatusLine = new Label(container, SWT.NONE);
 		lblStatusLine.setText("Update Status Line every");
 
-		spinnerStatusLineFreq = new Spinner(grpStatusLine, SWT.BORDER);
+		spinnerStatusLineFreq = new Spinner(container, SWT.BORDER);
 		spinnerStatusLineFreq.setPageIncrement(5);
 		duration = Duration.newInstance(statusLineUpdateFreqInMillis);
 		spinnerStatusLineFreq.setSelection(duration.number);
 
-		cmbStatusLineTimeUnit = new Combo(grpStatusLine, SWT.READ_ONLY);
+		cmbStatusLineTimeUnit = new Combo(container, SWT.READ_ONLY);
 		cmbStatusLineTimeUnit.setItems(new String[] {
 				TimeUnit.SECONDS.name().toLowerCase(),
 				TimeUnit.MINUTES.name().toLowerCase(),
 				TimeUnit.HOURS.name().toLowerCase() });
 		cmbStatusLineTimeUnit.setText(duration.timeUnit.name().toLowerCase());
+	}
 
+	private void createDatesViewPart(Composite container) {
+		createHeadline(container, "Dates View");
+		datesViewSettings = new DatesViewSettings(container, prefs);
+		datesViewSettings.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+	}
 
-		Group grpDatesViewSettings = new Group(container, SWT.NONE);
-		grpDatesViewSettings.setLayout(new FillLayout());
-		grpDatesViewSettings.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		grpDatesViewSettings.setText("Dates View");
-		datesViewSettings = new DatesViewSettings(grpDatesViewSettings, prefs);
+	private void createStartWorkItemWithButtonViewPart(Composite container) {
+		createHeadline(container, "Start Work Item With Button View");
+		startWorkItemWithButtonViewSettings = new StartWorkItemWithButtonViewSettings(container, prefs);
+		startWorkItemWithButtonViewSettings.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+	}
 
-		Group grpStartWi = new Group(container, SWT.NONE);
-		grpStartWi.setLayout(new FillLayout());
-		grpStartWi.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		grpStartWi.setText("Start Work Item With Button View");
-		startWorkItemWithButtonViewSettings = new StartWorkItemWithButtonViewSettings(grpStartWi, prefs);
+	private void createWorkItemSummaryPart(Composite container) {
+		createHeadline(container, "Work Item Summary Settings");
+		summarySettings = new WorkItemSummaryViewSettings(container, prefs);
+		summarySettings.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+	}
 
-		return area;
+	private void createHeadline(Composite area, String headline) {
+		Label topSpace = new Label(area, SWT.NONE);
+		GridDataFactory.fillDefaults().applyTo(topSpace);
+		Label title = new Label(area, SWT.NONE);
+		title.setData("org.eclipse.e4.ui.css.id", "PreferencesDialogHeadline");
+		title.setText("  " + headline);
+		GridDataFactory.fillDefaults().applyTo(title);
+		Label sep = new Label(area, SWT.SEPARATOR | SWT.HORIZONTAL);
+		GridDataFactory.swtDefaults().applyTo(sep);
 	}
 
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
 		newShell.setText(DIALOG_TITLE);
+	}
+
+	@Override
+	protected boolean isResizable() {
+		return true;
 	}
 
 	/**
@@ -194,6 +225,7 @@ public class PreferencesDialog extends TitleAreaDialog {
 
 		datesViewSettings.flushPreferences();
 		startWorkItemWithButtonViewSettings.flushPreferences();
+		summarySettings.flushPreferences();
 
 		super.okPressed();
 	}
@@ -212,7 +244,8 @@ public class PreferencesDialog extends TitleAreaDialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(480, 600);
+		Point size = super.getInitialSize();
+		return new Point(Math.max(480, size.x), Math.max(600, size.y));
 	}
 
 

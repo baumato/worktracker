@@ -36,6 +36,11 @@ import org.osgi.service.prefs.BackingStoreException;
 @Creatable
 public class WorkTrackerPreferences {
 
+	public static enum TimePeriod {
+		DAILY,
+		WEEKLY
+	}
+
 	public static final String NODE_NAME = "org.tobbaumann.worktracker.ui";
 
 	public static final String USE_REMINDER = "useReminder";
@@ -56,6 +61,12 @@ public class WorkTrackerPreferences {
 	private static final String DATES_VIEW_SHOW_WEEKDAYS_DISPLAY_NAME = "Show Weekdays";
 	private static final boolean DATES_VIEW_SHOW_WEEKDAYS_DEFAULT = true;
 
+	public static final String WORKITEM_SUMMARY_TIME_PERIOD = "summaryTimePeriod";
+	private static final String WORKITEM_SUMMARY_TIME_PERIOD_DEFAULT = "DAILY";
+	public static final String WORKITEM_SUMMARY_MAX_HRS_PER_DAY = "summaryMaxHrsPerDay";
+	private static final int WORKITEM_SUMMARY_MAX_HRS_PER_DAY_DEFAULT = 8;
+	public static final String WORKITEM_SUMMARY_MAX_HRS_PER_WEEK = "summaryMaxHrsPerWeek";
+	private static final int WORKITEM_SUMMARY_MAX_HRS_PER_WEEK_DEFAULT = 40;
 
 	public static final String STARTWI_VIEW_NUMBER_OF_BUTTONS = "numberOfButtons";
 	private static final String STARTWI_VIEW_NUMBER_OF_BUTTONS_DISPLAY_NAME = "Number Of Buttons";
@@ -172,6 +183,44 @@ public class WorkTrackerPreferences {
 		InstanceScope.INSTANCE.getNode(NODE_NAME).putBoolean(DATES_VIEW_SHOW_WEEKDAYS, showWeekdays);
 		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(NODE_NAME);
 		node.putBoolean(DATES_VIEW_SHOW_WEEKDAYS, showWeekdays);
+		flushNode(node);
+	}
+
+
+	/*
+	 * WorkItemSummarySettings
+	 */
+	public TimePeriod getWorkItemSummaryTimePeriod() {
+		String timePeriod = prefService.getString(NODE_NAME, WORKITEM_SUMMARY_TIME_PERIOD, WORKITEM_SUMMARY_TIME_PERIOD_DEFAULT, null);
+		return TimePeriod.valueOf(timePeriod);
+	}
+
+	public void setWorkItemSummaryTimePeriod(TimePeriod timePeriod) {
+		InstanceScope.INSTANCE.getNode(NODE_NAME).put(WORKITEM_SUMMARY_TIME_PERIOD, timePeriod.name());
+		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(NODE_NAME);
+		node.put(WORKITEM_SUMMARY_TIME_PERIOD, timePeriod.name());
+		flushNode(node);
+	}
+
+	public int getMaximumNumberHoursPerDay() {
+		return prefService.getInt(NODE_NAME, WORKITEM_SUMMARY_MAX_HRS_PER_DAY, WORKITEM_SUMMARY_MAX_HRS_PER_DAY_DEFAULT, null);
+	}
+
+	public void setMaximumNumberHoursPerDay(int maxHrsPerDay) {
+		InstanceScope.INSTANCE.getNode(NODE_NAME).putInt(WORKITEM_SUMMARY_MAX_HRS_PER_DAY, maxHrsPerDay);
+		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(NODE_NAME);
+		node.putInt(WORKITEM_SUMMARY_MAX_HRS_PER_DAY, maxHrsPerDay);
+		flushNode(node);
+	}
+
+	public int getMaximumNumberOfHoursPerWeek() {
+		return prefService.getInt(NODE_NAME, WORKITEM_SUMMARY_MAX_HRS_PER_WEEK, WORKITEM_SUMMARY_MAX_HRS_PER_WEEK_DEFAULT, null);
+	}
+
+	public void setMaximumNumberHoursPerWeek(int maxHrsPerWeek) {
+		InstanceScope.INSTANCE.getNode(NODE_NAME).putInt(WORKITEM_SUMMARY_MAX_HRS_PER_WEEK, maxHrsPerWeek);
+		IEclipsePreferences node = ConfigurationScope.INSTANCE.getNode(NODE_NAME);
+		node.putInt(WORKITEM_SUMMARY_MAX_HRS_PER_WEEK, maxHrsPerWeek);
 		flushNode(node);
 	}
 

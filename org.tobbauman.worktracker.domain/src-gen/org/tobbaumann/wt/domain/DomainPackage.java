@@ -370,7 +370,80 @@ public interface DomainPackage extends EPackage
    * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getTimeSpan()
    * @generated
    */
-  int TIME_SPAN = 4;
+  int TIME_SPAN = 5;
+
+  /**
+   * The meta object id for the '{@link org.tobbaumann.wt.domain.impl.WorkItemSummariesImpl <em>Work Item Summaries</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.tobbaumann.wt.domain.impl.WorkItemSummariesImpl
+   * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getWorkItemSummaries()
+   * @generated
+   */
+  int WORK_ITEM_SUMMARIES = 4;
+
+  /**
+   * The feature id for the '<em><b>Work Item Summaries</b></em>' reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WORK_ITEM_SUMMARIES__WORK_ITEM_SUMMARIES = 0;
+
+  /**
+   * The feature id for the '<em><b>Sum Of Durations</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WORK_ITEM_SUMMARIES__SUM_OF_DURATIONS = 1;
+
+  /**
+   * The number of structural features of the '<em>Work Item Summaries</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WORK_ITEM_SUMMARIES_FEATURE_COUNT = 2;
+
+  /**
+   * The operation id for the '<em>Compute Duration Ratio In Percent</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WORK_ITEM_SUMMARIES___COMPUTE_DURATION_RATIO_IN_PERCENT__WORKITEMSUMMARY = 0;
+
+  /**
+   * The operation id for the '<em>Compute Duration Ratio</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WORK_ITEM_SUMMARIES___COMPUTE_DURATION_RATIO__WORKITEMSUMMARY_INT = 1;
+
+  /**
+   * The operation id for the '<em>Compute Sum Of Duration Ratio</em>' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WORK_ITEM_SUMMARIES___COMPUTE_SUM_OF_DURATION_RATIO__INT = 2;
+
+  /**
+   * The number of operations of the '<em>Work Item Summaries</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int WORK_ITEM_SUMMARIES_OPERATION_COUNT = 3;
 
   /**
    * The feature id for the '<em><b>Millis</b></em>' attribute.
@@ -506,7 +579,7 @@ public interface DomainPackage extends EPackage
    * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getDate()
    * @generated
    */
-  int DATE = 5;
+  int DATE = 6;
 
   /**
    * The meta object id for the '<em>Date Format</em>' data type.
@@ -516,7 +589,7 @@ public interface DomainPackage extends EPackage
    * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getDateFormat()
    * @generated
    */
-  int DATE_FORMAT = 6;
+  int DATE_FORMAT = 7;
 
 
   /**
@@ -923,6 +996,68 @@ public interface DomainPackage extends EPackage
   EOperation getTimeSpan__ToString();
 
   /**
+   * Returns the meta object for class '{@link org.tobbaumann.wt.domain.WorkItemSummaries <em>Work Item Summaries</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Work Item Summaries</em>'.
+   * @see org.tobbaumann.wt.domain.WorkItemSummaries
+   * @generated
+   */
+  EClass getWorkItemSummaries();
+
+  /**
+   * Returns the meta object for the reference list '{@link org.tobbaumann.wt.domain.WorkItemSummaries#getWorkItemSummaries <em>Work Item Summaries</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the reference list '<em>Work Item Summaries</em>'.
+   * @see org.tobbaumann.wt.domain.WorkItemSummaries#getWorkItemSummaries()
+   * @see #getWorkItemSummaries()
+   * @generated
+   */
+  EReference getWorkItemSummaries_WorkItemSummaries();
+
+  /**
+   * Returns the meta object for the containment reference '{@link org.tobbaumann.wt.domain.WorkItemSummaries#getSumOfDurations <em>Sum Of Durations</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Sum Of Durations</em>'.
+   * @see org.tobbaumann.wt.domain.WorkItemSummaries#getSumOfDurations()
+   * @see #getWorkItemSummaries()
+   * @generated
+   */
+  EReference getWorkItemSummaries_SumOfDurations();
+
+  /**
+   * Returns the meta object for the '{@link org.tobbaumann.wt.domain.WorkItemSummaries#computeDurationRatioInPercent(org.tobbaumann.wt.domain.WorkItemSummary) <em>Compute Duration Ratio In Percent</em>}' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the '<em>Compute Duration Ratio In Percent</em>' operation.
+   * @see org.tobbaumann.wt.domain.WorkItemSummaries#computeDurationRatioInPercent(org.tobbaumann.wt.domain.WorkItemSummary)
+   * @generated
+   */
+  EOperation getWorkItemSummaries__ComputeDurationRatioInPercent__WorkItemSummary();
+
+  /**
+   * Returns the meta object for the '{@link org.tobbaumann.wt.domain.WorkItemSummaries#computeDurationRatio(org.tobbaumann.wt.domain.WorkItemSummary, int) <em>Compute Duration Ratio</em>}' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the '<em>Compute Duration Ratio</em>' operation.
+   * @see org.tobbaumann.wt.domain.WorkItemSummaries#computeDurationRatio(org.tobbaumann.wt.domain.WorkItemSummary, int)
+   * @generated
+   */
+  EOperation getWorkItemSummaries__ComputeDurationRatio__WorkItemSummary_int();
+
+  /**
+   * Returns the meta object for the '{@link org.tobbaumann.wt.domain.WorkItemSummaries#computeSumOfDurationRatio(int) <em>Compute Sum Of Duration Ratio</em>}' operation.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the '<em>Compute Sum Of Duration Ratio</em>' operation.
+   * @see org.tobbaumann.wt.domain.WorkItemSummaries#computeSumOfDurationRatio(int)
+   * @generated
+   */
+  EOperation getWorkItemSummaries__ComputeSumOfDurationRatio__int();
+
+  /**
    * Returns the meta object for data type '{@link java.util.Date <em>Date</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1281,6 +1416,56 @@ public interface DomainPackage extends EPackage
      * @generated
      */
     EOperation TIME_SPAN___TO_STRING = eINSTANCE.getTimeSpan__ToString();
+
+    /**
+     * The meta object literal for the '{@link org.tobbaumann.wt.domain.impl.WorkItemSummariesImpl <em>Work Item Summaries</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.tobbaumann.wt.domain.impl.WorkItemSummariesImpl
+     * @see org.tobbaumann.wt.domain.impl.DomainPackageImpl#getWorkItemSummaries()
+     * @generated
+     */
+    EClass WORK_ITEM_SUMMARIES = eINSTANCE.getWorkItemSummaries();
+
+    /**
+     * The meta object literal for the '<em><b>Work Item Summaries</b></em>' reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference WORK_ITEM_SUMMARIES__WORK_ITEM_SUMMARIES = eINSTANCE.getWorkItemSummaries_WorkItemSummaries();
+
+    /**
+     * The meta object literal for the '<em><b>Sum Of Durations</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference WORK_ITEM_SUMMARIES__SUM_OF_DURATIONS = eINSTANCE.getWorkItemSummaries_SumOfDurations();
+
+    /**
+     * The meta object literal for the '<em><b>Compute Duration Ratio In Percent</b></em>' operation.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EOperation WORK_ITEM_SUMMARIES___COMPUTE_DURATION_RATIO_IN_PERCENT__WORKITEMSUMMARY = eINSTANCE.getWorkItemSummaries__ComputeDurationRatioInPercent__WorkItemSummary();
+
+    /**
+     * The meta object literal for the '<em><b>Compute Duration Ratio</b></em>' operation.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EOperation WORK_ITEM_SUMMARIES___COMPUTE_DURATION_RATIO__WORKITEMSUMMARY_INT = eINSTANCE.getWorkItemSummaries__ComputeDurationRatio__WorkItemSummary_int();
+
+    /**
+     * The meta object literal for the '<em><b>Compute Sum Of Duration Ratio</b></em>' operation.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EOperation WORK_ITEM_SUMMARIES___COMPUTE_SUM_OF_DURATION_RATIO__INT = eINSTANCE.getWorkItemSummaries__ComputeSumOfDurationRatio__int();
 
     /**
      * The meta object literal for the '<em>Date</em>' data type.

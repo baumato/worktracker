@@ -19,6 +19,10 @@ Button {
 	color: black;
 }
 
+#PreferencesDialogHeadline {
+	font: bold;
+}
+
 #QuickAccessButton {
 	font: Verdana 10px;
 	color: black;

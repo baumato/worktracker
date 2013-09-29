@@ -11,6 +11,7 @@ import org.tobbaumann.wt.domain.Activity;
 import org.tobbaumann.wt.domain.DomainPackage;
 import org.tobbaumann.wt.domain.TimeSpan;
 import org.tobbaumann.wt.domain.WorkItem;
+import org.tobbaumann.wt.domain.WorkItemSummaries;
 import org.tobbaumann.wt.domain.WorkItemSummary;
 
 /**
@@ -95,6 +96,13 @@ public class DomainSwitch<T> extends Switch<T>
       {
         WorkItemSummary workItemSummary = (WorkItemSummary)theEObject;
         T result = caseWorkItemSummary(workItemSummary);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case DomainPackage.WORK_ITEM_SUMMARIES:
+      {
+        WorkItemSummaries workItemSummaries = (WorkItemSummaries)theEObject;
+        T result = caseWorkItemSummaries(workItemSummaries);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -185,6 +193,22 @@ public class DomainSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseTimeSpan(TimeSpan object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Work Item Summaries</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Work Item Summaries</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseWorkItemSummaries(WorkItemSummaries object)
   {
     return null;
   }

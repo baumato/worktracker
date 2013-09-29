@@ -20,8 +20,8 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 import org.eclipse.xtext.xbase.lib.Functions.Function1;
-import org.eclipse.xtext.xbase.lib.Functions.Function2;
 
+import org.eclipse.xtext.xbase.lib.Functions.Function2;
 import org.eclipse.xtext.xbase.lib.IterableExtensions;
 import org.eclipse.xtext.xbase.lib.ListExtensions;
 
@@ -129,7 +129,6 @@ public class WorkItemSummaryImpl extends MinimalEObjectImpl.Container implements
    */
   public TimeSpan getSumOfDurations()
   {
-    final TimeSpan ts = DomainFactory.eINSTANCE.createTimeSpan();
     EList<WorkItem> _workItems = this.getWorkItems();
     final Function1<WorkItem,Long> _function = new Function1<WorkItem,Long>()
     {
@@ -149,8 +148,9 @@ public class WorkItemSummaryImpl extends MinimalEObjectImpl.Container implements
           return Long.valueOf(_plus);
         }
       };
-    Long _reduce = IterableExtensions.<Long>reduce(_map, _function_1);
-    ts.setMillis((_reduce).longValue());
+    long duration = (IterableExtensions.<Long>reduce(_map, _function_1)).longValue();
+    final TimeSpan ts = DomainFactory.eINSTANCE.createTimeSpan();
+    ts.setMillis(duration);
     return ts;
   }
 

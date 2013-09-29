@@ -20,6 +20,7 @@ import org.tobbaumann.wt.domain.DomainFactory;
 import org.tobbaumann.wt.domain.DomainPackage;
 import org.tobbaumann.wt.domain.TimeSpan;
 import org.tobbaumann.wt.domain.WorkItem;
+import org.tobbaumann.wt.domain.WorkItemSummaries;
 import org.tobbaumann.wt.domain.WorkItemSummary;
 
 /**
@@ -77,6 +78,7 @@ public class DomainFactoryImpl extends EFactoryImpl implements DomainFactory
       case DomainPackage.ACTIVITY: return createActivity();
       case DomainPackage.WORK_ITEM: return createWorkItem();
       case DomainPackage.WORK_ITEM_SUMMARY: return createWorkItemSummary();
+      case DomainPackage.WORK_ITEM_SUMMARIES: return createWorkItemSummaries();
       case DomainPackage.TIME_SPAN: return createTimeSpan();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -163,6 +165,17 @@ public class DomainFactoryImpl extends EFactoryImpl implements DomainFactory
   {
     TimeSpanImpl timeSpan = new TimeSpanImpl();
     return timeSpan;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public WorkItemSummaries createWorkItemSummaries()
+  {
+    WorkItemSummariesImpl workItemSummaries = new WorkItemSummariesImpl();
+    return workItemSummaries;
   }
 
   /**
