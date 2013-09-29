@@ -35,6 +35,10 @@
                name="preferenceCustomization"
                value="plugin_customization.ini">
          </property>
+         <property
+               name="lifeCycleURI"
+               value="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.lifecycle.LifeCycleManager">
+         </property>
       </product>
    </extension>
    <extension

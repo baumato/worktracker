@@ -34,12 +34,11 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.ShellAdapter;
+import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.WorkItem;
@@ -85,23 +84,22 @@ public class DatesView implements Switchable {
 		createDatesPanel();
 		createSettingsPanel();
 		switchComposite.setTopControl(determineTopControlFromToolItemState());
+		askToEndActiveWorkItemOnApplicationClose();
+	}
 
-		// TODO put this in lifecycle manager or so
-		switchComposite.getShell().addDisposeListener(new DisposeListener() {
+	private void askToEndActiveWorkItemOnApplicationClose() {
+		final Shell shell = switchComposite.getShell();
+		shell.addShellListener(new ShellAdapter() {
 			@Override
-			public void widgetDisposed(DisposeEvent e) {
+			public void shellClosed(ShellEvent e) {
 				if (service.getActiveWorkItem().isPresent()) {
-					Shell shell = new Shell(Display.getCurrent());
-					try {
-						boolean ok = MessageDialog.openQuestion(
-							switchComposite.getShell(),
-							"End current active work item?",
-							"Do you want to end your current active work item?");
-						if (ok) {
-							service.getActiveWorkItem().get().setEndDate(new Date());
-						}
-					} finally {
-						shell.dispose();
+					String name = service.getActiveWorkItem().get().getActivityName();
+					boolean ok = MessageDialog.openQuestion(
+						shell,
+						"End work item?",
+						String.format("Do you want to end your current active work item '%s'?", name));
+					if (ok) {
+						service.getActiveWorkItem().get().setEndDate(new Date());
 					}
 				}
 			}

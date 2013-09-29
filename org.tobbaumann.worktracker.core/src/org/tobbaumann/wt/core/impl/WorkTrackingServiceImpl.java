@@ -69,14 +69,15 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	}
 
 	public void activate() {
-		LOGGER.trace("activate");
+		LOGGER.trace("activate - perform load");
 		persister.load();
 		// add persister as list change listener after load to save one commit
 		this.workItems.addListChangeListener(persister);
 	}
 
 	public void deactivate() {
-		LOGGER.trace("deactivate");
+		LOGGER.trace("deactivate - perform commit");
+		persister.commit();
 	}
 
 	@Override

@@ -24,7 +24,6 @@ import org.eclipse.core.databinding.observable.list.ListChangeEvent;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.impl.ResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.ecore.xmi.XMLParserPool;
 import org.eclipse.emf.ecore.xmi.XMLResource;
@@ -42,7 +41,7 @@ import com.google.common.base.Throwables;
  * @author tobbaumann
  *
  */
-final class WorkItemsPersister extends ResourceFactoryImpl implements IListChangeListener {
+final class WorkItemsPersister extends XMIResourceFactoryImpl implements IListChangeListener {
 
 	private static final String WORKTRACKER_STORAGE_URI = "storage/worktracker.storage";
 
@@ -60,7 +59,7 @@ final class WorkItemsPersister extends ResourceFactoryImpl implements IListChang
 	private void configure() {
 		Resource.Factory.Registry reg = Resource.Factory.Registry.INSTANCE;
 	    Map<String, Object> m = reg.getExtensionToFactoryMap();
-	    m.put("storage", new XMIResourceFactoryImpl());
+	    m.put("storage", this);
 	}
 
 	@Override
@@ -68,7 +67,7 @@ final class WorkItemsPersister extends ResourceFactoryImpl implements IListChang
 		commit();
 	}
 
-	private void commit() {
+	void commit() {
 		try {
 			commitUnchecked();
 		} catch (Exception e) {
@@ -85,7 +84,7 @@ final class WorkItemsPersister extends ResourceFactoryImpl implements IListChang
 		resource.save(resource.getDefaultSaveOptions());
 	}
 
-	public void load() {
+	void load() {
 		try {
 			loadUnchecked();
 		} catch (IOException e) {
