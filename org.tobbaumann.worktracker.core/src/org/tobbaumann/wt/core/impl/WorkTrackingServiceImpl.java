@@ -76,8 +76,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	}
 
 	public void deactivate() {
-		LOGGER.trace("deactivate - perform commit");
-		persister.commit();
+		LOGGER.trace("deactivate");
 	}
 
 	@Override
