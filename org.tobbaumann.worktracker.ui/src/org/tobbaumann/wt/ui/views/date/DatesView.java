@@ -18,15 +18,12 @@ import javax.inject.Inject;
 
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.di.extensions.Preference;
-import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.core.services.log.Logger;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.menu.MToolItem;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.databinding.viewers.ObservableSetContentProvider;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -34,17 +31,13 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ShellAdapter;
-import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Shell;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.WorkItem;
 import org.tobbaumann.wt.ui.event.Events;
 import org.tobbaumann.wt.ui.preferences.WorkTrackerPreferences;
-import org.tobbaumann.wt.ui.systemtray.SystemTray;
 import org.tobbaumann.wt.ui.views.PreferencesComposite;
 import org.tobbaumann.wt.ui.views.SwitchComposite;
 import org.tobbaumann.wt.ui.views.Switchable;
@@ -56,18 +49,8 @@ public class DatesView implements Switchable {
 
 	private @Inject WorkTrackingService service;
 	private @Inject ESelectionService selectionService;
-	private @Inject IEventBroker eventBroker;
 	private @Inject WorkTrackerPreferences prefs;
 	private @Inject MPart part;
-	private @Inject Logger logger;
-
-	/*
-	 * TODO
-	 * I really do not want to setup the tray here
-	 * but I found no other location where the shell and the eventbroker is in place.
-	 * Neither is a LifeCycleHook available nor can I access eventBroker in the bundle activator.
-	 */
-	private @Inject SystemTray systemTray;
 
 	private SwitchComposite switchComposite;
 	private Composite datesPanel;
@@ -84,26 +67,6 @@ public class DatesView implements Switchable {
 		createDatesPanel();
 		createSettingsPanel();
 		switchComposite.setTopControl(determineTopControlFromToolItemState());
-		askToEndActiveWorkItemOnApplicationClose();
-	}
-
-	private void askToEndActiveWorkItemOnApplicationClose() {
-		final Shell shell = switchComposite.getShell();
-		shell.addShellListener(new ShellAdapter() {
-			@Override
-			public void shellClosed(ShellEvent e) {
-				if (service.getActiveWorkItem().isPresent()) {
-					String name = service.getActiveWorkItem().get().getActivityName();
-					boolean ok = MessageDialog.openQuestion(
-						shell,
-						"End work item?",
-						String.format("Do you want to end your current active work item '%s'?", name));
-					if (ok) {
-						service.getActiveWorkItem().get().setEndDate(new Date());
-					}
-				}
-			}
-		});
 	}
 
 	private void createDatesPanel() {

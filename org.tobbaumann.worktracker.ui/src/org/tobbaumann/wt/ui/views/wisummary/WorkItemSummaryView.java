@@ -374,8 +374,12 @@ public class WorkItemSummaryView implements Switchable {
 
 		@Override
 		protected Date getCurrentlySelectedDate() {
-			List<?> wis = (List<?>) tableViewer.getInput();
-			return wis == null || wis.isEmpty() ? new Date() : getDateFromElement(((WorkItemSummary)wis.get(0)).getWorkItems().get(0));
+			List<?> input = (List<?>) tableViewer.getInput();
+			if (input == null || input.isEmpty()) {
+				return new Date();
+			}
+			WorkItemSummary wis = (WorkItemSummary) input.get(0);
+			return getDateFromElement(wis.getWorkItems().get(0));
 		}
 
 		@Override

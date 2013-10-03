@@ -4,7 +4,7 @@
 <product name="WorkTracker" uid="org.tobbaumann.worktracker.product" id="org.tobbaumann.worktracker.ui.product" application="org.eclipse.e4.ui.workbench.swt.E4Application" version="1.0.0" useFeatures="false" includeLaunchers="true">
 
    <aboutInfo>
-      <image path="/org.tobbaumann.worktracker.ui/icons/clocks/clock_128x128.png"/>
+      <image path="/org.tobbaumann.worktracker.ui/icons/pc.de/app-icon/finished-work-48.png"/>
       <text>
          Copyright (c) 2013 Tobias Baumann.
 All rights reserved. This program and the accompanying materials
@@ -12,7 +12,6 @@ are made available under the terms of the Eclipse Public License v1.0
 which accompanies this distribution, and is available at
 http://www.eclipse.org/legal/epl-v10.html
 
-All clock icons are from http://www.icons-land.com.
 All other icons are from http://pc.de/ico/
       </text>
    </aboutInfo>
@@ -25,13 +24,14 @@ All other icons are from http://pc.de/ico/
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
-   <windowImages i16="/org.tobbaumann.worktracker.ui/icons/clocks/clock_16x16.png" i32="/org.tobbaumann.worktracker.ui/icons/clocks/clock_32x32.png" i48="/org.tobbaumann.worktracker.ui/icons/clocks/clock_48x48.png" i64="/org.tobbaumann.worktracker.ui/icons/clocks/clock_64x64.png" i128="/org.tobbaumann.worktracker.ui/icons/clocks/clock_128x128.png"/>
+   <windowImages i16="/org.tobbaumann.worktracker.ui/icons/pc.de/app-icon/finished-work-16.png" i32="/org.tobbaumann.worktracker.ui/icons/pc.de/app-icon/finished-work-32.png" i48="/org.tobbaumann.worktracker.ui/icons/pc.de/app-icon/finished-work-48.png"/>
+
 
    <launcher name="WorkTracker">
       <linux icon="/org.tobbaumann.worktracker.ui/icons/launcher.xpm"/>
       <solaris/>
-      <win useIco="false">
-         <ico path="/org.tobbaumann.worktracker.ui/icons/clocks/clock.ico"/>
+      <win useIco="true">
+         <ico path="/org.tobbaumann.worktracker.ui/icons/pc.de/finished_work.ico"/>
          <bmp
             winSmallHigh="/org.tobbaumann.worktracker.ui/icons/clocks/bmp/clock_16x16_32bit.bmp"
             winSmallLow="/org.tobbaumann.worktracker.ui/icons/clocks/bmp/clock_16x16_8bit.bmp"
@@ -42,6 +42,7 @@ All other icons are from http://pc.de/ico/
             winExtraLargeHigh="/org.tobbaumann.worktracker.ui/icons/clocks/bmp/clock_256x256_32bit.bmp"/>
       </win>
    </launcher>
+
 
    <vm>
       <linux include="true">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7</linux>
@@ -128,5 +129,5 @@ All rights reserved. This program and the accompanying materials are made availa
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="1" />
       <plugin id="org.eclipse.osgi" autoStart="true" startLevel="0" />
    </configurations>
-   
+
 </product>
