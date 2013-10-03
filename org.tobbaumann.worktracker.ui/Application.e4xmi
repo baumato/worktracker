@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ASCII"?>
 <application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_zmOyMDYrEeKvpYoU2mBS0w" elementId="" bindingContexts="_0dfGEJO8EeKwNNMjl4I5UA">
-  <children xsi:type="basic:TrimmedWindow" xmi:id="_MZMgEDYtEeKvpYoU2mBS0w" elementId="worktracker.ui.trimmedwindow.0" label="WorkTracker" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/clocks/clock_16x16.png" x="100" y="100" width="1024" height="768">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_MZMgEDYtEeKvpYoU2mBS0w" elementId="worktracker.ui.trimmedwindow.0" label="WorkTracker" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/app-icon/finished-work-16.png" x="100" y="100" width="1024" height="768">
     <children xsi:type="basic:PartSashContainer" xmi:id="_xw1AsDY0EeKiNZbXiGFecg" elementId="partsashcontainer" containerData="" horizontal="true">
       <children xsi:type="basic:PartStack" xmi:id="_ezqTQIkOEeKX0dm4WNPgyQ" elementId="org.tobbaumann.worktracker.ui.partstack.1" containerData="15">
         <children xsi:type="basic:Part" xmi:id="_ts_NQDYzEeKiNZbXiGFecg" elementId="datesview" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.date.DatesView" label="Dates" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/calendar.png">
@@ -30,10 +30,10 @@
         </children>
         <children xsi:type="basic:PartSashContainer" xmi:id="_FSfNADY2EeKiNZbXiGFecg" elementId="worktracker.ui.partsashcontainer.0" containerData="44" horizontal="true">
           <children xsi:type="basic:PartStack" xmi:id="_eg4vIDY2EeKiNZbXiGFecg" elementId="worktracker.ui.partstack.0">
-            <children xsi:type="basic:Part" xmi:id="_HAVO4DY2EeKiNZbXiGFecg" elementId="workitemsview" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.workitem.WorkItemsView" label="Work Items" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/finished-work.png"/>
+            <children xsi:type="basic:Part" xmi:id="_HAVO4DY2EeKiNZbXiGFecg" elementId="workitemsview" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.workitem.WorkItemsView" label="Work Items" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/app-icon/finished-work-16.png"/>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_hmhqYDY2EeKiNZbXiGFecg" elementId="worktracker.ui.partstack.0">
-            <children xsi:type="basic:Part" xmi:id="_U-Wo8DY2EeKiNZbXiGFecg" elementId="workitemssummaryview" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.wisummary.WorkItemSummaryView" label="Work Items Summary" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/finished-work.png">
+            <children xsi:type="basic:Part" xmi:id="_U-Wo8DY2EeKiNZbXiGFecg" elementId="workitemssummaryview" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.wisummary.WorkItemSummaryView" label="Work Items Summary" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/app-icon/finished-work-16.png">
               <toolbar xmi:id="_2SyWsCCZEeOhFua4W3kHnA" elementId="org.tobbaumann.worktracker.ui.toolbar.2">
                 <children xsi:type="menu:HandledToolItem" xmi:id="_hQuEICYVEeOJNs9BnOTfKQ" elementId="org.tobbaumann.worktracker.ui.handledtoolitem.9" label="Work item summary view settings" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/settings.png" tooltip="Show/Hide Settings" type="Check" command="_8f2KYJS2EeKbjMpGHgZ80g"/>
                 <children xsi:type="menu:DirectToolItem" xmi:id="_3sD2wCCZEeOhFua4W3kHnA" elementId="org.tobbaumann.worktracker.ui.directtoolitem.3" label="Switch daily/weekly summary" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/star.png" tooltip="Switch between daily and weekly summary" type="Check" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.views.wisummary.DailyVsWeeklySummarySwitcher"/>
@@ -55,6 +55,7 @@
         <children xsi:type="menu:MenuSeparator" xmi:id="_wqND4LEXEeKE5Orpyhzryg" elementId="org.tobbaumann.worktracker.ui.menuseparator.1"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_R19I8JSOEeKbjMpGHgZ80g" elementId="org.tobbaumann.worktracker.ui.handledmenuitem.0" label="Exit" tooltip="Quits the application." command="_HL8dUJSOEeKbjMpGHgZ80g"/>
       </children>
+      <children xsi:type="menu:DirectMenuItem" xmi:id="_ORXHwCxjEeO-mP21K2ktrw" elementId="org.tobbaumann.worktracker.ui.directmenuitem.2" label="&amp;About" tooltip="Show publisher information." contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.about.AboutHandler"/>
     </mainMenu>
     <trimBars xmi:id="_6k7M4KCKEeKmvsFjGBY_pg" elementId="worktracker.stausline" side="Bottom">
       <children xsi:type="menu:ToolControl" xmi:id="_Vm0F4KCLEeKmvsFjGBY_pg" elementId="org.tobbaumann.worktracker.ui.toolcontrol.0" contributionURI="bundleclass://org.tobbaumann.worktracker.ui/org.tobbaumann.wt.ui.statusline.StatusLine"/>
@@ -168,4 +169,5 @@
   <addons xmi:id="_2qG_YLNdEeKE5Orpyhzryg" elementId="MinMaxAddon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.minmax.MinMaxAddon"/>
   <addons xmi:id="_2qG_YbNdEeKE5Orpyhzryg" elementId="DnDAddon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.dndaddon.DnDAddon"/>
   <addons xmi:id="_2qG_YrNdEeKE5Orpyhzryg" elementId="CleanupAddon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.cleanupaddon.CleanupAddon"/>
+  <addons xmi:id="_paD3kCxcEeOBJcyPSWaVpQ" elementId="org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
 </application:Application>
