@@ -63,21 +63,21 @@ public class SystemTray {
 	private static final String TRAY_ICON_IMAGE_NAME = "trayIcon";
 
 	static {
-			try {
-				String strImgUrl = "platform:/plugin/org.tobbaumann.worktracker.ui/icons/clocks/clock_16x16.png";
-				URL imgUrl = URI.create(strImgUrl).toURL();
-				ImageDescriptor id = ImageDescriptor.createFromURL(imgUrl);
-				JFaceResources.getImageRegistry().put(TRAY_ICON_IMAGE_NAME, id);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		try {
+			String strImgUrl = "platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/app-icon/finished-work.ico";
+			URL imgUrl = URI.create(strImgUrl).toURL();
+			ImageDescriptor id = ImageDescriptor.createFromURL(imgUrl);
+			JFaceResources.getImageRegistry().put(TRAY_ICON_IMAGE_NAME, id);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+	}
 
 	private @Inject IWorkbench workbench;
-	private @Inject	Shell shell;
 	private @Inject WorkTrackingService service;
 	private @Inject IEventBroker eventBroker;
 	private @Inject ShortcutActivityNamesCreator shortcutNamesCreator;
+	private Shell shell;
 	private TrayItem trayItem;
 	private ToolTip reminderToolTip;
 	private final Job reminderJob;
