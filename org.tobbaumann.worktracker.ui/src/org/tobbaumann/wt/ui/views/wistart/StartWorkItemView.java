@@ -85,7 +85,6 @@ import org.eclipse.swt.widgets.Text;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.Activity;
 import org.tobbaumann.wt.ui.event.Events;
-import org.tobbaumann.wt.ui.views.ViewerUtils;
 
 import com.google.common.collect.Ordering;
 
@@ -139,11 +138,11 @@ public class StartWorkItemView {
 		txtActivity.setMessage("Enter activity here...");
 		txtActivity.setToolTipText("Enter the name of your activity you want to start.");
 		txtActivity.addKeyListener(new StartWorkItemOnKeyShortcutListener());
-		applyConentAssist(txtActivity);
+		applyContentAssist(txtActivity);
 		updateAddButtonEnabling();
 	}
 
-	private void applyConentAssist(Text txtActivity) {
+	private void applyContentAssist(Text txtActivity) {
 		SimpleContentProposalProvider proposalProvider = new SimpleContentProposalProvider(
 				createProposalsFromActivities(service.getActivities()));
 		activiyContentProposalAdapter = new ContentProposalAdapter(
@@ -157,7 +156,7 @@ public class StartWorkItemView {
 		updateProposalsOnActivityListChange(proposalProvider);
 	}
 
-	private String[] createProposalsFromActivities(IObservableList activities) {
+	private String[] createProposalsFromActivities(IObservableList<Activity> activities) {
 		Collection<String> activityNames = newArrayList();
 		for (Object o : activities) {
 			Activity a = (Activity) o;
@@ -168,10 +167,10 @@ public class StartWorkItemView {
 	}
 
 	private void updateProposalsOnActivityListChange(final SimpleContentProposalProvider proposalProvider) {
-		service.getActivities().addListChangeListener(new IListChangeListener() {
+		final IObservableList<Activity> activities = service.getActivities();
+		activities.addListChangeListener(new IListChangeListener<Activity>() {
 			@Override
-			public void handleListChange(ListChangeEvent event) {
-				IObservableList activities = event.getObservableList();
+			public void handleListChange(ListChangeEvent<Activity> event) {
 				String[] arrActivityNames = createProposalsFromActivities(activities);
 				proposalProvider.setProposals(arrActivityNames);
 			}
@@ -259,7 +258,6 @@ public class StartWorkItemView {
 		applySorting();
 		applyFilter();
 		applyMenu();
-		ViewerUtils.requestFocusOnMouseEnter(activitiesTable);
 		makeActivitiesTableDragSource();
 	}
 
@@ -410,7 +408,7 @@ public class StartWorkItemView {
 	}
 
 	private void updateActivitiesTable() {
-		IObservableList activities = service.getActivities();
+		IObservableList<Activity> activities = service.getActivities();
 		activitiesTable.setInput(activities);
 	}
 

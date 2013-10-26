@@ -159,7 +159,6 @@ public class WorkItemSummaryView implements Switchable {
 		});
 		service.getWorkItems().addListChangeListener(new WorkItemSummariesUpdater());
 		tableViewer.setComparator(new ViewerComparator());
-		ViewerUtils.requestFocusOnMouseEnter(tableViewer);
 		ViewerUtils.refreshViewerPeriodically(tableViewer);
 	}
 
@@ -379,7 +378,7 @@ public class WorkItemSummaryView implements Switchable {
 				return new Date();
 			}
 			WorkItemSummary wis = (WorkItemSummary) input.get(0);
-			return getDateFromElement(wis.getWorkItems().get(0));
+			return wis.getWorkItems().get(0).getStart();
 		}
 
 		@Override
