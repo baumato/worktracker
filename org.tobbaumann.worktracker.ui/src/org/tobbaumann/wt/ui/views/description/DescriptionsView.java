@@ -18,7 +18,6 @@ import javax.inject.Named;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.services.IServiceConstants;
-import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
@@ -37,9 +36,6 @@ public class DescriptionsView {
 
 	private Text txtDescr;
 	private EObject current;
-
-	@Inject
-	private ESelectionService selectionService;
 
 	public DescriptionsView() {
 	}
