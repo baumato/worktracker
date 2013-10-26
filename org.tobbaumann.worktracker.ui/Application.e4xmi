@@ -1,14 +1,4 @@
 <?xml version="1.0" encoding="ASCII"?>
-<!--
-  Copyright (c) 2013 tobbaumann.
-  All rights reserved. This program and the accompanying materials
-  are made available under the terms of the Eclipse Public License v1.0
-  which accompanies this distribution, and is available at
-  http://www.eclipse.org/legal/epl-v10.html
-  
-  Contributors:
-      tobbaumann - initial API and implementation
--->
 <application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_zmOyMDYrEeKvpYoU2mBS0w" elementId="" bindingContexts="_0dfGEJO8EeKwNNMjl4I5UA">
   <children xsi:type="basic:TrimmedWindow" xmi:id="_MZMgEDYtEeKvpYoU2mBS0w" elementId="worktracker.ui.trimmedwindow.0" label="WorkTracker" iconURI="platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/app-icon/finished-work-16.png" x="100" y="100" width="1024" height="768">
     <children xsi:type="basic:PartSashContainer" xmi:id="_xw1AsDY0EeKiNZbXiGFecg" elementId="partsashcontainer" containerData="" horizontal="true">

@@ -26,12 +26,11 @@ All other icons are from http://pc.de/ico/
 
    <windowImages i16="/org.tobbaumann.worktracker.ui/icons/pc.de/app-icon/finished-work-16.png" i32="/org.tobbaumann.worktracker.ui/icons/pc.de/app-icon/finished-work-32.png" i48="/org.tobbaumann.worktracker.ui/icons/pc.de/app-icon/finished-work-48.png"/>
 
-
    <launcher name="WorkTracker">
       <linux icon="/org.tobbaumann.worktracker.ui/icons/launcher.xpm"/>
       <solaris/>
       <win useIco="true">
-         <ico path="/org.tobbaumann.worktracker.ui/icons/pc.de/finished_work.ico"/>
+         <ico path="/org.tobbaumann.worktracker.ui/icons/pc.de/app-icon/finished-work.ico"/>
          <bmp
             winSmallHigh="/org.tobbaumann.worktracker.ui/icons/clocks/bmp/clock_16x16_32bit.bmp"
             winSmallLow="/org.tobbaumann.worktracker.ui/icons/clocks/bmp/clock_16x16_8bit.bmp"
