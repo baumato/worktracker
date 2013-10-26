@@ -4,13 +4,14 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
 package org.tobbaumann.wt.ui.views.workitem;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -173,12 +174,7 @@ abstract class WorkItemsViewColumn extends EditingSupport {
 		@Override
 		protected abstract void setValue(Object element, Object value);
 
-		@Override
-		protected String getStringValue(WorkItem wi) {
-			return format(wi.getStart());
-		}
-
-		private String format(Date date) {
+		String format(Date date) {
 			// TODO should be preference?
 			return DateFormat.getTimeInstance(DateFormat.SHORT).format(date);
 		}
@@ -191,6 +187,15 @@ abstract class WorkItemsViewColumn extends EditingSupport {
 
 		protected Date calendarToDate(Calendar c) {
 			return c.getTime();
+		}
+
+		boolean equal(Object oldValue, Object newValue) {
+			Calendar calOldValue = (Calendar) oldValue;
+			Calendar calNewValue = (Calendar) newValue;
+			SimpleDateFormat f = new SimpleDateFormat("HHmmss");
+			String strOldValue = f.format(calOldValue.getTime());
+			String strNewValue = f.format(calNewValue.getTime());
+			return strOldValue.equals(strNewValue);
 		}
 	}
 
@@ -219,6 +224,11 @@ abstract class WorkItemsViewColumn extends EditingSupport {
 		}
 
 		@Override
+		protected String getStringValue(WorkItem wi) {
+			return format(wi.getStart());
+		}
+
+		@Override
 		protected void setValue(Object element, Object value) {
 			WorkItem wi = (WorkItem) element;
 			wi.setStart(calendarToDate((Calendar) value));
@@ -235,6 +245,8 @@ abstract class WorkItemsViewColumn extends EditingSupport {
 
 		private static final String COLUMN_END = "End";
 
+		private Object oldValue;
+
 		public EndDateColumn(TableViewer viewer) {
 			super(viewer);
 		}
@@ -247,14 +259,22 @@ abstract class WorkItemsViewColumn extends EditingSupport {
 		@Override
 		protected Object getValue(Object element) {
 			WorkItem wi = (WorkItem) element;
-			return dateToCalendar(wi.getEnd());
+			oldValue = dateToCalendar(wi.getEnd());
+			return oldValue;
+		}
+
+		@Override
+		protected String getStringValue(WorkItem wi) {
+			return format(wi.getEnd());
 		}
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			WorkItem wi = (WorkItem) element;
-			wi.setEndDate(calendarToDate((Calendar) value));
-			getViewer().update(element, null);
+			if (!equal(oldValue, value)) {
+				WorkItem wi = (WorkItem) element;
+				wi.setEndDate(calendarToDate((Calendar) value));
+				getViewer().update(element, null);
+			}
 		}
 	}
 
