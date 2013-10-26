@@ -35,14 +35,4 @@ public class ViewerUtils {
 			}
 		});
 	}
-
-	public static void requestFocusOnMouseEnter(final StructuredViewer viewer) {
-//		viewer.getControl().addMouseTrackListener(new MouseTrackAdapter() {
-//			@Override
-//			public void mouseEnter(MouseEvent e) {
-//				viewer.getControl().setFocus();
-//			}
-//		});
-	}
-
 }
