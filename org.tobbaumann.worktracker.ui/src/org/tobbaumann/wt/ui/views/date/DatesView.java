@@ -16,6 +16,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.core.databinding.observable.set.IObservableSet;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.di.extensions.Preference;
 import org.eclipse.e4.ui.di.Focus;
@@ -41,7 +42,6 @@ import org.tobbaumann.wt.ui.preferences.WorkTrackerPreferences;
 import org.tobbaumann.wt.ui.views.PreferencesComposite;
 import org.tobbaumann.wt.ui.views.SwitchComposite;
 import org.tobbaumann.wt.ui.views.Switchable;
-import org.tobbaumann.wt.ui.views.ViewerUtils;
 
 import com.google.common.collect.Ordering;
 
@@ -78,9 +78,9 @@ public class DatesView implements Switchable {
 		viewer.setContentProvider(new ObservableSetContentProvider());
 		viewer.setLabelProvider(new DatesViewLabelProvider(prefs));
 		viewer.setComparator(new ViewerComparator(Ordering.natural().reverse()));
-		viewer.setInput(service.readDates());
+		final IObservableSet<Date> dates = service.readDates();
+		viewer.setInput(dates);
 		updateSelectionServiceIfViewerSelectionChanges();
-		ViewerUtils.requestFocusOnMouseEnter(viewer);
 	}
 
 	private void updateSelectionServiceIfViewerSelectionChanges() {
