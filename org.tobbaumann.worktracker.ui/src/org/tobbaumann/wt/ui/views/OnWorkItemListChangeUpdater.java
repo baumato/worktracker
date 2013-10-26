@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Tobias Baumann - initial API and implementation
  ******************************************************************************/
@@ -18,42 +18,37 @@ import org.eclipse.core.databinding.observable.list.ListChangeEvent;
 import org.eclipse.core.databinding.observable.list.ListDiffVisitor;
 import org.tobbaumann.wt.domain.WorkItem;
 
-public abstract class OnWorkItemListChangeUpdater extends ListDiffVisitor implements
-		IListChangeListener {
+public abstract class OnWorkItemListChangeUpdater extends ListDiffVisitor<WorkItem> implements
+		IListChangeListener<WorkItem> {
 
 	@Override
-	public void handleListChange(ListChangeEvent event) {
+	public void handleListChange(ListChangeEvent<WorkItem> event) {
 		event.diff.accept(this);
 	}
 
 	@Override
-	public void handleAdd(int index, Object element) {
+	public void handleAdd(int index, WorkItem element) {
 		updateIfNecessary(element);
 	}
 
 	@Override
-	public void handleRemove(int index, Object element) {
+	public void handleRemove(int index, WorkItem element) {
 		updateIfNecessary(element);
 	}
 
-	private void updateIfNecessary(Object element) {
+	private void updateIfNecessary(WorkItem element) {
 		if (elementRelevantForCurrentlySelectedDate(element)) {
 			update(getCurrentlySelectedDate());
 		}
 	}
 
-	private boolean elementRelevantForCurrentlySelectedDate(Object element) {
-		return getDateFormat().format(getDateFromElement(element)).equals(
+	private boolean elementRelevantForCurrentlySelectedDate(WorkItem element) {
+		return getDateFormat().format(element.getStart()).equals(
 				getDateFormat().format(getCurrentlySelectedDate()));
 	}
 
 	private SimpleDateFormat getDateFormat() {
 		return new SimpleDateFormat("yyyy-MM-dd");
-	}
-
-	protected Date getDateFromElement(Object element) {
-		WorkItem wi = (WorkItem) element;
-		return wi.getStart();
 	}
 
 	protected abstract Date getCurrentlySelectedDate();
