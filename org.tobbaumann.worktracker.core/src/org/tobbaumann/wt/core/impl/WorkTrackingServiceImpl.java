@@ -30,6 +30,7 @@ import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.databinding.observable.set.IObservableSet;
 import org.eclipse.core.databinding.observable.set.WritableSet;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,17 +54,17 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(WorkTrackingServiceImpl.class
 			.getName());
 
-	private final IObservableList activities;
-	private final IObservableSet workItemDates;
-	private final IObservableList workItems;
+	private final IObservableList<Activity> activities;
+	private final IObservableSet<Date> workItemDates;
+	private final IObservableList<WorkItem> workItems;
 	private final WorkItemsPersister persister;
 	private WorkItem activeWorkItem;
 
 	public WorkTrackingServiceImpl() {
 		LOGGER.trace("init");
-		this.activities = new WritableList(newArrayList(), Activity.class);
-		this.workItemDates = new WritableSet(newArrayList(), Date.class);
-		this.workItems = new WritableList(newArrayList(), WorkItem.class);
+		this.activities = new WritableList<>();
+		this.workItemDates = new WritableSet<>();
+		this.workItems = new WritableList<>();
 		this.workItems.addListChangeListener(new WorkItemDatesUpdater());
 		this.persister = new WorkItemsPersister(this);
 	}
@@ -80,7 +81,6 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	}
 
 	@Override
-	@SuppressWarnings("unchecked")
 	public Optional<Activity> getActivity(final String activityName) {
 		LOGGER.trace("enter getActivity - {}", activityName);
 		return getActivity(this.activities, activityName);
@@ -101,7 +101,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	}
 
 	@Override
-	public IObservableList getActivities() {
+	public IObservableList<Activity> getActivities() {
 		LOGGER.trace("enter getActivities");
 		return activities;
 	}
@@ -109,7 +109,6 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	@Override
 	public List<Activity> getMostUsedActivities(int numberOfActivities) {
 		LOGGER.trace("enter getMostUsedActivities - {}", numberOfActivities);
-		@SuppressWarnings("unchecked")
 		List<Activity> sorted = newArrayList(activities);
 		Comparator<Activity> order = new Comparator<Activity>() {
 			@Override
@@ -124,7 +123,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	}
 
 	@Override
-	public IObservableSet readDates() {
+	public IObservableSet<Date> readDates() {
 		return workItemDates;
 	}
 
@@ -153,6 +152,14 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		setActiveWorkItem(wi);
 	}
 
+	@Override
+	public void endActiveWorkItem() {
+		if (getActiveWorkItem().isPresent()) {
+			getActiveWorkItem().get().setEndDate(new Date());
+			persister.commit();
+		}
+	}
+
 	void setActiveWorkItem(WorkItem activeWorkItem) {
 		this.activeWorkItem = activeWorkItem;
 	}
@@ -163,7 +170,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	}
 
 	@Override
-	public IObservableList getWorkItems() {
+	public IObservableList<WorkItem> getWorkItems() {
 		LOGGER.trace("enter getWorkItems");
 		return workItems;
 	}
@@ -301,12 +308,12 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 	 * @author tobbaumann
 	 *
 	 */
-	private final class WorkItemDatesUpdater implements IListChangeListener {
+	private final class WorkItemDatesUpdater implements IListChangeListener<EObject> {
 		@Override
-		public void handleListChange(ListChangeEvent event) {
-			event.diff.accept(new ListDiffVisitor() {
+		public void handleListChange(ListChangeEvent<EObject> event) {
+			event.diff.accept(new ListDiffVisitor<EObject>() {
 				@Override
-				public void handleRemove(int index, Object element) {
+				public void handleRemove(int index, EObject element) {
 					WorkItem wi = (WorkItem) element;
 					Date date = wi.getDatePartOfStart();
 					if (getWorkItems(date).isEmpty()) {
@@ -315,7 +322,7 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 				}
 
 				@Override
-				public void handleAdd(int index, Object element) {
+				public void handleAdd(int index, EObject element) {
 					WorkItem wi = (WorkItem) element;
 					workItemDates.add(wi.getDatePartOfStart());
 				}

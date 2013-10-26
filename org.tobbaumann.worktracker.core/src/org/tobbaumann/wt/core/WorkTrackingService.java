@@ -33,15 +33,16 @@ import com.google.common.collect.ImmutableList;
  */
 public interface WorkTrackingService {
 
-	IObservableSet readDates();
+	IObservableSet<Date> readDates();
 
 	Optional<Activity> getActivity(String activityName);
-	IObservableList getActivities();
+	IObservableList<Activity> getActivities();
 	List<Activity> getMostUsedActivities(int numberOfActivities);
 
-	IObservableList getWorkItems();
+	IObservableList<WorkItem> getWorkItems();
 	List<WorkItem> getWorkItems(Date date);
 	void startWorkItem(String activityName, int numberOfMinutesBeforeNow);
+	void endActiveWorkItem();
 	Optional<WorkItem> getActiveWorkItem();
 
 	List<WorkItemSummary> getWorkItemSummaries(Date date);
