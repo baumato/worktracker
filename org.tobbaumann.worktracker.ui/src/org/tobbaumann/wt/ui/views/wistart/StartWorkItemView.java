@@ -36,6 +36,7 @@ import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
 import org.eclipse.jface.fieldassist.SimpleContentProposalProvider;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
+import org.eclipse.jface.internal.databinding.viewers.ViewerUpdater;
 import org.eclipse.jface.preference.JFacePreferences;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -233,7 +234,7 @@ public class StartWorkItemView {
 		activitiesTable = new TableViewer(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE);
 		activitiesTable.getTable().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		activitiesTable.setLabelProvider(new ChangeActivitiesViewLabelProvider());
-		activitiesTable.setContentProvider(new ObservableListContentProvider());
+		activitiesTable.setContentProvider(new ObservableListContentProvider(new ActivtiesTableViewerUpdater(activitiesTable)));
 		activitiesTable.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -410,6 +411,41 @@ public class StartWorkItemView {
 	private void updateActivitiesTable() {
 		IObservableList<Activity> activities = service.getActivities();
 		activitiesTable.setInput(activities);
+	}
+
+	/**
+	 *
+	 * @author tobbaumann
+	 *
+	 */
+	private static final class ActivtiesTableViewerUpdater extends ViewerUpdater {
+
+		private final TableViewer viewer;
+
+		ActivtiesTableViewerUpdater(TableViewer viewer) {
+			super(viewer);
+			this.viewer = viewer;
+		}
+
+		@Override
+		public void insert(Object element, int position) {
+			viewer.insert(element, position);
+		}
+
+		@Override
+		public void remove(Object element, int position) {
+			viewer.remove(element);
+		}
+
+		@Override
+		public void add(Object[] elements) {
+			viewer.add(elements);
+		}
+
+		@Override
+		public void remove(Object[] elements) {
+			viewer.remove(elements);
+		}
 	}
 
 	/**
