@@ -11,6 +11,8 @@
 package org.tobbaumann.wt.ui.views.workitem;
 
 
+import static com.google.common.collect.Lists.newArrayList;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +31,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -36,8 +39,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.tobbaumann.wt.core.WorkTrackingService;
+import org.tobbaumann.wt.domain.WorkItem;
 import org.tobbaumann.wt.ui.views.OnWorkItemListChangeUpdater;
 import org.tobbaumann.wt.ui.views.ViewerUtils;
+import org.tobbaumann.wt.ui.views.workitem.WorkItemsViewColumn.ActivityColumn;
+import org.tobbaumann.wt.ui.views.workitem.WorkItemsViewColumn.DurationColumn;
+import org.tobbaumann.wt.ui.views.workitem.WorkItemsViewColumn.EndDateColumn;
+import org.tobbaumann.wt.ui.views.workitem.WorkItemsViewColumn.StartDateColumn;
 
 import com.google.common.collect.Ordering;
 
@@ -50,6 +58,8 @@ public class WorkItemsView {
 
 	private TableViewer tableViewer;
 	private WorkTrackingService service;
+
+	private List<WorkItemsViewColumn> columns = newArrayList();
 
 	@Inject
 	private ESelectionService selectionService;
@@ -68,12 +78,13 @@ public class WorkItemsView {
 		createAndConfigureTable();
 		createColumns();
 		packColumns();
+		applyEditingSupport();
 	}
 
 	private void createAndConfigureTableViewer(Composite parent) {
 		tableViewer = new TableViewer(parent, SWT.FULL_SELECTION);
 		tableViewer.setContentProvider(new ArrayContentProvider());
-		tableViewer.setLabelProvider(new LabelProvider(tableViewer));
+		tableViewer.setLabelProvider(new LabelProviderForSortingPurposes());
 		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -83,7 +94,6 @@ public class WorkItemsView {
 		});
 		tableViewer.setComparator(new ViewerComparator(Ordering.natural().reverse()));
 		service.getWorkItems().addListChangeListener(new WorkItemsUpdater());
-		ViewerUtils.requestFocusOnMouseEnter(tableViewer);
 		ViewerUtils.refreshViewerPeriodically(tableViewer);
 	}
 
@@ -95,11 +105,15 @@ public class WorkItemsView {
 	}
 
 	private void createColumns() {
+		columns = Arrays.asList(
+			new ActivityColumn(tableViewer),
+			new StartDateColumn(tableViewer),
+			new EndDateColumn(tableViewer),
+			new DurationColumn(tableViewer));
 		Table table = tableViewer.getTable();
-		List<String> columnNames = Arrays.asList("Activity", "Start", "End", "Duration");
-		for (String colName : columnNames) {
+		for (WorkItemsViewColumn col : columns) {
 			TableColumn tcol = new TableColumn(table, SWT.LEFT);
-			tcol.setText(colName);
+			tcol.setText(col.getName());
 		}
 	}
 
@@ -115,6 +129,16 @@ public class WorkItemsView {
 	private void packColumns() {
 		for (TableColumn c : tableViewer.getTable().getColumns()) {
 			c.pack();
+		}
+	}
+
+	private void applyEditingSupport() {
+		TableColumn[] tableColumns = tableViewer.getTable().getColumns();
+		for (int i = 0; i < tableColumns.length; i++) {
+			TableColumn tc = tableColumns[i];
+			TableViewerColumn column = new TableViewerColumn(tableViewer, tc);
+			column.setEditingSupport(columns.get(i));
+			column.setLabelProvider(columns.get(i).getLabelProvider());
 		}
 	}
 
@@ -139,8 +163,8 @@ public class WorkItemsView {
 
 		@Override
 		protected Date getCurrentlySelectedDate() {
-			List<?> items = (List<?>) tableViewer.getInput();
-			return items == null || items.isEmpty() ? new Date() : getDateFromElement(items.get(0));
+			List<WorkItem> items = (List<WorkItem>) tableViewer.getInput();
+			return items == null || items.isEmpty() ? new Date() : items.get(0).getStart();
 		}
 
 		@Override
@@ -148,4 +172,6 @@ public class WorkItemsView {
 			updateDate(date);
 		}
 	}
+
+
 }
