@@ -13,6 +13,8 @@ package org.tobbaumann.wt.ui.views.workitem;
 
 import static com.google.common.collect.Lists.newArrayList;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -26,6 +28,8 @@ import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -34,12 +38,21 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MenuDetectEvent;
+import org.eclipse.swt.events.MenuDetectListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.WorkItem;
+import org.tobbaumann.wt.domain.util.TimeSpanHelper;
 import org.tobbaumann.wt.ui.views.OnWorkItemListChangeUpdater;
 import org.tobbaumann.wt.ui.views.ViewerUtils;
 import org.tobbaumann.wt.ui.views.workitem.WorkItemsViewColumn.ActivityColumn;
@@ -140,6 +153,119 @@ public class WorkItemsView {
 			column.setEditingSupport(columns.get(i));
 			column.setLabelProvider(columns.get(i).getLabelProvider());
 		}
+
+		tableViewer.getTable().addMenuDetectListener(new MenuDetectListener() {
+			@Override
+			public void menuDetected(MenuDetectEvent e) {
+				createAndOpenTableMenu(e);
+			}
+		});
+	}
+
+	private void createAndOpenTableMenu(MenuDetectEvent e) {
+		if (getSelectedElement() == null) {
+			return;
+		}
+
+		Menu menu = new Menu(tableViewer.getTable());
+
+		MenuItem addItem = new MenuItem(menu, SWT.PUSH);
+		addItem.setText("Add work item");
+		if (getAddItemImage() != null) {
+			addItem.setImage(getAddItemImage());
+		}
+		addItem.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				addWorkItemOccurred();
+			}
+		});
+
+		MenuItem removeItem = new MenuItem(menu, SWT.PUSH);
+		removeItem.setText("Remove work item");
+		if (getRemoveItemImage() != null) {
+			removeItem.setImage(getRemoveItemImage());
+		}
+		removeItem.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				removeWorkItemOccurred();
+			}
+		});
+
+		menu.setLocation(e.x, e.y);
+		menu.setVisible(true);
+
+		final Display display = tableViewer.getTable().getDisplay();
+		while (!menu.isDisposed() && menu.isVisible()) {
+			if (!display.readAndDispatch()) {
+				display.sleep();
+			}
+		}
+		menu.dispose();
+	}
+
+	private WorkItem getSelectedElement() {
+		IStructuredSelection selection = (IStructuredSelection) tableViewer.getSelection();
+		if (selection.isEmpty()) {
+			return null;
+		}
+		return (WorkItem) selection.getFirstElement();
+	}
+
+	private Image getAddItemImage() {
+		String imageKey = getClass().getName() + ".AddItemImage";
+		String imageUrl = "platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/plus.png";
+		return getImage(imageKey, imageUrl);
+	}
+
+	private Image getImage(String imageKey, String imageUrl) {
+		Image img = JFaceResources.getImageRegistry().get(imageKey);
+		if (img == null) {
+			try {
+				ImageDescriptor imgDescr = ImageDescriptor.createFromURL(new URL(imageUrl));
+				JFaceResources.getImageRegistry().put(imageKey, imgDescr);
+				img = getImage(imageKey, imageUrl);
+			} catch (MalformedURLException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return img;
+	}
+
+	private Image getRemoveItemImage() {
+		String imageKey = getClass().getName() + ".RemoveItemImage";
+		String imageUrl = "platform:/plugin/org.tobbaumann.worktracker.ui/icons/pc.de/remove.png";
+		return getImage(imageKey, imageUrl);
+	}
+
+	private void addWorkItemOccurred() {
+		AddWorkItemDialog dlg = new AddWorkItemDialog(
+			tableViewer.getTable().getShell(),
+			getSelectedElement());
+		AddWorkItemDialog.DialogResult itemToAdd = dlg.openDialog();
+		if (itemToAdd == null) {
+			return;
+		}
+		if (itemToAdd.shouldStillBeRunning()) {
+			final int numberOfMinutesBeforeNow = TimeSpanHelper.getInstance(
+				itemToAdd.getStart(),
+				new Date()).inMinutes();
+			service.startWorkItem(itemToAdd.getActivityName(), numberOfMinutesBeforeNow);
+			if (itemToAdd.getDescription() != null) {
+				service.getActiveWorkItem().get().setDescription(itemToAdd.getDescription());
+			}
+		} else {
+			service.addWorkItem(
+				itemToAdd.getActivityName(),
+				itemToAdd.getStart(),
+				itemToAdd.getEnd(),
+				itemToAdd.getDescription());
+		}
+	}
+
+	private void removeWorkItemOccurred() {
+		service.removeWorkItem(getSelectedElement());
 	}
 
 	@PreDestroy
@@ -172,6 +298,4 @@ public class WorkItemsView {
 			updateDate(date);
 		}
 	}
-
-
 }

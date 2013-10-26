@@ -41,6 +41,8 @@ public interface WorkTrackingService {
 
 	IObservableList<WorkItem> getWorkItems();
 	List<WorkItem> getWorkItems(Date date);
+	void addWorkItem(String activityName, Date start, Date end, String description);
+	void removeWorkItem(WorkItem wi);
 	void startWorkItem(String activityName, int numberOfMinutesBeforeNow);
 	void endActiveWorkItem();
 	Optional<WorkItem> getActiveWorkItem();
@@ -100,5 +102,24 @@ public interface WorkTrackingService {
 	 *
 	 */
 	public static final class OperationCanceledException extends RuntimeException {
+	}
+
+	/**
+	 *
+	 * @author tobbaumann
+	 *
+	 */
+	public static final class ActivityAlreadyExistsException extends RuntimeException {
+		public ActivityAlreadyExistsException(String activityName) {
+			super(activityName);
+		}
+	}
+
+	/**
+	 *
+	 * @author tobbaumann
+	 *
+	 */
+	public static final class WorkItemDoesNotExistException extends RuntimeException {
 	}
 }
