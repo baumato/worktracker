@@ -25,7 +25,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.xmi.XMIResource;
-import org.eclipse.emf.ecore.xmi.XMLParserPool;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
@@ -41,19 +40,17 @@ import com.google.common.base.Throwables;
  * @author tobbaumann
  *
  */
-final class WorkItemsPersister extends XMIResourceFactoryImpl implements IListChangeListener {
+final class WorkItemsPersister extends XMIResourceFactoryImpl implements IListChangeListener<EObject> {
 
 	private static final String WORKTRACKER_STORAGE_URI = "storage/worktracker.storage";
 
 	private final WorkTrackingServiceImpl service;
-	private final List<?> lookupTable = newArrayList();
-	private final XMLParserPool parserPool = new XMLParserPoolImpl();
-	private final Map<?, ?> nameToFeatureMap = newHashMap();
-
+	private final XMIResource resource;
 
 	public WorkItemsPersister(WorkTrackingServiceImpl service) {
 		this.service = service;
 		configure();
+		this.resource = createResource(URI.createURI(WORKTRACKER_STORAGE_URI));
 	}
 
 	private void configure() {
@@ -63,7 +60,7 @@ final class WorkItemsPersister extends XMIResourceFactoryImpl implements IListCh
 	}
 
 	@Override
-	public void handleListChange(ListChangeEvent event) {
+	public void handleListChange(ListChangeEvent<EObject> event) {
 		commit();
 	}
 
@@ -75,13 +72,11 @@ final class WorkItemsPersister extends XMIResourceFactoryImpl implements IListCh
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private void commitUnchecked() throws IOException {
-		URI uri = URI.createURI(WORKTRACKER_STORAGE_URI);
-		XMIResource resource = createResource(uri);
+		resource.getContents().clear();
 		resource.getContents().addAll(service.getActivities());
 		resource.getContents().addAll(service.getWorkItems());
-		resource.save(resource.getDefaultSaveOptions());
+		resource.save(null);
 	}
 
 	void load() {
@@ -98,10 +93,9 @@ final class WorkItemsPersister extends XMIResourceFactoryImpl implements IListCh
 	    if (!new File(uri.toFileString()).exists()) {
 	    	return;
 	    }
-		XMIResource resource = createResource(uri);
 	    List<Activity> activities = newArrayList();
 	    List<WorkItem> workItems = newArrayList();
-	    resource.load(resource.getDefaultLoadOptions());
+	    resource.load(null);
 	    for (EObject e : resource.getContents()) {
 	    	if (isWorkItem(e)) {
 	    		workItems.add((WorkItem) e);
@@ -124,13 +118,13 @@ final class WorkItemsPersister extends XMIResourceFactoryImpl implements IListCh
 		Map<Object, Object> saveOptions = resource.getDefaultSaveOptions();
 		saveOptions.put(XMLResource.OPTION_DECLARE_XML, Boolean.TRUE);
 		saveOptions.put(XMLResource.OPTION_CONFIGURATION_CACHE, Boolean.TRUE);
-		saveOptions.put(XMLResource.OPTION_USE_CACHED_LOOKUP_TABLE, lookupTable);
-		Map<Object, Object> loadOptions = resource.getDefaultSaveOptions();
+		saveOptions.put(XMLResource.OPTION_USE_CACHED_LOOKUP_TABLE, newArrayList());
+		Map<Object, Object> loadOptions = resource.getDefaultLoadOptions();
 		loadOptions.put(XMLResource.OPTION_DEFER_ATTACHMENT, Boolean.TRUE);
 		loadOptions.put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, Boolean.TRUE);
 		loadOptions.put(XMLResource.OPTION_USE_DEPRECATED_METHODS, Boolean.FALSE);
-		loadOptions.put(XMLResource.OPTION_USE_PARSER_POOL, parserPool);
-		loadOptions.put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, nameToFeatureMap);
+		loadOptions.put(XMLResource.OPTION_USE_PARSER_POOL, new XMLParserPoolImpl());
+		loadOptions.put(XMLResource.OPTION_USE_XML_NAME_TO_FEATURE_MAP, newHashMap());
 		return resource;
 	}
 
