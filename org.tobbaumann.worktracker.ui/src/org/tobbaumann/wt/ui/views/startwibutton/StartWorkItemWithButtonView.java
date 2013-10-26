@@ -23,8 +23,8 @@ import javax.inject.Inject;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.di.extensions.Preference;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.core.services.log.Logger;
 import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.menu.MToolItem;
 import org.eclipse.swt.SWT;
@@ -43,6 +43,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.tobbaumann.wt.core.WorkTrackingService;
+import org.tobbaumann.wt.domain.WorkItem;
 import org.tobbaumann.wt.ui.event.Events;
 import org.tobbaumann.wt.ui.preferences.WorkTrackerPreferences;
 import org.tobbaumann.wt.ui.views.SwitchComposite;
@@ -52,11 +53,10 @@ public class StartWorkItemWithButtonView implements Switchable {
 
 	private static final String BTN_DATA_KEY_ACTIVITY_NAME = "activityName";
 
-	private @Inject Logger logger;
 	private @Inject WorkTrackingService service;
 	private @Inject WorkTrackerPreferences prefs;
 	private @Inject IEventBroker eventBroker;
-	private @Inject ShortcutActivityNamesCreator shorcutNamesCreator;
+	private @Inject ShortcutActivityNamesCreator shortcutNamesCreator;
 	private @Inject MPart part;
 
 	private SwitchComposite switchComposite;
@@ -106,6 +106,26 @@ public class StartWorkItemWithButtonView implements Switchable {
 		}
 	}
 
+	@Inject @org.eclipse.e4.core.di.annotations.Optional
+	void workItemStarted(
+			@UIEventTopic(Events.START_WORK_ITEM) com.google.common.base.Optional<WorkItem> owi) {
+		if (!prefs.customWorkItemStartButtonLabelsAvailable()
+				&& unusedButtonsInButtonPanelAvailable()) {
+			activateButtonPanel();
+		}
+	}
+
+	private boolean unusedButtonsInButtonPanelAvailable() {
+		for (Control c : buttonPanelContent.getChildren()) {
+			if (c instanceof Button) {
+				if (((Button) c).getText().isEmpty()) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	private void activateButtonPanel() {
 		if (buttonPanelContent == null || buttonPanelContent.isDisposed()) {
 			return;
@@ -116,7 +136,7 @@ public class StartWorkItemWithButtonView implements Switchable {
 	}
 
 	private void createButtonPanel() {
-		List<String> names = shorcutNamesCreator.create();
+		List<String> names = shortcutNamesCreator.create();
 		createButtonPanel(names);
 	}
 
