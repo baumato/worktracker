@@ -242,25 +242,26 @@ public class WorkItemsView {
 	private void addWorkItemOccurred() {
 		AddWorkItemDialog dlg = new AddWorkItemDialog(
 			tableViewer.getTable().getShell(),
-			getSelectedElement());
+			getSelectedElement(),
+			service);
 		AddWorkItemDialog.DialogResult itemToAdd = dlg.openDialog();
 		if (itemToAdd == null) {
 			return;
 		}
-		if (itemToAdd.shouldStillBeRunning()) {
+		if (itemToAdd.shouldStillBeRunning) {
 			final int numberOfMinutesBeforeNow = TimeSpanHelper.getInstance(
-				itemToAdd.getStart(),
+				itemToAdd.start,
 				new Date()).inMinutes();
-			service.startWorkItem(itemToAdd.getActivityName(), numberOfMinutesBeforeNow);
-			if (itemToAdd.getDescription() != null) {
-				service.getActiveWorkItem().get().setDescription(itemToAdd.getDescription());
+			service.startWorkItem(itemToAdd.activityName, numberOfMinutesBeforeNow);
+			if (itemToAdd.description != null) {
+				service.getActiveWorkItem().get().setDescription(itemToAdd.description);
 			}
 		} else {
 			service.addWorkItem(
-				itemToAdd.getActivityName(),
-				itemToAdd.getStart(),
-				itemToAdd.getEnd(),
-				itemToAdd.getDescription());
+				itemToAdd.activityName,
+				itemToAdd.start,
+				itemToAdd.end,
+				itemToAdd.description);
 		}
 	}
 

@@ -12,20 +12,16 @@ package org.tobbaumann.wt.ui.views.wistart;
 
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.base.Strings.nullToEmpty;
-import static com.google.common.collect.Lists.newArrayList;
 
 import java.net.URI;
 import java.net.URL;
-import java.util.Collection;
 import java.util.Comparator;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.core.databinding.observable.list.IListChangeListener;
 import org.eclipse.core.databinding.observable.list.IObservableList;
-import org.eclipse.core.databinding.observable.list.ListChangeEvent;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -33,9 +29,6 @@ import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.menu.MToolItem;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
-import org.eclipse.jface.fieldassist.ContentProposalAdapter;
-import org.eclipse.jface.fieldassist.SimpleContentProposalProvider;
-import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.internal.databinding.viewers.ViewerUpdater;
 import org.eclipse.jface.preference.JFacePreferences;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -82,7 +75,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Spinner;
-import org.eclipse.swt.widgets.Text;
 import org.tobbaumann.wt.core.WorkTrackingService;
 import org.tobbaumann.wt.domain.Activity;
 import org.tobbaumann.wt.ui.event.Events;
@@ -95,8 +87,7 @@ public class StartWorkItemView {
 	private @Inject IEventBroker eventBroker;
 
 	private @Inject MPart part;
-	private Text txtActivity;
-	private ContentProposalAdapter activiyContentProposalAdapter;
+	private ActivityField activity;
 	private Spinner startedSpinner;
 	private Button btnAdd;
 	private TableViewer activitiesTable;
@@ -108,8 +99,8 @@ public class StartWorkItemView {
 
 	@Focus
 	public void requestFocus() {
-		if (txtActivity != null && !txtActivity.isDisposed()) {
-			txtActivity.setFocus();
+		if (activity != null && !activity.isDisposed()) {
+			activity.setFocus();
 		}
 	}
 
@@ -134,55 +125,17 @@ public class StartWorkItemView {
 	}
 
 	private void createActivityTextField(Composite stripe) {
-		txtActivity = new Text(stripe, SWT.SINGLE | SWT.LEAD | SWT.BORDER);
-		txtActivity.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		txtActivity.setMessage("Enter activity here...");
-		txtActivity.setToolTipText("Enter the name of your activity you want to start.");
-		txtActivity.addKeyListener(new StartWorkItemOnKeyShortcutListener());
-		applyContentAssist(txtActivity);
+		activity = new ActivityField(stripe, service);
+		activity.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		activity.addKeyListener(new StartWorkItemOnKeyShortcutListener());
 		updateAddButtonEnabling();
 	}
 
-	private void applyContentAssist(Text txtActivity) {
-		SimpleContentProposalProvider proposalProvider = new SimpleContentProposalProvider(
-				createProposalsFromActivities(service.getActivities()));
-		activiyContentProposalAdapter = new ContentProposalAdapter(
-			txtActivity,
-			new TextContentAdapter(),
-			proposalProvider,
-			null,
-			null);
-		proposalProvider.setFiltering(true);
-		activiyContentProposalAdapter.setProposalAcceptanceStyle(ContentProposalAdapter.PROPOSAL_REPLACE);
-		updateProposalsOnActivityListChange(proposalProvider);
-	}
-
-	private String[] createProposalsFromActivities(IObservableList<Activity> activities) {
-		Collection<String> activityNames = newArrayList();
-		for (Object o : activities) {
-			Activity a = (Activity) o;
-			activityNames.add(a.getName());
-		}
-		String[] arrActivityNames = activityNames.toArray(new String[0]);
-		return arrActivityNames;
-	}
-
-	private void updateProposalsOnActivityListChange(final SimpleContentProposalProvider proposalProvider) {
-		final IObservableList<Activity> activities = service.getActivities();
-		activities.addListChangeListener(new IListChangeListener<Activity>() {
-			@Override
-			public void handleListChange(ListChangeEvent<Activity> event) {
-				String[] arrActivityNames = createProposalsFromActivities(activities);
-				proposalProvider.setProposals(arrActivityNames);
-			}
-		});
-	}
-
 	private void updateAddButtonEnabling() {
-		txtActivity.addModifyListener(new ModifyListener() {
+		activity.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				btnAdd.setEnabled(!nullToEmpty(txtActivity.getText()).trim().isEmpty());
+				btnAdd.setEnabled(!nullToEmpty(activity.getText()).trim().isEmpty());
 			}
 		});
 	}
@@ -242,7 +195,7 @@ public class StartWorkItemView {
 					return;
 				}
 				Activity selectedActivity = (Activity) ((IStructuredSelection)event.getSelection()).getFirstElement();
-				txtActivity.setText(selectedActivity.getName());
+				activity.setText(selectedActivity.getName());
 			}
 		});
 		activitiesTable.addDoubleClickListener(new IDoubleClickListener() {
@@ -391,7 +344,7 @@ public class StartWorkItemView {
 	}
 
 	private void startWorkItem() {
-		startWorkItem(txtActivity.getText());
+		startWorkItem(activity.getText());
 	}
 
 	private void startWorkItem(String activityName) {
@@ -404,7 +357,7 @@ public class StartWorkItemView {
 
 	@Inject @Optional
 	void workItemStarted(@SuppressWarnings("unused") @UIEventTopic(Events.START_WORK_ITEM) Object o) {
-		txtActivity.setText("");
+		activity.setText("");
 		startedSpinner.setSelection(0);
 	}
 
@@ -457,7 +410,7 @@ public class StartWorkItemView {
 
 		@Override
 		public void keyPressed(KeyEvent e) {
-			if ((enterPressed(e) || altAPressed(e)) && !isProposalPopupOpen()) {
+			if ((enterPressed(e) || altAPressed(e)) && !activity.isProposalPopupOpen()) {
 				startWorkItem();
 			}
 		}
@@ -469,10 +422,6 @@ public class StartWorkItemView {
 		private boolean altAPressed(KeyEvent e) {
 			return (e.stateMask & SWT.ALT) != 0
 					&& e.character == 'a';
-		}
-
-		private boolean isProposalPopupOpen() {
-			return activiyContentProposalAdapter != null && activiyContentProposalAdapter.isProposalPopupOpen();
 		}
 	}
 

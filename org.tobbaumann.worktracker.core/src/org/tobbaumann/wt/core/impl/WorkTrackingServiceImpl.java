@@ -101,6 +101,9 @@ public class WorkTrackingServiceImpl implements WorkTrackingService {
 		}
 		Activity a = wi.getActivity();
 		getWorkItems().remove(indexOfWi);
+		if (getActiveWorkItem().isPresent() && getActiveWorkItem().get().getId().equals(wi.getId())) {
+			setActiveWorkItem(null);
+		}
 		removeActivityIfNotUsed(a);
 	}
 
