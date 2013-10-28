@@ -55,10 +55,8 @@ import org.tobbaumann.wt.domain.WorkItem;
 import org.tobbaumann.wt.domain.util.TimeSpanHelper;
 import org.tobbaumann.wt.ui.views.OnWorkItemListChangeUpdater;
 import org.tobbaumann.wt.ui.views.ViewerUtils;
-import org.tobbaumann.wt.ui.views.workitem.WorkItemsViewColumn.ActivityColumn;
-import org.tobbaumann.wt.ui.views.workitem.WorkItemsViewColumn.DurationColumn;
-import org.tobbaumann.wt.ui.views.workitem.WorkItemsViewColumn.EndDateColumn;
-import org.tobbaumann.wt.ui.views.workitem.WorkItemsViewColumn.StartDateColumn;
+import org.tobbaumann.wt.ui.views.workitem.DateColumn.EndDateColumn;
+import org.tobbaumann.wt.ui.views.workitem.DateColumn.StartDateColumn;
 
 import com.google.common.collect.Ordering;
 
@@ -119,7 +117,7 @@ public class WorkItemsView {
 
 	private void createColumns() {
 		columns = Arrays.asList(
-			new ActivityColumn(tableViewer),
+			new ActivityColumn(tableViewer, service),
 			new StartDateColumn(tableViewer),
 			new EndDateColumn(tableViewer),
 			new DurationColumn(tableViewer));
